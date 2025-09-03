@@ -10,7 +10,7 @@ export function Footer() {
           <div className="space-y-3">
             <h3 className="text-lg font-bold">FileThetic</h3>
             <p className="text-sm text-muted-foreground">
-              DePIN for AI Data Economy - Decentralized synthetic data marketplace powered by U2U Network
+              DePIN for AI Data Economy - Decentralized synthetic data marketplace powered byHedera
             </p>
           </div>
 
