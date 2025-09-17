@@ -10,8 +10,10 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@dmitryrechkin/json-schema-to-zod": "^1.0.1",
     "@hashgraph/hedera-wallet-connect": "2.0.0-canary.811af2f.0",
     "@hashgraph/sdk": "^2.67.0",
+    "@hookform/resolvers": "^5.2.2",
     "@langchain/core": "^0.3.66",
     "@langchain/openai": "^0.6.2",
     "@prisma/extension-accelerate": "^1.2.2",
@@ -39,6 +41,8 @@
     "@walletconnect/universal-provider": "^2.21.5",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "cmdk": "^1.1.1",
+    "dotenv": "^17.2.3",
     "embla-carousel-react": "^8.6.0",
     "fetch-retry": "^6.0.0",
     "hedera-agent-kit": "^3.0.4",
@@ -50,12 +54,14 @@
     "prisma": "^6.4.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-dropzone": "^14.3.8",
+    "react-hook-form": "^7.65.0",
     "react-icons": "^5.5.0",
     "sonner": "^2.0.7",
     "tailwind-merge": "^3.0.2",
     "viem": "^2.31.6",
-    "wagmi": "^2.15.6",
-    "zod": "^3.25.67"
+    "wagmi": "^2.19.1",
+    "zod": "^4.1.12"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
