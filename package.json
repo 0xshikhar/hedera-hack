@@ -7,7 +7,9 @@
     "build": "bun build:prisma && next build",
     "build:prisma": "prisma generate --no-engine",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "hedera:init": "bun run src/scripts/init-hedera.ts",
+    "hedera:test": "bun run src/scripts/test-hedera.ts"
   },
   "dependencies": {
     "@dmitryrechkin/json-schema-to-zod": "^1.0.1",

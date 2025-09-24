@@ -15,7 +15,7 @@ export default function MyDatasetsPage() {
           <div>
             <h1 className="text-3xl font-bold tracking-tight">My Datasets</h1>
             <p className="text-muted-foreground">
-              Manage datasets you've created or purchased
+              Manage datasets you&apos;ve created or purchased 
             </p>
           </div>
           {/* Using the DatasetBrowser with filter for owned datasets */}
