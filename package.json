@@ -9,6 +9,7 @@
     "start": "next start",
     "lint": "next lint",
     "hedera:init": "bun run src/scripts/init-hedera.ts",
+    "hedera:balance": "bun run src/scripts/check-balance.ts",
     "hedera:test": "bun run src/scripts/test-hedera.ts"
   },
   "dependencies": {

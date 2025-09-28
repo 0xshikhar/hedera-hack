@@ -47,7 +47,8 @@ export class HederaClient {
     this.instance.setOperator(this.operatorId, this.operatorKey);
 
     // Set default transaction fee and query payment
-    this.instance.setDefaultMaxTransactionFee(new Hbar(2));
+    // Increased for token/topic creation which requires higher fees
+    this.instance.setDefaultMaxTransactionFee(new Hbar(10));
     this.instance.setDefaultMaxQueryPayment(new Hbar(1));
 
     console.log(`✅ Hedera client initialized for ${network}`);

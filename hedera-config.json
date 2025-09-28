@@ -1,0 +1,21 @@
+{
+  "network": "testnet",
+  "operatorAccountId": "0.0.7158221",
+  "tokens": {
+    "datasetNFT": "0.0.7158235",
+    "fileToken": "0.0.7158236",
+    "paymentToken": "0.0.7158237"
+  },
+  "topics": {
+    "datasetMetadata": "0.0.7158238",
+    "verificationLogs": "0.0.7158239",
+    "agentCommunication": "0.0.7158240",
+    "auditTrail": "0.0.7158241",
+    "marketplaceEvents": "0.0.7158243"
+  },
+  "contracts": {
+    "marketplace": "",
+    "providerRegistry": "",
+    "verificationOracle": ""
+  }
+}
