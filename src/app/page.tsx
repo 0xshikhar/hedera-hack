@@ -38,7 +38,7 @@ export default function Home() {
                     DePIN for AI Data Economy
                   </h1>
                   <p className="max-w-[600px] text-xl text-muted-foreground">
-                    The world's first Decentralized Physical Infrastructure Network purpose-built for the $200B+ AI data market. Create, verify, and trade synthetic datasets with real infrastructure providers on Hedera.
+                    The worlds first Decentralized Physical Infrastructure Network purpose-built for the $200B+ AI data market. Create, verify, and trade synthetic datasets with real infrastructure providers on Hedera.
                   </p>
                 </div>
                 <div className="flex flex-col gap-3 sm:flex-row">
@@ -457,7 +457,7 @@ export default function Home() {
                   Join the AI Data Revolution
                 </h2>
                 <p className="max-w-[700px] text-muted-foreground md:text-xl/relaxed">
-                  Be part of the first DePIN built for the $200B+ AI data economy. Whether you're creating datasets, running infrastructure, or building AI applications—FileThetic is your platform.
+                  Be part of the first DePIN built for the $200B+ AI data economy. Whether you&apos;re creating datasets, running infrastructure, or building AI applications—FileThetic is your platform.
                 </p>
               </div>
               <div className="flex flex-col gap-3 min-[400px]:flex-row">
