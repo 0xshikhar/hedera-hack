@@ -16,6 +16,6 @@ declare module 'web3.storage' {
     constructor(options: Web3StorageOptions);
     put(files: File[], options?: PutOptions): Promise<string>;
     get(cid: string): Promise<{ ok: boolean; files: () => Promise<File[]>; }>;
-    status(cid: string): Promise<{ cid: string; dagSize: number; created: Date; pins: Array<any>; deals: Array<any>; }>;
+    status(cid: string): Promise<{ cid: string; dagSize: number; created: Date; pins: unknown[]; deals: unknown[]; }>;
   }
 }

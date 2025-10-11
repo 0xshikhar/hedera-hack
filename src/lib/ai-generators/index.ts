@@ -97,8 +97,8 @@ Make the data realistic and diverse. Return ONLY the JSON array, no additional t
       } else {
         data = JSON.parse(content);
       }
-    } catch (error) {
-      console.error('Failed to parse OpenAI response:', content);
+    } catch (error: any) {
+      console.error('Failed to parse OpenAI response:', error);
       throw new Error('Failed to parse generated data');
     }
 
@@ -181,8 +181,8 @@ Make the data realistic and diverse. Return ONLY the JSON array, no additional t
       } else {
         data = JSON.parse(content);
       }
-    } catch (error) {
-      console.error('Failed to parse Anthropic response:', content);
+    } catch (error: any) {
+      console.error('Failed to parse Anthropic response:', error);
       throw new Error('Failed to parse generated data');
     }
 
