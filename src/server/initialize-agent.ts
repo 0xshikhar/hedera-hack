@@ -1,17 +1,33 @@
 import { Client } from '@hashgraph/sdk';
 import { ChatPromptTemplate } from '@langchain/core/prompts';
-import { ChatOpenAI } from '@langchain/openai';
 import { AgentMode, HederaLangchainToolkit } from 'hedera-agent-kit';
 import { AgentExecutor, createToolCallingAgent } from 'langchain/agents';
 import { BufferMemory } from 'langchain/memory';
+import { AIModelFactory, AIProvider } from '@/lib/ai/model-factory';
 
-export async function initializeAgent(userAccountId: string) {
+export interface AgentConfig {
+  userAccountId: string;
+  aiProvider?: AIProvider;
+  model?: string;
+  temperature?: number;
+}
+
+export async function initializeAgent(
+  userAccountId: string,
+  provider: AIProvider = 'openai',
+  model?: string
+) {
   if (!userAccountId)
     throw new Error('userAccountId must be set');
 
-  // Initialise OpenAI LLM
-  const llm = new ChatOpenAI({
-    model: 'gpt-4o-mini',
+  // Create AI model using the factory
+  const llm = AIModelFactory.createModel({
+    provider,
+    model: model || (provider === 'openai' ? 'gpt-4o-mini' : 
+                     provider === 'anthropic' ? 'claude-3-5-sonnet-20241022' :
+                     'gemini-1.5-flash'),
+    temperature: 0.7,
+    maxTokens: 4000,
   });
 
   const agentClient = Client.forTestnet();

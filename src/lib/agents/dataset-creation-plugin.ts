@@ -1,7 +1,6 @@
 import { Tool } from 'langchain/tools';
 import { Client, TokenMintTransaction, TokenId } from '@hashgraph/sdk';
-import { ChatOpenAI } from '@langchain/openai';
-import { BaseChatModel } from '@langchain/core/language_models/chat_models';
+import { AIModelFactory, AIProvider } from '@/lib/ai/model-factory';
 import { carbonCalculator } from '@/services/carbon';
 import { ProvenanceService } from '@/services/provenance';
 
@@ -37,20 +36,13 @@ export class DatasetCreationPlugin extends Tool {
 
   private hederaClient: Client;
   private provenanceService: ProvenanceService;
-  private chatModel: BaseChatModel;
+  private defaultProvider: AIProvider;
 
-  constructor(hederaClient: Client, provider: 'openai' | 'anthropic' | 'google' = 'openai') {
+  constructor(hederaClient: Client, provider: AIProvider = 'openai') {
     super();
     this.hederaClient = hederaClient;
     this.provenanceService = new ProvenanceService(hederaClient);
-
-    // Initialize LangChain chat model based on provider
-    // For now, only OpenAI is supported (others can be added when needed)
-    this.chatModel = new ChatOpenAI({
-      openAIApiKey: process.env.OPENAI_API_KEY,
-      temperature: 0.7,
-      maxTokens: 2000,
-    });
+    this.defaultProvider = provider;
   }
 
   async _call(input: string): Promise<string> {
@@ -151,8 +143,16 @@ export class DatasetCreationPlugin extends Tool {
 
 Return ONLY valid ${format.toUpperCase()} data, no additional text or explanations.`;
 
+    // Create AI model dynamically based on the request
+    const chatModel = AIModelFactory.createModel({
+      provider: params.provider || this.defaultProvider,
+      model: params.model,
+      temperature: 0.7,
+      maxTokens: 4000,
+    });
+
     // Use LangChain chat model to generate dataset
-    const response = await this.chatModel.invoke(systemPrompt);
+    const response = await chatModel.invoke(systemPrompt);
     
     // Extract content from response
     const content = typeof response.content === 'string' 
