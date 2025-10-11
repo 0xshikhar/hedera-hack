@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useHederaWallet } from '@/contexts/HederaWalletContext';
 import { toast } from 'sonner';
 import { ethers } from 'ethers';
-import { createDataset, lockDataset } from '@/lib/web3';
+import { createDataset, lockDataset } from '@/lib/hedera';
 import { GenerationResult } from '@/lib/models';
 
 interface UseDatasetPublisherProps {

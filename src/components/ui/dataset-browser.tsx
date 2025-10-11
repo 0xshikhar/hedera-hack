@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback } from 'react';
-import { getAllDatasets, lockDataset } from '@/lib/web3';
+import { getAllDatasets, lockDataset } from '@/lib/hedera';
 import { Dataset as DatasetType } from '@/lib/types';
 import { DatasetCard } from '@/components/ui/dataset-card';
 import { Input } from '@/components/ui/input';

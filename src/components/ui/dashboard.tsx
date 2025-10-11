@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useWagmiWeb3 } from '@/hooks/useWagmiWeb3';
 import { Dataset } from '@/lib/types';
-import { getAllDatasets, getWalletAddress } from '@/lib/web3';
+import { getAllDatasets, getWalletAddress } from '@/lib/hedera';
 import Link from 'next/link';
 
 export function Dashboard() {
@@ -25,6 +25,10 @@ export function Dashboard() {
       try {
         const allDatasets = await getAllDatasets();
         const address = await getWalletAddress();
+        
+        if (!address) {
+          throw new Error('Wallet not connected');
+        }
         
         // Filter for owned and purchased datasets
         const owned = allDatasets.filter(dataset => 

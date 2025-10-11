@@ -27,7 +27,7 @@ import {
 } from "@/components/ui/select";
 import { toast } from 'sonner';
 import { useHederaWallet } from '@/contexts/HederaWalletContext';
-import { createDataset, lockDataset } from "@/lib/web3";
+import { createDataset, lockDataset } from "@/lib/hedera";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 // Define the form schema
@@ -56,11 +56,11 @@ const formSchema = z.object({
 
 export type CreateDatasetFormProps = {
   cid: string;
-  fileData: any;
+  fileData?: unknown;
   onBack: () => void;
 };
 
-export function CreateDatasetForm({ cid, fileData, onBack }: CreateDatasetFormProps) {
+export function CreateDatasetForm({ cid, onBack }: CreateDatasetFormProps) {
   const { isConnected, accountId: address } = useHederaWallet();
   const [creating, setCreating] = useState(false);
 
@@ -96,49 +96,33 @@ export function CreateDatasetForm({ cid, fileData, onBack }: CreateDatasetFormPr
     setCreating(true);
 
     try {
-      const priceInUSDC = parseFloat(values.price);
-      const priceInWei = BigInt(Math.floor(priceInUSDC * 1_000_000));
-
-      const metadata = {
-        name: values.name,
-        description: values.description,
-        cid,
-        visibility: values.visibility,
-        allowNFTAccess: values.allowNFTAccess,
-        model: {
-          type: values.modelType,
-          version: values.modelVersion,
-          samplePrompt: values.samplePrompt || "",
-        },
-        dataStats: {
-          rowCount: fileData?.length || 0,
-          columnCount: fileData && fileData.length > 0 ? Object.keys(fileData[0]).length : 0,
-          createdAt: new Date().toISOString(),
-        }
-      };
-
-      const { receipt, datasetId } = await createDataset(
+      // Create dataset with Hedera
+      const result = await createDataset(
         values.name,
         values.description,
-        priceInWei.toString(),
-        values.visibility !== "private",
+        cid,
+        parseFloat(values.price),
         values.modelType,
-        1, // taskId (placeholder)
-        1, // nodeId (placeholder)
-        100, // computeUnitsPrice (placeholder)
-        1000000 // maxComputeUnits (placeholder)
+        [values.visibility]
       );
 
-      toast.success("Dataset metadata created", {
-        description: `Transaction successful with hash: ${receipt.transactionHash}. Now locking dataset...`,
+      if (!result.success || !result.tokenId || !result.serialNumber) {
+        throw new Error(result.error || 'Failed to create dataset');
+      }
+
+      toast.success("Dataset NFT created", {
+        description: `Token ID: ${result.tokenId}, Serial: ${result.serialNumber}. Now locking dataset...`,
       });
 
-      await lockDataset(
-        datasetId,
-        cid,
-        fileData?.length || 0,
-        0 // numTokens is not yet calculated, placeholder
+      // Lock the dataset
+      const lockResult = await lockDataset(
+        result.tokenId,
+        result.serialNumber
       );
+
+      if (!lockResult.success) {
+        throw new Error(lockResult.error || 'Failed to lock dataset');
+      }
 
       toast.success("Dataset published successfully!", {
         description: "Your dataset has been locked and is now active on the blockchain.",
@@ -146,10 +130,11 @@ export function CreateDatasetForm({ cid, fileData, onBack }: CreateDatasetFormPr
 
       form.reset();
       onBack();
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Error creating dataset:", error);
+      const errorMessage = error instanceof Error ? error.message : "There was an error creating your dataset";
       toast.error("Error creating dataset", {
-        description: error.message || "There was an error creating your dataset",
+        description: errorMessage,
       });
     } finally {
       setCreating(false);

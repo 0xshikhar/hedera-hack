@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { VerificationStatus } from "@/components/ui/verification-status";
-import { getAllDatasets, getDatasetVerificationInfo } from "@/lib/web3";
+import { getAllDatasets, getDatasetVerificationInfo } from "@/lib/hedera";
 import { Dataset } from "@/lib/types";
 import { Loader2, Search, Filter, Shield } from "lucide-react";
 import { toast } from "sonner";

@@ -9,7 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { EnhancedVerificationStatus } from "@/components/verification/enhanced-verification-status";
 import { QualityMetricsDashboard } from "@/components/verification/quality-metrics-dashboard";
-import { getAllDatasets, getDatasetVerificationInfo, isWalletConnected } from "@/lib/web3";
+import { getAllDatasets, getDatasetVerificationInfo, isWalletConnected } from "@/lib/hedera";
 import { Dataset } from "@/lib/types";
 import { 
   Search, 
@@ -58,7 +58,10 @@ export default function VerificationDashboard() {
   // Transform blockchain dataset to dashboard format
   const transformDataset = async (dataset: Dataset): Promise<DashboardDataset> => {
     // Get verification info
-    const verificationInfo = await getDatasetVerificationInfo(Number(dataset.id));
+    const verificationInfo = await getDatasetVerificationInfo(
+      dataset.tokenId || '',
+      Number(dataset.id)
+    ); 
     
     // Determine verification status
     let verificationStatus: "verified" | "pending" | "rejected" = "pending";

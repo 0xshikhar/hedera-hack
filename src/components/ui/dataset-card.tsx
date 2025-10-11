@@ -6,7 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Lock, Unlock, ShoppingCart, Shield, CheckCircle, XCircle, Eye, EyeOff, Download } from 'lucide-react';
-import { purchaseDataset, hasAccessToDataset, checkDatasetVerification } from '@/lib/web3';
+import { purchaseDataset, hasAccessToDataset, checkDatasetVerification } from '@/lib/hedera';
 import { getDatasetContent } from '@/lib/ipfs';
 import { toast } from 'sonner';     
 import { useHederaWallet } from '@/contexts/HederaWalletContext';

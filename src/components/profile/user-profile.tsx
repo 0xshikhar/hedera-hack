@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
-import { getAllDatasets } from "@/lib/web3";
+import { getAllDatasets } from "@/lib/hedera";
 import { Dataset } from "@/lib/types";
 import { DatasetCard } from "@/components/ui/dataset-card";
 import { toast } from "sonner";
