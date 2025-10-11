@@ -77,9 +77,3 @@ export interface Web3ProviderState {
   disconnectWallet: () => void;
 }
 
-// Window interface extension for Ethereum providers
-declare global {
-  interface Window {
-    ethereum?: any;
-  }
-}
