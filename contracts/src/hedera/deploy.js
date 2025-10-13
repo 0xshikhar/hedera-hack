@@ -27,8 +27,7 @@ async function deployContract(client, contractName, constructorParams) {
   // Try multiple paths for compiled contracts
   const possiblePaths = [
     path.join(__dirname, `../out/${contractName}.sol/${contractName}.json`), // Foundry
-    path.join(__dirname, `../artifacts/src/hedera/${contractName}.sol/${contractName}.json`), // Hardhat (src/hedera)
-    path.join(__dirname, `../artifacts/hedera/${contractName}.sol/${contractName}.json`), // Hardhat (hedera)
+    path.join(__dirname, `../artifacts/hedera/${contractName}.sol/${contractName}.json`), // Hardhat
     path.join(__dirname, `../artifacts/contracts/hedera/${contractName}.sol/${contractName}.json`), // Hardhat alt
   ];
 

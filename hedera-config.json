@@ -14,8 +14,8 @@
     "marketplaceEvents": "0.0.7158243"
   },
   "contracts": {
-    "marketplace": "",
-    "providerRegistry": "",
-    "verificationOracle": ""
+    "marketplace": "0.0.7158321",
+    "providerRegistry": "0.0.7158323",
+    "verificationOracle": "0.0.7158325"
   }
 }
