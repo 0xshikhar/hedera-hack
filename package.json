@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "bun build:prisma && next build",
+    "build": "next build",
     "build:prisma": "prisma generate --no-engine",
     "start": "next start",
     "lint": "next lint",
