@@ -9,13 +9,15 @@ import {
   HederaChainId,
 } from '@hashgraph/hedera-wallet-connect';
 import { LedgerId } from '@hashgraph/sdk';
+import { HederaWalletProvider } from '@/contexts/HederaWalletContext';
+import { Toaster } from 'sonner';
 
 const projectId = process.env.NEXT_PUBLIC_WALLET_CONNECT_ID ?? '';
 const queryClient = new QueryClient();
 
 const metadata = {
-  name: 'AgentKit Next.js Demo',
-  description: 'AgentKit Next.js Demo',
+  name: 'FileThetic',
+  description: 'Decentralized AI Data Marketplace on Hedera',
   url: typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3000',
   icons: ['https://avatars.githubusercontent.com/u/179229932'],
 };
@@ -115,7 +117,12 @@ export function ClientProviders({ children }: ClientProvidersProps) {
 
   return (
     <DAppConnectorContext.Provider value={{ dAppConnector, userAccountId, sessionTopic, disconnect, refresh }}>
-      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+      <QueryClientProvider client={queryClient}>
+        <HederaWalletProvider>
+          <Toaster position="top-right" richColors />
+          {children}
+        </HederaWalletProvider>
+      </QueryClientProvider>
     </DAppConnectorContext.Provider>
   );
 }
