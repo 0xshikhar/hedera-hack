@@ -29,15 +29,15 @@ export class HgraphClient {
   private client: HgraphSDK;
   
   constructor() {
-    const network = process.env.HEDERA_NETWORK === 'mainnet' 
-      ? 'mainnet.hedera' 
-      : 'testnet.hedera';
+    const network = process.env.HEDERA_NETWORK === 'testnet' 
+      ? 'testnet.hedera' 
+      : 'mainnet.hedera';
     
     // Initialize HGraph SDK with optional API key
     const headers: Record<string, string> = {};
     
-    if (process.env.HGRAPH_API_KEY) {
-      headers['x-api-key'] = process.env.HGRAPH_API_KEY;
+    if (process.env.NEXT_PUBLIC_HGRAPH_SECRET_KEY) {
+      headers['x-api-key'] = process.env.NEXT_PUBLIC_HGRAPH_SECRET_KEY || '';
     }
     
     this.client = new HgraphSDK({
