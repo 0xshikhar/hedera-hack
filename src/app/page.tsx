@@ -4,8 +4,6 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { ArrowRight, BarChart3, CheckCircle, Database, ExternalLink, FileText, Layers, LockKeyhole, Shield, Store, Server, Globe, Zap } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
-import Image from 'next/image';
-import { Suspense } from 'react';
 
 export default function Home() {
   const isMobile = useIsMobile();
