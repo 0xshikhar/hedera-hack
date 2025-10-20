@@ -20,7 +20,6 @@ import {
 } from "@/components/ui/sheet";
 import { Database, Plus, Shield, User, Server, TrendingUp, ChevronDown, Menu } from "lucide-react";
 import { HederaConnectButton } from "@/components/wallet/HederaConnectButton";
-import Image from "next/image";
 
 const navItems = [
  
@@ -74,12 +73,9 @@ export function Navbar() {
       <div className="container flex h-16 items-center justify-between space-x-4 sm:space-x-0">
         <div className="flex items-center gap-2">
           <Link href="/" className="flex items-center space-x-2">
-          <Image
-            src="/logo.png"
-            alt="Logo"
-            width={32}
-            height={32}
-          />
+            <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
+              <Database className="h-5 w-5 text-white" />
+            </div>
             <span className="font-bold text-2xl">FileThetic</span>
           </Link>
         </div>
