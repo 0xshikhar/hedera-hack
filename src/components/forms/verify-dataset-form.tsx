@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Shield, CheckCircle, ArrowLeft } from "lucide-react";
 import { toast } from 'sonner';     
-import { useAccount } from 'wagmi';
+import { useHederaWallet } from '@/contexts/HederaWalletContext';
 import Link from "next/link";
 import { VerificationStatus } from "@/components/ui/verification-status";
 import { useDatasetContract, Dataset } from "@/hooks/blockchain/useDatasetContract";
@@ -31,7 +31,7 @@ const formSchema = z.object({
 });
 
 export function VerifyDatasetForm() {
-  const { isConnected, address } = useAccount();
+  const { isConnected, accountId: address } = useHederaWallet();
   const searchParams = useSearchParams();
   const datasetIdParam = searchParams.get('datasetId');
   

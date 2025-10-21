@@ -1,13 +1,13 @@
 'use client';
 
 import { useMutation } from "@tanstack/react-query";
-import { useAccount } from "wagmi";
+import { useHederaWallet } from "@/contexts/HederaWalletContext";
 
 /**
  * Simplified payment hook (stub for compatibility)
  */
 export const usePayment = () => {
-  const { address } = useAccount();
+  const { accountId: address } = useHederaWallet();
 
   const depositMutation = useMutation({
     mutationKey: ["deposit", address],

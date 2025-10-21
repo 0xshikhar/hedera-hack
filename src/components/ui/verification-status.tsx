@@ -93,7 +93,7 @@ export function VerificationStatus({ datasetId, onVerifyClick }: VerificationSta
             <CheckCircle className="h-5 w-5" />
             Verified Dataset
           </CardTitle>
-          {verificationInfo.verifiedAt > 0n && (
+          {verificationInfo.verifiedAt > BigInt(0) && (
             <CardDescription>
               Verified on {new Date(Number(verificationInfo.verifiedAt) * 1000).toLocaleDateString()}
             </CardDescription>

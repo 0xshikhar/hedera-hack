@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { toast } from 'sonner';
 import { Search, Filter, RefreshCw } from 'lucide-react';
-import { useAccount } from 'wagmi';
+import { useHederaWallet } from '@/contexts/HederaWalletContext';
 
 
 // Local Dataset interface that matches what's used in the component
@@ -25,7 +25,7 @@ type Dataset = {
 };
 
 export function DatasetBrowser() {
-  const { address, isConnected } = useAccount();
+  const { accountId: address, isConnected } = useHederaWallet();
   const [datasets, setDatasets] = useState<Dataset[]>([]);
   const [filteredDatasets, setFilteredDatasets] = useState<Dataset[]>([]);
   const [isLoading, setIsLoading] = useState(true);

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
-import { useAccount } from "wagmi";
+import { useHederaWallet } from "@/contexts/HederaWalletContext";
 
 export type UploadedInfo = {
   fileName?: string;
@@ -18,7 +18,7 @@ export const useFileUpload = () => {
   const [progress, setProgress] = useState(0);
   const [status, setStatus] = useState("");
   const [uploadedInfo, setUploadedInfo] = useState<UploadedInfo | null>(null);
-  const { address } = useAccount();
+  const { accountId: address } = useHederaWallet();
 
   const mutation = useMutation({
     mutationKey: ["file-upload", address],

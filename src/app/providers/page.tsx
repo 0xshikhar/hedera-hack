@@ -22,7 +22,7 @@ export default function ProvidersPage() {
       <div className="mb-8">
         <h1 className="text-4xl font-bold mb-2">Storage Provider Network</h1>
         <p className="text-muted-foreground">
-          Decentralized IPFS storage providers powering FileThetic's DePIN infrastructure
+          Decentralized IPFS storage providers powering FileThetic&apos;s DePIN infrastructure
         </p>
       </div>
 

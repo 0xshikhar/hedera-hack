@@ -1,11 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { usePublicClient, useChainId } from 'wagmi';
-import u2uTestnetDeployment from '@/deployments/u2uTestnet.json';
-import u2uMainnetDeployment from '@/deployments/u2uMainnet.json';
-import localhostDeployment from '@/deployments/localhost.json';
-import { STORAGE_NETWORK_ABI } from '@/contracts/FiletheticStorageNetworkABI';
+import { useHederaWallet } from '@/contexts/HederaWalletContext';
 
 interface Provider {
   provider: string;
@@ -35,103 +31,76 @@ export function useStorageProviders() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   
-  const publicClient = usePublicClient();
-  const chainId = useChainId();
+  const { isConnected } = useHederaWallet();
 
   const fetchProviders = async () => {
-    if (!publicClient) return;
-
     try {
       setIsLoading(true);
       setError(null);
 
-      // Get deployment info based on chain ID
-      const deploymentMap: Record<number, any> = {
-        2484: u2uTestnetDeployment,
-        39: u2uMainnetDeployment,
-        31337: localhostDeployment,
+      // TODO: Implement Hedera smart contract call to ProviderRegistry
+      // For now, use mock data
+      await new Promise(resolve => setTimeout(resolve, 500));
+
+      // Mock providers data
+      const mockProviders: Provider[] = [
+        {
+          provider: '0.0.12345',
+          stakedAmount: BigInt(1000),
+          bandwidthMbps: BigInt(100),
+          storageTB: BigInt(5),
+          uptime: BigInt(9900), // 99%
+          ipfsGateway: 'https://ipfs-gateway-1.example.com',
+          location: 'Singapore',
+          isActive: true,
+          registeredAt: BigInt(Date.now() - 30 * 24 * 60 * 60 * 1000),
+          totalEarnings: BigInt(500),
+          datasetsHosted: BigInt(25),
+        },
+        {
+          provider: '0.0.12346',
+          stakedAmount: BigInt(2000),
+          bandwidthMbps: BigInt(200),
+          storageTB: BigInt(10),
+          uptime: BigInt(9950), // 99.5%
+          ipfsGateway: 'https://ipfs-gateway-2.example.com',
+          location: 'USA',
+          isActive: true,
+          registeredAt: BigInt(Date.now() - 60 * 24 * 60 * 60 * 1000),
+          totalEarnings: BigInt(1200),
+          datasetsHosted: BigInt(50),
+        },
+        {
+          provider: '0.0.12347',
+          stakedAmount: BigInt(1500),
+          bandwidthMbps: BigInt(150),
+          storageTB: BigInt(8),
+          uptime: BigInt(9800), // 98%
+          ipfsGateway: 'https://ipfs-gateway-3.example.com',
+          location: 'Germany',
+          isActive: true,
+          registeredAt: BigInt(Date.now() - 45 * 24 * 60 * 60 * 1000),
+          totalEarnings: BigInt(800),
+          datasetsHosted: BigInt(35),
+        },
+      ];
+
+      setProviders(mockProviders);
+
+      // Mock network stats
+      const mockStats: NetworkStats = {
+        totalProviders: mockProviders.length,
+        activeProviders: mockProviders.filter(p => p.isActive).length,
+        networkBandwidth: mockProviders.reduce((sum, p) => sum + Number(p.bandwidthMbps || 0), 0),
+        networkStorage: mockProviders.reduce((sum, p) => sum + Number(p.storageTB || 0), 0),
       };
 
-      const deployment = deploymentMap[chainId] || u2uTestnetDeployment;
+      setNetworkStats(mockStats);
 
-      if (!deployment.filetheticStorageNetwork) {
-        console.log('Storage network not deployed yet');
-        setProviders([]);
-        setNetworkStats({
-          totalProviders: 0,
-          activeProviders: 0,
-          networkBandwidth: 0,
-          networkStorage: 0
-        });
-        setIsLoading(false);
-        return;
-      }
-
-      const contractAddress = deployment.filetheticStorageNetwork as `0x${string}`;
-
-      // Get provider count
-      const providerCount = await publicClient.readContract({
-        address: contractAddress,
-        abi: STORAGE_NETWORK_ABI,
-        functionName: 'getProviderCount',
-      }) as bigint;
-
-      console.log('Provider count:', providerCount.toString());
-
-      // Fetch all providers
-      const providerPromises = [];
-      for (let i = 0; i < Number(providerCount); i++) {
-        providerPromises.push(
-          publicClient.readContract({
-            address: contractAddress,
-            abi: STORAGE_NETWORK_ABI,
-            functionName: 'getProviderByIndex',
-            args: [BigInt(i)],
-          })
-        );
-      }
-
-      const providersData = await Promise.all(providerPromises);
-      
-      const formattedProviders = providersData
-        .map((data: any) => {
-          // Handle both array and object responses from the contract
-          const isArray = Array.isArray(data);
-          return {
-            provider: isArray ? data[0] : data.provider,
-            stakedAmount: isArray ? data[1] : data.stakedAmount,
-            bandwidthMbps: isArray ? data[2] : data.bandwidthMbps,
-            storageTB: isArray ? data[3] : data.storageTB,
-            uptime: isArray ? data[4] : data.uptime,
-            ipfsGateway: isArray ? data[5] : data.ipfsGateway,
-            location: isArray ? data[6] : data.location,
-            isActive: isArray ? data[7] : data.isActive,
-            registeredAt: isArray ? data[8] : data.registeredAt,
-            totalEarnings: isArray ? data[9] : data.totalEarnings,
-            datasetsHosted: isArray ? data[10] : data.datasetsHosted,
-          };
-        })
-        .filter(p => p.provider); // Filter out any invalid providers
-
-      setProviders(formattedProviders);
-
-      // Get network stats
-      const stats = await publicClient.readContract({
-        address: contractAddress,
-        abi: STORAGE_NETWORK_ABI,
-        functionName: 'getNetworkStats',
-      }) as [bigint, bigint, bigint, bigint];
-
-      setNetworkStats({
-        totalProviders: Number(stats[0]),
-        activeProviders: Number(stats[1]),
-        networkBandwidth: Number(stats[2]),
-        networkStorage: Number(stats[3]),
-      });
-
-    } catch (err: any) {
+    } catch (err) {
       console.error('Error fetching providers:', err);
-      setError(err.message || 'Failed to fetch providers');
+      const errorMessage = err instanceof Error ? err.message : 'Failed to fetch providers';
+      setError(errorMessage);
       setProviders([]);
       setNetworkStats(null);
     } finally {
@@ -142,7 +111,7 @@ export function useStorageProviders() {
   useEffect(() => {
     fetchProviders();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [publicClient, chainId]);
+  }, [isConnected]);
 
   return {
     providers,

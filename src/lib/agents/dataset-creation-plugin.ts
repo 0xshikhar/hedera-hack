@@ -1,8 +1,7 @@
 import { Tool } from 'langchain/tools';
 import { Client, TokenMintTransaction, TokenId } from '@hashgraph/sdk';
-import OpenAI from 'openai';
-import Anthropic from '@anthropic-ai/sdk';
-import { GoogleGenerativeAI } from '@google/generative-ai';
+import { ChatOpenAI } from '@langchain/openai';
+import { BaseChatModel } from '@langchain/core/language_models/chat_models';
 import { carbonCalculator } from '@/services/carbon';
 import { ProvenanceService } from '@/services/provenance';
 
@@ -38,25 +37,20 @@ export class DatasetCreationPlugin extends Tool {
 
   private hederaClient: Client;
   private provenanceService: ProvenanceService;
-  private openai: OpenAI;
-  private anthropic: Anthropic;
-  private google: GoogleGenerativeAI;
+  private chatModel: BaseChatModel;
 
-  constructor(hederaClient: Client) {
+  constructor(hederaClient: Client, provider: 'openai' | 'anthropic' | 'google' = 'openai') {
     super();
     this.hederaClient = hederaClient;
     this.provenanceService = new ProvenanceService(hederaClient);
 
-    // Initialize AI providers
-    this.openai = new OpenAI({
-      apiKey: process.env.OPENAI_API_KEY,
+    // Initialize LangChain chat model based on provider
+    // For now, only OpenAI is supported (others can be added when needed)
+    this.chatModel = new ChatOpenAI({
+      openAIApiKey: process.env.OPENAI_API_KEY,
+      temperature: 0.7,
+      maxTokens: 2000,
     });
-
-    this.anthropic = new Anthropic({
-      apiKey: process.env.ANTHROPIC_API_KEY,
-    });
-
-    this.google = new GoogleGenerativeAI(process.env.GOOGLE_AI_API_KEY || '');
   }
 
   async _call(input: string): Promise<string> {
@@ -153,56 +147,19 @@ export class DatasetCreationPlugin extends Tool {
     const rows = params.rows || 100;
     const format = params.format || 'json';
 
-    const systemPrompt = `Generate a dataset with ${rows} rows in ${format} format. ${params.prompt}`;
+    const systemPrompt = `Generate a dataset with ${rows} rows in ${format} format. ${params.prompt}
 
-    switch (params.provider) {
-      case 'openai':
-        return this.generateWithOpenAI(systemPrompt, params.model);
-      case 'anthropic':
-        return this.generateWithAnthropic(systemPrompt, params.model);
-      case 'google':
-        return this.generateWithGoogle(systemPrompt, params.model);
-      default:
-        throw new Error(`Unsupported provider: ${params.provider}`);
-    }
-  }
+Return ONLY valid ${format.toUpperCase()} data, no additional text or explanations.`;
 
-  private async generateWithOpenAI(
-    prompt: string,
-    model: string
-  ): Promise<string> {
-    const response = await this.openai.chat.completions.create({
-      model,
-      messages: [{ role: 'user', content: prompt }],
-      temperature: 0.7,
-      max_tokens: 2000,
-    });
-
-    return response.choices[0]?.message?.content || '';
-  }
-
-  private async generateWithAnthropic(
-    prompt: string,
-    model: string
-  ): Promise<string> {
-    const response = await this.anthropic.messages.create({
-      model,
-      max_tokens: 2000,
-      messages: [{ role: 'user', content: prompt }],
-    });
-
-    const content = response.content[0];
-    return content.type === 'text' ? content.text : '';
-  }
-
-  private async generateWithGoogle(
-    prompt: string,
-    model: string
-  ): Promise<string> {
-    const genModel = this.google.getGenerativeModel({ model });
-    const result = await genModel.generateContent(prompt);
-    const response = await result.response;
-    return response.text();
+    // Use LangChain chat model to generate dataset
+    const response = await this.chatModel.invoke(systemPrompt);
+    
+    // Extract content from response
+    const content = typeof response.content === 'string' 
+      ? response.content 
+      : JSON.stringify(response.content);
+    
+    return content;
   }
 
   private async uploadToIPFS(data: string): Promise<string> {

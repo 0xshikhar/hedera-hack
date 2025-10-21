@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useAccount } from "wagmi";
+import { useHederaWallet } from "@/contexts/HederaWalletContext";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -20,7 +20,7 @@ import Link from "next/link";
 import { StorageManager } from "@/components/storage/StorageManager";
 
 export function UserProfile() {
-  const { address, isConnected } = useAccount();
+  const { accountId: address, isConnected } = useHederaWallet();
   const [datasets, setDatasets] = useState<Dataset[]>([]);
   const [loading, setLoading] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -209,7 +209,7 @@ export function UserProfile() {
               <CardHeader>
                 <CardTitle>No Datasets Found</CardTitle>
                 <CardDescription>
-                  You haven't created any datasets yet
+                  You haven&apos;t created any datasets yet
                 </CardDescription>
               </CardHeader>
               <CardContent>

@@ -1,11 +1,7 @@
 'use client';
 
-import { usePublicClient, useWalletClient, useChainId } from 'wagmi';
-import { parseAbi } from 'viem';
-import u2uTestnetDeployment from '@/deployments/u2uTestnet.json';
-import u2uMainnetDeployment from '@/deployments/u2uMainnet.json';
-import localhostDeployment from '@/deployments/localhost.json';
-import FiletheticABI from '@/abi/Filethetic.json';
+import { useHederaWallet } from '@/contexts/HederaWalletContext';
+import { mockDatasets } from '@/lib/mock-data';
 
 export interface Dataset {
   id: bigint;
@@ -27,79 +23,62 @@ export interface Dataset {
 }
 
 export function useDatasetContract() {
-  const publicClient = usePublicClient();
-  const { data: walletClient } = useWalletClient();
-  const chainId = useChainId();
-
-  const getContractAddress = () => {
-    const deploymentMap: Record<number, any> = {
-      2484: u2uTestnetDeployment,
-      39: u2uMainnetDeployment,
-      31337: localhostDeployment,
-    };
-
-    const deployment = deploymentMap[chainId] || u2uTestnetDeployment;
-    return deployment.filethetic as `0x${string}`;
-  };
+  const { accountId, isConnected } = useHederaWallet();
 
   const getDataset = async (datasetId: number): Promise<Dataset> => {
-    if (!publicClient) {
-      throw new Error('Public client not available');
+    // TODO: Implement Hedera smart contract call
+    // For now, use mock data
+    await new Promise(resolve => setTimeout(resolve, 300));
+    
+    const mockDataset = mockDatasets.find(ds => ds.id === datasetId.toString());
+    
+    if (!mockDataset) {
+      throw new Error(`Dataset ${datasetId} not found`);
     }
 
-    const contractAddress = getContractAddress();
-    
-    const result = await publicClient.readContract({
-      address: contractAddress,
-      abi: FiletheticABI.abi,
-      functionName: 'getDataset',
-      args: [BigInt(datasetId)],
-    }) as any;
-
     return {
-      id: result[0],
-      version: result[1],
-      owner: result[2],
-      name: result[3],
-      description: result[4],
-      price: result[5],
-      isPublic: result[6],
-      cid: result[7],
-      numRows: result[8],
-      numTokens: result[9],
-      modelName: result[10],
-      taskId: result[11],
-      nodeId: result[12],
-      computeUnitsPrice: result[13],
-      maxComputeUnits: result[14],
-      numDownloads: result[15],
+      id: BigInt(datasetId),
+      version: BigInt(1),
+      owner: mockDataset.owner,
+      name: mockDataset.name,
+      description: mockDataset.description || '',
+      price: BigInt(Math.floor((mockDataset.price || 0) * 100)),
+      isPublic: !mockDataset.isPrivate,
+      cid: mockDataset.metadata?.ipfsHash || '',
+      numRows: BigInt(mockDataset.numRows || 0),
+      numTokens: BigInt(mockDataset.tokenCount || 0),
+      modelName: mockDataset.model || '',
+      taskId: BigInt(0),
+      nodeId: BigInt(0),
+      computeUnitsPrice: BigInt(0),
+      maxComputeUnits: BigInt(0),
+      numDownloads: BigInt(mockDataset.downloads || 0),
     };
   };
 
   const getAllDatasets = async (): Promise<Dataset[]> => {
-    if (!publicClient) {
-      throw new Error('Public client not available');
-    }
-
-    const contractAddress = getContractAddress();
+    // TODO: Implement Hedera smart contract call
+    // For now, use mock data
+    await new Promise(resolve => setTimeout(resolve, 300));
     
-    const count = await publicClient.readContract({
-      address: contractAddress,
-      abi: FiletheticABI.abi,
-      functionName: 'getDatasetCount',
-    }) as bigint;
-
-    const datasets: Dataset[] = [];
-    for (let i = 0; i < Number(count); i++) {
-      try {
-        const dataset = await getDataset(i);
-        datasets.push(dataset);
-      } catch (error) {
-        console.error(`Error fetching dataset ${i}:`, error);
-      }
-    }
-
-    return datasets;
+    return mockDatasets.map((ds, index) => ({
+      id: BigInt(index),
+      version: BigInt(1),
+      owner: ds.owner,
+      name: ds.name,
+      description: ds.description || '',
+      price: BigInt(Math.floor((ds.price || 0) * 100)),
+      isPublic: !ds.isPrivate,
+      cid: ds.metadata?.ipfsHash || '',
+      numRows: BigInt(ds.numRows || 0),
+      numTokens: BigInt(ds.tokenCount || 0),
+      modelName: ds.model || '',
+      taskId: BigInt(0),
+      nodeId: BigInt(0),
+      computeUnitsPrice: BigInt(0),
+      maxComputeUnits: BigInt(0),
+      numDownloads: BigInt(ds.downloads || 0),
+    }));
   };
 
   const createDataset = async (
@@ -112,45 +91,30 @@ export function useDatasetContract() {
     numTokens: bigint,
     modelName: string
   ) => {
-    if (!walletClient) {
+    if (!isConnected || !accountId) {
       throw new Error('Wallet not connected');
     }
 
-    const contractAddress = getContractAddress();
+    // TODO: Implement Hedera smart contract call via dAppConnector
+    // This would use the FiletheticMarketplace contract on Hedera
+    console.log('Creating dataset:', { name, description, price, isPublic, cid, numRows, numTokens, modelName });
     
-    const hash = await walletClient.writeContract({
-      address: contractAddress,
-      abi: FiletheticABI.abi,
-      functionName: 'createDataset',
-      args: [name, description, price, isPublic, cid, numRows, numTokens, modelName],
-    });
-
-    if (publicClient) {
-      await publicClient.waitForTransactionReceipt({ hash });
-    }
-
-    return hash;
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    
+    return '0.0.123@1234567890.123456789'; // Mock transaction ID
   };
 
   const lockDataset = async (datasetId: number) => {
-    if (!walletClient) {
+    if (!isConnected || !accountId) {
       throw new Error('Wallet not connected');
     }
 
-    const contractAddress = getContractAddress();
+    // TODO: Implement Hedera smart contract call
+    console.log('Locking dataset:', datasetId);
     
-    const hash = await walletClient.writeContract({
-      address: contractAddress,
-      abi: FiletheticABI.abi,
-      functionName: 'lockDataset',
-      args: [BigInt(datasetId)],
-    });
-
-    if (publicClient) {
-      await publicClient.waitForTransactionReceipt({ hash });
-    }
-
-    return hash;
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    
+    return '0.0.123@1234567890.123456789'; // Mock transaction ID
   };
 
   return {

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { useConfetti } from "@/hooks/storage/useConfetti";
-import { useAccount } from "wagmi";
+import { useHederaWallet } from "@/contexts/HederaWalletContext";
 import { storeDataset } from "@/lib/ipfs";
 
 export type UploadedInfo = {
@@ -22,8 +22,8 @@ export const useDataUpload = () => {
   const [status, setStatus] = useState("");
   const [uploadedInfo, setUploadedInfo] = useState<UploadedInfo | null>(null);
 
-  const { triggerConfetti } = useConfetti();
-  const { address, chainId } = useAccount();
+  const { showConfetti } = useConfetti();
+  const { accountId: address, network: chainId } = useHederaWallet();
 
   const mutation = useMutation({
     mutationKey: ["data-upload", address, chainId],
@@ -66,7 +66,7 @@ export const useDataUpload = () => {
     onSuccess: () => {
       setStatus("🎉 Dataset successfully uploaded!");
       setProgress(100);
-      triggerConfetti();
+      showConfetti();
     },
     onError: (error) => {
       console.error("Upload failed:", error);

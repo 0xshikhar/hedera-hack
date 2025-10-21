@@ -1,7 +1,7 @@
 'use client';
 
 import { useQuery } from "@tanstack/react-query";
-import { useAccount, useBalance } from "wagmi";
+import { useHederaWallet } from "@/contexts/HederaWalletContext";
 import { formatUnits } from "viem";
 import { defaultBalances, UseBalancesResponse } from "@/types";
 
@@ -10,10 +10,10 @@ import { defaultBalances, UseBalancesResponse } from "@/types";
  * Tracks U2U and MockUSDC balances only
  */
 export const useBalances = () => {
-  const { address } = useAccount();
+  const { accountId: address } = useHederaWallet();
   
-  // Get native U2U balance
-  const { data: seiBalance } = useBalance({ address });
+  // Get native HBAR balance (placeholder - would need Hedera SDK to fetch actual balance)
+  const seiBalance = { value: BigInt(0) };
 
   const query = useQuery({
     enabled: !!address,

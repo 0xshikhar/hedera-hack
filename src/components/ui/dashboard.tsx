@@ -109,7 +109,7 @@ export function Dashboard() {
           </div>
         ) : (
           <p className="text-center text-muted-foreground">
-            You haven't created any datasets yet
+            You haven&apos; t created any datasets yet
           </p>
         )}
         <div className="mt-4 text-center">
@@ -153,7 +153,7 @@ export function Dashboard() {
           </div>
         ) : (
           <p className="text-center text-muted-foreground">
-            You haven't purchased any datasets yet
+            You haven&apos;t purchased any datasets yet
           </p>
         )}
         <div className="mt-4 text-center">

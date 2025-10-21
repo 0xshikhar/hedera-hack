@@ -114,7 +114,7 @@ function ValueDisplay({ value }: { value: any }) {
   
   switch (typeof value) {
     case "string":
-      return <span className="text-green-600">"{value}"</span>;
+      return <span className="text-green-600">&quot;{value}&quot;</span>;
     case "number":
       return <span className="text-amber-600">{value}</span>;
     case "boolean":

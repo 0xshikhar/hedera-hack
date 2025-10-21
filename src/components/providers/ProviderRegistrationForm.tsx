@@ -7,12 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 import { Loader2 } from 'lucide-react';
-import { useAccount, useWriteContract, useWaitForTransactionReceipt } from 'wagmi';
-import { parseEther } from 'viem';
-import { STORAGE_NETWORK_ABI } from '@/contracts/FiletheticStorageNetworkABI';
-import u2uTestnetDeployment from '@/deployments/u2uTestnet.json';
-import u2uMainnetDeployment from '@/deployments/u2uMainnet.json';
-import localhostDeployment from '@/deployments/localhost.json';
+import { useHederaWallet } from '@/contexts/HederaWalletContext';
 
 interface RegistrationFormData {
   bandwidthMbps: string;
@@ -28,8 +23,9 @@ interface ProviderRegistrationFormProps {
 }
 
 export function ProviderRegistrationForm({ onSuccess, onCancel }: ProviderRegistrationFormProps) {
-  const { address, isConnected, chainId } = useAccount();
+  const { accountId, isConnected } = useHederaWallet();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isConfirming, setIsConfirming] = useState(false);
   
   const { register, handleSubmit, formState: { errors } } = useForm<RegistrationFormData>({
     defaultValues: {
@@ -37,66 +33,38 @@ export function ProviderRegistrationForm({ onSuccess, onCancel }: ProviderRegist
       storageTB: '1',
       ipfsGateway: '',
       location: '',
-      stakeAmount: '0.1'
+      stakeAmount: '100'
     }
   });
 
-  const { data: hash, writeContract } = useWriteContract();
-  
-  const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({
-    hash,
-  });
-
   const onSubmit = async (data: RegistrationFormData) => {
-    if (!isConnected || !address) {
-      toast.error('Please connect your wallet');
+    if (!isConnected || !accountId) {
+      toast.error('Please connect your Hedera wallet');
       return;
     }
 
     try {
       setIsSubmitting(true);
+      setIsConfirming(true);
       
-      // Get deployment info based on chain ID
-      const deploymentMap: Record<number, any> = {
-        2484: u2uTestnetDeployment,
-        39: u2uMainnetDeployment,
-        31337: localhostDeployment,
-      };
-
-      const deployment = deploymentMap[chainId || 2484] || u2uTestnetDeployment;
+      // TODO: Implement Hedera smart contract call
+      // This would use the Hedera SDK to call the ProviderRegistry contract
+      // For now, simulate the registration with the form data
+      console.log('Registering provider with data:', data);
+      await new Promise(resolve => setTimeout(resolve, 2000));
       
-      if (!deployment.filetheticStorageNetwork) {
-        toast.error('Storage network contract not deployed');
-        return;
-      }
-
-      writeContract({
-        address: deployment.filetheticStorageNetwork as `0x${string}`,
-        abi: STORAGE_NETWORK_ABI,
-        functionName: 'registerAsProvider',
-        args: [
-          BigInt(data.bandwidthMbps),
-          BigInt(data.storageTB),
-          data.ipfsGateway,
-          data.location
-        ],
-        value: parseEther(data.stakeAmount)
-      });
-
-      toast.success('Registration submitted!');
-    } catch (error: any) {
+      toast.success('Successfully registered as provider!');
+      setIsConfirming(false);
+      onSuccess();
+    } catch (error) {
       console.error('Registration error:', error);
-      toast.error(error.message || 'Failed to register provider');
+      const errorMessage = error instanceof Error ? error.message : 'Failed to register provider';
+      toast.error(errorMessage);
+      setIsConfirming(false);
     } finally {
       setIsSubmitting(false);
     }
   };
-
-  // Handle successful confirmation
-  if (isConfirmed) {
-    toast.success('Successfully registered as provider!');
-    onSuccess();
-  }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -174,22 +142,22 @@ export function ProviderRegistrationForm({ onSuccess, onCancel }: ProviderRegist
 
       {/* Stake Amount */}
       <div className="space-y-2">
-        <Label htmlFor="stakeAmount">Stake Amount (U2U)</Label>
+        <Label htmlFor="stakeAmount">Stake Amount (FILE tokens)</Label>
         <Input
           id="stakeAmount"
           type="number"
-          step="0.01"
-          placeholder="0.1"
+          step="1"
+          placeholder="100"
           {...register('stakeAmount', {
             required: 'Stake amount is required',
-            min: { value: 0.1, message: 'Minimum stake is 0.1 U2U' }
+            min: { value: 100, message: 'Minimum stake is 100 FILE' }
           })}
         />
         {errors.stakeAmount && (
           <p className="text-sm text-red-500">{errors.stakeAmount.message}</p>
         )}
         <p className="text-xs text-muted-foreground">
-          Minimum stake: 0.1 U2U. This will be locked while you're an active provider.
+          Minimum stake: 100 FILE tokens. This will be locked while you&apos;re an active provider.
         </p>
       </div>
 

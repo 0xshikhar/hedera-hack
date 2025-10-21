@@ -1,0 +1,9 @@
+{
+  "abi": [],
+  "_format": "hh-sol-artifact-1",
+  "contractName": "MockUSDC",
+  "sourceName": "contracts/MockUSDC.sol",
+  "deployedBytecode": "0x",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

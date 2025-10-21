@@ -26,7 +26,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from 'sonner';
-import { useAccount } from 'wagmi';
+import { useHederaWallet } from '@/contexts/HederaWalletContext';
 import { createDataset, lockDataset } from "@/lib/web3";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -42,7 +42,7 @@ const formSchema = z.object({
     message: "Price must be a non-negative number",
   }),
   visibility: z.enum(["public", "private"], {
-    required_error: "You must select a visibility option",
+    message: "You must select a visibility option",
   }),
   allowNFTAccess: z.boolean(),
   modelType: z.string().min(1, {
@@ -61,7 +61,7 @@ export type CreateDatasetFormProps = {
 };
 
 export function CreateDatasetForm({ cid, fileData, onBack }: CreateDatasetFormProps) {
-  const { isConnected, address } = useAccount();
+  const { isConnected, accountId: address } = useHederaWallet();
   const [creating, setCreating] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({

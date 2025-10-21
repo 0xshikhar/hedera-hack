@@ -16,7 +16,7 @@ import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { toast } from 'sonner';
-import { useAccount } from 'wagmi';
+import { useHederaWallet } from '@/contexts/HederaWalletContext';
 import { Loader2, Database, Bot, ArrowRight, CheckCircle, AlertCircle, Clock, Upload, Zap, Eye, Sparkles } from 'lucide-react';
 import { Model, getModels, MODEL_PROVIDERS } from '@/lib/models';
 import { DatasetGenerationService } from '@/lib/synthetic-generation-service';
@@ -36,18 +36,18 @@ const formSchema = z.object({
     message: "Price must be a non-negative number",
   }),
   visibility: z.enum(["public", "private"], {
-    required_error: "You must select a visibility option",
+    message: "You must select a visibility option",
   }),
-  allowNFTAccess: z.boolean().default(false),
-  
+  allowNFTAccess: z.boolean(),
+
   // Generation mode selection
   generationMode: z.enum(["synthetic", "augment"], {
-    required_error: "You must select a generation mode",
+    message: "You must select a generation mode",
   }),
-  
+
   // Schema selection for synthetic generation
   schemaId: z.string().optional(),
-  
+
   // AI Model configuration
   aiProvider: z.string().min(1, {
     message: "AI provider is required",
@@ -55,19 +55,19 @@ const formSchema = z.object({
   modelId: z.string().min(1, {
     message: "Model is required",
   }),
-  
+
   // Synthetic generation parameters
-  sampleCount: z.number().min(10).max(10000).default(100),
+  sampleCount: z.number().min(10).max(10000),
   customPrompt: z.string().optional(),
-  
+
   // HuggingFace augmentation parameters (for augment mode)
   datasetPath: z.string().optional(),
-  datasetConfig: z.string().default("default"),
-  datasetSplit: z.string().default("train"),
+  datasetConfig: z.string().min(1),
+  datasetSplit: z.string().min(1),
   inputFeature: z.string().optional(),
   augmentPrompt: z.string().optional(),
-  
-  maxTokens: z.number().min(100).max(8000).default(1000),
+
+  maxTokens: z.number().min(100).max(8000),
 });
 
 type ProcessStep = 'idle' | 'generating' | 'uploading' | 'publishing' | 'completed' | 'error';
@@ -134,7 +134,7 @@ function StepIndicator({ currentStep, error }: StepIndicatorProps) {
 }
 
 export function GenerateDatasetForm() {
-  const { isConnected, address } = useAccount();
+  const { isConnected, accountId: address } = useHederaWallet();
   const {
     uploadDataMutation,
     progress: uploadProgress,

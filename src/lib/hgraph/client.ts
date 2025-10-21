@@ -1,4 +1,4 @@
-import { HGraphSDK } from '@hgraph.io/sdk';
+import HGraphSDK from '@hgraph.io/sdk';
 
 export interface TransactionData {
   consensus_timestamp: string;

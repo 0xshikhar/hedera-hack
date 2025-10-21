@@ -9,7 +9,7 @@ import { Lock, Unlock, ShoppingCart, Shield, CheckCircle, XCircle, Eye, EyeOff, 
 import { purchaseDataset, hasAccessToDataset, checkDatasetVerification } from '@/lib/web3';
 import { getDatasetContent } from '@/lib/ipfs';
 import { toast } from 'sonner';     
-import { useAccount } from 'wagmi';
+import { useHederaWallet } from '@/contexts/HederaWalletContext';
 
 export interface DatasetCardProps {
   id: number;
@@ -38,7 +38,7 @@ export function DatasetCard({
   onLock,
   onVerificationCheck,
 }: DatasetCardProps) {
-  const { address, isConnected } = useAccount();
+  const { accountId: address, isConnected } = useHederaWallet();
   const [isPurchasing, setIsPurchasing] = useState(false);
   const [hasAccess, setHasAccess] = useState<boolean | null>(null);
   const [isLoading, setIsLoading] = useState(false);

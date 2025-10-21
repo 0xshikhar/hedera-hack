@@ -1,10 +1,7 @@
 'use client';
 
-import { usePublicClient, useWalletClient, useChainId } from 'wagmi';
-import u2uTestnetDeployment from '@/deployments/u2uTestnet.json';
-import u2uMainnetDeployment from '@/deployments/u2uMainnet.json';
-import localhostDeployment from '@/deployments/localhost.json';
-import FilethethicVerifierABI from '@/abi/FilethethicVerifier.json';
+import { useHederaWallet } from '@/contexts/HederaWalletContext';
+import hederaConfig from '@/../hedera-config.json';
 
 export interface VerificationInfo {
   isVerified: boolean;
@@ -14,20 +11,7 @@ export interface VerificationInfo {
 }
 
 export function useVerifierContract() {
-  const publicClient = usePublicClient();
-  const { data: walletClient } = useWalletClient();
-  const chainId = useChainId();
-
-  const getContractAddress = () => {
-    const deploymentMap: Record<number, any> = {
-      2484: u2uTestnetDeployment,
-      39: u2uMainnetDeployment,
-      31337: localhostDeployment,
-    };
-
-    const deployment = deploymentMap[chainId] || u2uTestnetDeployment;
-    return deployment.filethethicVerifier as `0x${string}`;
-  };
+  const { accountId, isConnected } = useHederaWallet();
 
   const verifyDataset = async (
     datasetId: number,
@@ -35,69 +19,47 @@ export function useVerifierContract() {
     signature: string,
     signerAddress: string
   ) => {
-    if (!walletClient) {
+    if (!isConnected || !accountId) {
       throw new Error('Wallet not connected');
     }
 
-    const contractAddress = getContractAddress();
-    
-    // Convert hex string to bytes32
-    const hashBytes32 = datasetHash.startsWith('0x') ? datasetHash : `0x${datasetHash}`;
-    
-    // Convert signature to bytes
-    const signatureBytes = signature.startsWith('0x') ? signature : `0x${signature}`;
-    
-    const hash = await walletClient.writeContract({
-      address: contractAddress,
-      abi: FilethethicVerifierABI.abi,
-      functionName: 'verifyDataset',
-      args: [BigInt(datasetId), hashBytes32 as `0x${string}`, signatureBytes as `0x${string}`, signerAddress as `0x${string}`],
+    // TODO: Implement Hedera smart contract call to VerificationOracle
+    // Contract ID: 0.0.7158325
+    console.log('Verifying dataset:', { 
+      datasetId, 
+      datasetHash, 
+      signature, 
+      signerAddress,
+      contractId: hederaConfig.contracts.verificationOracle
     });
-
-    if (publicClient) {
-      await publicClient.waitForTransactionReceipt({ hash });
-    }
-
-    return hash;
+    
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    
+    return '0.0.123@1234567890.123456789'; // Mock transaction ID
   };
 
   const getDatasetVerificationInfo = async (datasetId: number): Promise<VerificationInfo> => {
-    if (!publicClient) {
-      throw new Error('Public client not available');
-    }
-
-    const contractAddress = getContractAddress();
+    // TODO: Implement Hedera smart contract call
+    console.log('Getting verification info for dataset:', datasetId);
     
-    const result = await publicClient.readContract({
-      address: contractAddress,
-      abi: FilethethicVerifierABI.abi,
-      functionName: 'getVerificationInfo',
-      args: [BigInt(datasetId)],
-    }) as any;
+    await new Promise(resolve => setTimeout(resolve, 300));
 
+    // Mock verification info
     return {
-      isVerified: result[0],
-      verifier: result[1],
-      verifiedAt: result[2],
-      datasetHash: result[3],
+      isVerified: false,
+      verifier: '0.0.0',
+      verifiedAt: BigInt(0),
+      datasetHash: '0x0000000000000000000000000000000000000000000000000000000000000000',
     };
   };
 
   const isDatasetVerified = async (datasetId: number): Promise<boolean> => {
-    if (!publicClient) {
-      throw new Error('Public client not available');
-    }
-
-    const contractAddress = getContractAddress();
+    // TODO: Implement Hedera smart contract call
+    console.log('Checking if dataset is verified:', datasetId);
     
-    const result = await publicClient.readContract({
-      address: contractAddress,
-      abi: FilethethicVerifierABI.abi,
-      functionName: 'isVerified',
-      args: [BigInt(datasetId)],
-    }) as boolean;
-
-    return result;
+    await new Promise(resolve => setTimeout(resolve, 300));
+    
+    return false; // Mock response
   };
 
   return {

@@ -17,7 +17,7 @@ export default function DePINAnalyticsPage() {
       <div className="mb-8">
         <h1 className="text-4xl font-bold mb-2">DePIN Analytics Dashboard</h1>
         <p className="text-muted-foreground">
-          Real-time metrics for FileThetic's Decentralized Physical Infrastructure Network
+          Real-time metrics for FileThetic&apos;s Decentralized Physical Infrastructure Network
         </p>
       </div>
 

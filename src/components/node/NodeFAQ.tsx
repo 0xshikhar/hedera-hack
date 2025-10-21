@@ -16,7 +16,7 @@ export function NodeFAQ() {
             </AccordionContent>
           </AccordionItem>
           <AccordionItem value="item-2">
-            <AccordionTrigger>What's the minimum stake?</AccordionTrigger>
+            <AccordionTrigger>What&apos;s the minimum stake?</AccordionTrigger> 
             <AccordionContent>
               0.1 U2U tokens required as stake when registering.
             </AccordionContent>

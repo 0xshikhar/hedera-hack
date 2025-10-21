@@ -2,11 +2,9 @@
 
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { ArrowRight, BarChart3, CheckCircle, Database, ExternalLink, FileText, Layers, LockKeyhole, Shield, Store, Server, Globe, Zap } from 'lucide-react';
-import { useIsMobile } from '@/hooks/use-mobile';
+import { ArrowRight, BarChart3, CheckCircle, Database, FileText, Layers, LockKeyhole, Shield, Store, Server, Zap } from 'lucide-react';
 
 export default function Home() {
-  const isMobile = useIsMobile();
   return (
       <div className="flex flex-col">
         {/* Announcement Banner */}
@@ -117,11 +115,11 @@ export default function Home() {
             <div className="text-sm font-mono text-primary">
               {"{"}
               <br />
-              &nbsp;&nbsp;"decentralized": true,
+              &nbsp;&nbsp;&quot;decentralized&quot;: true,
               <br />
-              &nbsp;&nbsp;"verified": true,
+              &nbsp;&nbsp;&quot;verified&quot;: true,
               <br />
-              &nbsp;&nbsp;"source": "filethetic"
+              &nbsp;&nbsp;&quot;source&quot;: &quot;filethetic&quot;
               <br />
               {"}"}
             </div>

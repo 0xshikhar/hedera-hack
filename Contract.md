@@ -1,3 +1,20 @@
+
+**Created Tokens**:
+| Token | ID | Type | Purpose |
+|-------|----|----|---------|
+| Dataset NFT | `0.0.7158235` | HTS NFT | AI dataset ownership |
+| FILE Token | `0.0.7158236` | HTS Fungible | Utility & rewards |
+| FTUSD Token | `0.0.7158237` | HTS Fungible | Payments |
+
+**Files Created**:
+- `src/lib/hedera/token.ts` - HTS token service
+- `src/lib/hedera/dataset-nft.ts` - Dataset NFT service
+- `src/scripts/init-hedera.ts` - Initialization script
+- `hedera-config.json` - Configuration file
+
+---
+
+
 🚀 Deploying contracts to Hedera...
 🚀 Deploying FileThetic Smart Contracts to Hedera...
 
@@ -39,3 +56,5 @@ Contracts:
   • Provider Registry: 0.0.7158323
   • Verification Oracle: 0.0.7158325
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+

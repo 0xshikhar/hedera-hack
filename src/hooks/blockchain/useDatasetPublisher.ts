@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useAccount } from 'wagmi';
+import { useHederaWallet } from '@/contexts/HederaWalletContext';
 import { toast } from 'sonner';
 import { ethers } from 'ethers';
 import { createDataset, lockDataset } from '@/lib/web3';
@@ -20,7 +20,7 @@ interface UseDatasetPublisherProps {
 }
 
 export function useDatasetPublisher() {
-  const { address } = useAccount();
+  const { accountId: address } = useHederaWallet();
   const [isPublishing, setIsPublishing] = useState(false);
 
   const publish = async (props: UseDatasetPublisherProps) => {

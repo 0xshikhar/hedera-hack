@@ -18,8 +18,8 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { Database, Home, Plus, ShoppingBag, Shield, User, Server, TrendingUp, ChevronDown, Menu } from "lucide-react";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { Database, Plus, Shield, User, Server, TrendingUp, ChevronDown, Menu } from "lucide-react";
+import { HederaConnectButton } from "@/components/wallet/HederaConnectButton";
 import Image from "next/image";
 
 const navItems = [
@@ -139,7 +139,7 @@ export function Navbar() {
         
         <div className="flex items-center gap-2">
           <div className="hidden md:flex items-center gap-2">
-            <ConnectButton />
+            <HederaConnectButton />
           </div>
           
           {/* Mobile Menu */}
@@ -192,7 +192,7 @@ export function Navbar() {
                 </div>
                 
                 <div className="border-t pt-4 mt-4 flex items-center gap-2">
-                  <ConnectButton />
+                  <HederaConnectButton />
                 </div>
               </nav>
             </SheetContent>

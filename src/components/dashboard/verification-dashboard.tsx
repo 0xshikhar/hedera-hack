@@ -12,11 +12,11 @@ import { getAllDatasets, getDatasetVerificationInfo } from "@/lib/web3";
 import { Dataset } from "@/lib/types";
 import { Loader2, Search, Filter, Shield } from "lucide-react";
 import { toast } from "sonner";
-import { useAccount } from "wagmi";
+import { useHederaWallet } from "@/contexts/HederaWalletContext";
 
 export function VerificationDashboard() {
   const router = useRouter();
-  const { isConnected, address } = useAccount();
+  const { isConnected, accountId: address } = useHederaWallet();
   const [datasets, setDatasets] = useState<Dataset[]>([]);
   const [filteredDatasets, setFilteredDatasets] = useState<Dataset[]>([]);
   const [loading, setLoading] = useState(true);

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import { Badge, type BadgeProps } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
@@ -14,14 +14,26 @@ import {
   Activity,
   Zap
 } from 'lucide-react';
-import { depinOptimization, type ProviderNode } from '@/services/depin-optimization';
+import {
+  depinOptimization,
+  type ProviderNode,
+  type NetworkTopology,
+  type OptimizationRecommendation,
+  type LoadBalancingStrategy,
+} from '@/services/depin-optimization';
+
+type NetworkHealth = Awaited<ReturnType<typeof depinOptimization.monitorNetworkHealth>>;
 
 export function DePINOptimizationDashboard() {
-  const [topology, setTopology] = useState<any>(null);
-  const [recommendations, setRecommendations] = useState<any[]>([]);
-  const [loadBalancing, setLoadBalancing] = useState<any[]>([]);
-  const [health, setHealth] = useState<any>(null);
+  const [topology, setTopology] = useState<NetworkTopology | null>(null);
+  const [recommendations, setRecommendations] = useState<OptimizationRecommendation[]>([]);
+  const [loadBalancing, setLoadBalancing] = useState<LoadBalancingStrategy[]>([]);
+  const [health, setHealth] = useState<NetworkHealth | null>(null);
   const [loading, setLoading] = useState(true);
+
+  const geographicEntries = topology
+    ? Array.from(topology.geographicDistribution.entries())
+    : [];
 
   useEffect(() => {
     loadOptimizationData();
@@ -107,7 +119,9 @@ export function DePINOptimizationDashboard() {
     }
   };
 
-  const getPriorityColor = (priority: string) => {
+  const getPriorityColor = (
+    priority: OptimizationRecommendation['priority']
+  ): BadgeProps['variant'] => {
     switch (priority) {
       case 'critical':
         return 'destructive';
@@ -258,25 +272,22 @@ export function DePINOptimizationDashboard() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  {topology?.geographicDistribution &&
-                    Array.from(topology.geographicDistribution.entries()).map(
-                      ([region, count]: [string, number]) => (
-                        <div key={region} className="flex items-center justify-between">
-                          <span className="text-sm font-medium capitalize">
-                            {region.replace('-', ' ')}
-                          </span>
-                          <div className="flex items-center gap-2">
-                            <Progress
-                              value={(count / topology.totalNodes) * 100}
-                              className="w-24"
-                            />
-                            <span className="text-sm text-muted-foreground w-8">
-                              {count}
-                            </span>
-                          </div>
-                        </div>
-                      )
-                    )}
+                  {geographicEntries.map(([region, count]) => (
+                    <div key={region} className="flex items-center justify-between">
+                      <span className="text-sm font-medium capitalize">
+                        {region.replace('-', ' ')}
+                      </span>
+                      <div className="flex items-center gap-2">
+                        <Progress
+                          value={topology ? (count / topology.totalNodes) * 100 : 0}
+                          className="w-24"
+                        />
+                        <span className="text-sm text-muted-foreground w-8">
+                          {count}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
                 </div>
 
                 <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
@@ -321,7 +332,7 @@ export function DePINOptimizationDashboard() {
                     >
                       <div className="flex items-start justify-between mb-2">
                         <div className="flex items-center gap-2">
-                          <Badge variant={getPriorityColor(rec.priority) as any}>
+                          <Badge variant={getPriorityColor(rec.priority)}>
                             {rec.priority}
                           </Badge>
                           <span className="font-medium">{rec.title}</span>
@@ -435,7 +446,7 @@ export function DePINOptimizationDashboard() {
                 </div>
               ) : (
                 <div className="space-y-3">
-                  {health?.issues.map((issue: any, index: number) => (
+                  {health?.issues.map((issue, index) => (
                     <div
                       key={index}
                       className={`p-4 border rounded-lg ${
