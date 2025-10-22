@@ -16,6 +16,7 @@
     "@dmitryrechkin/json-schema-to-zod": "^1.0.1",
     "@hashgraph/hedera-wallet-connect": "2.0.0-canary.811af2f.0",
     "@hashgraph/sdk": "^2.67.0",
+    "@hgraph.io/sdk": "^0.8.7",
     "@hookform/resolvers": "^5.2.2",
     "@langchain/core": "^0.3.66",
     "@langchain/openai": "^0.6.2",
