@@ -8,7 +8,7 @@
 **FileThetic-Hedera** is a next-generation DePIN platform for the AI data economy, built natively on Hedera to showcase the full power of Hedera's services for AI and decentralized infrastructure applications.
 
 **Track**: Track 4 - AI and Decentralized Physical Infrastructure (DePIN)  
-**Theme**: Create an AI Agent with ElizaOS + Custom Hedera Agent Kit Plugin  
+**Theme**: AI x Mirror Node Infrastructure + Verifiable & Sustainable AI  
 **Market**: $200B+ AI data market + $3.5T DePIN market by 2028
 
 ---
@@ -34,11 +34,11 @@ FileThetic-Hedera combines three breakthrough innovations:
 - **HSCS** for optimized smart contracts
 - **Hedera Agent Kit** for autonomous operations
 
-### 2. AI Agent Autonomy
+### 2. AI-Powered Analytics & Verification
 - Custom Hedera Agent Kit plugins
-- ElizaOS conversational interface
-- HCS-10 compliant multi-agent coordination
-- 24/7 autonomous operation
+- Hgraph SDK for mirror node queries
+- AI agents analyzing on-chain data
+- Predictive models for network optimization
 
 ### 3. DePIN Infrastructure
 - Global storage provider network
@@ -53,11 +53,11 @@ FileThetic-Hedera combines three breakthrough innovations:
 ```
 Users & AI Agents
        ↓
-ElizaOS + Hedera Agent Kit (Custom Plugins)
+Hedera Agent Kit (Custom Plugins) + Hgraph SDK
        ↓
-HTS (NFTs/Tokens) + HCS (Consensus) + HSCS (Contracts)
+HTS (NFTs/Tokens) + HCS (Provenance) + HSCS (Contracts)
        ↓
-Hedera Network (10,000 TPS, aBFT)
+Hedera Network (10,000 TPS, aBFT) ←→ Mirror Nodes
        ↓
 IPFS Storage Network (DePIN)
 ```
@@ -88,7 +88,8 @@ IPFS Storage Network (DePIN)
 - 🤖 Autonomous dataset creation
 - 🔄 Automated trading
 - 🔍 AI-powered verification
-- 💬 HCS-10 agent communication
+- 📊 Real-time analytics via Hgraph SDK
+- 🌱 Carbon-aware operations
 
 ---
 
@@ -101,26 +102,28 @@ IPFS Storage Network (DePIN)
 - HSCS for optimized contracts
 - Not just EVM-compatible, but Hedera-optimized
 
-### 2. Verifiable AI
-**Complete transparency and audit trail**
+### 2. Verifiable & Sustainable AI
+**Complete transparency, audit trail, and carbon awareness**
 - Every AI generation logged to HCS
 - Immutable provenance tracking
-- Model transparency
+- Model transparency and parameter recording
+- Carbon footprint tracking and offsetting
 - Regulatory compliance ready
 
-### 3. Multi-Agent Coordination
-**HCS-10 compliant agent network**
-- Agent-to-agent communication
-- Distributed verification
-- Specialized agents
-- Autonomous coordination
+### 3. AI x Mirror Node Infrastructure
+**Real-time analytics and predictive intelligence**
+- Hgraph SDK integration for data queries
+- AI agents analyzing on-chain patterns
+- Predictive models for demand forecasting
+- Automated fraud detection
+- Network health monitoring
 
-### 4. Machine-to-Machine Economy
-**Neuron SDK integration**
-- Automated dataset trading
-- M2M payment channels
-- Inter-agent coordination
-- New economic models
+### 4. Multi-Agent Coordination (Future)
+**Standards SDK for agent communication**
+- HCS-10 compliant messaging
+- Distributed verification consensus
+- Specialized functional agents
+- Autonomous coordination
 
 ---
 
@@ -196,8 +199,8 @@ IPFS Storage Network (DePIN)
 
 ### AI & Agents
 - Hedera Agent Kit (custom plugins)
-- ElizaOS (conversational AI)
-- Standards SDK (HCS-10)
+- Hgraph SDK (mirror node queries)
+- Standards SDK (HCS-10, future)
 - LangChain (orchestration)
 
 ### Frontend
@@ -239,10 +242,10 @@ IPFS Storage Network (DePIN)
 ✅ **Autonomous Systems** - Fully autonomous agents
 
 ### Theme Alignment
-✅ **Custom Hedera Agent Kit Plugin** - 4 custom plugins  
-✅ **ElizaOS Integration** - Conversational interface  
-✅ **HCS-10 Compliance** - Agent communication standard  
-✅ **Standards SDK** - Agent registration & discovery
+✅ **AI x Mirror Node Infrastructure** - Hgraph SDK integration  
+✅ **Verifiable & Sustainable AI** - HCS provenance + carbon tracking  
+✅ **Custom Hedera Agent Kit Plugin** - 4 specialized plugins  
+✅ **Standards SDK (Future)** - HCS-10 multi-agent coordination
 
 ---
 
@@ -256,9 +259,10 @@ IPFS Storage Network (DePIN)
 
 ### 2. Innovation
 - First AI data DePIN on Hedera
-- Verifiable AI with HCS
-- HCS-10 multi-agent system
-- M2M economy integration
+- Verifiable & Sustainable AI with HCS
+- AI-powered analytics via Hgraph SDK
+- Carbon-aware dataset generation
+- Predictive network optimization
 
 ### 3. Completeness
 - Full-stack implementation

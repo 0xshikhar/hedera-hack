@@ -6,7 +6,7 @@
 
 **What**: AI data DePIN platform on Hedera  
 **Track**: Track 4 - AI and DePIN  
-**Theme**: Custom Hedera Agent Kit Plugin + ElizaOS  
+**Theme**: AI x Mirror Node Infrastructure + Verifiable & Sustainable AI  
 **Timeline**: 7 weeks  
 **Team**: 2-3 senior developers
 
@@ -124,13 +124,13 @@ agent.registerProvider({
 
 ## 🎯 Track 4 Requirements
 
-✅ **AI Integration** - Hedera Agent Kit + ElizaOS  
+✅ **AI Integration** - Hedera Agent Kit + Hgraph SDK  
 ✅ **DePIN Solutions** - Storage provider network  
 ✅ **AI-Based Economics** - Dynamic pricing with AI  
 ✅ **Autonomous Systems** - 24/7 autonomous agents  
 ✅ **Custom Plugin** - 4 custom Hedera Agent Kit plugins  
-✅ **HCS-10 Compliance** - Multi-agent communication
-
+✅ **Verifiable AI** - HCS provenance tracking  
+✅ **Sustainable AI** - Carbon footprint monitoring
 ---
 
 ## 🚀 7-Week Timeline
@@ -138,15 +138,16 @@ agent.registerProvider({
 | Week | Focus | Deliverables |
 |------|-------|--------------|
 | 1 | Foundation | Smart contracts, HTS, HCS |
-| 2 | Agents | 4 custom plugins, ElizaOS |
-| 3 | Frontend | 7 pages, wallet integration |
-| 4 | Advanced AI | Verifiable AI, multi-agent |
-| 5 | DePIN | Optimization, monitoring |
+| 2 | Agents | 4 custom plugins, Hgraph SDK |
+| 3 | Frontend | Analytics dashboard, marketplace |
+| 4 | Advanced AI | Verifiable AI, carbon tracking |
+| 5 | DePIN | Mirror node analytics, optimization |
 | 6 | Testing | 100% coverage, docs |
 | 7 | Deployment | Testnet launch, submission |
 
 ---
 
+{{ ... }}
 ## 💰 Cost Comparison
 
 | Operation | U2U | Hedera | Savings |
@@ -280,12 +281,12 @@ npm run deploy
 
 1. **First AI data DePIN on Hedera**
 2. **Native HTS/HCS/HSCS integration**
-3. **Autonomous AI agents (24/7)**
-4. **Verifiable AI with complete audit trail**
-5. **HCS-10 multi-agent coordination**
-6. **M2M economy integration**
-7. **90% cost reduction**
-8. **10x performance improvement**
+3. **AI x Mirror Node Infrastructure (Hgraph SDK)**
+4. **Verifiable & Sustainable AI with HCS provenance**
+5. **Carbon-aware dataset generation**
+6. **Predictive analytics for network optimization**
+7. **Real-time fraud detection**
+8. **90% cost reduction + 10x performance**
 
 ---
 

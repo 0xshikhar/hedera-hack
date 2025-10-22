@@ -80,18 +80,19 @@
 
 #### Goals
 - Build custom Hedera Agent Kit plugins
-- Integrate ElizaOS
-- Implement HCS-10 communication
-- Register agents
+- Integrate Hgraph SDK for mirror node queries
+- Implement AI analytics agents
+- Set up provenance tracking
 
 #### Tasks
 
-**Day 8-9: Agent Kit Setup**
+**Day 8-9: Agent Kit & Hgraph SDK Setup**
 - [ ] Install Hedera Agent Kit
-- [ ] Install ElizaOS framework
+- [ ] Install Hgraph SDK (@hgraph.io/sdk)
 - [ ] Configure agent accounts
 - [ ] Set up LangChain integration
 - [ ] Create plugin architecture
+- [ ] Configure mirror node endpoints
 
 **Day 10-11: Dataset Creation Plugin**
 - [ ] Implement AI dataset generation
@@ -112,26 +113,29 @@
 - [ ] Transaction handling
 - [ ] Plugin testing
 
-**Day 13: Verification Plugin**
+**Day 13: Verification & Analytics Plugin**
 - [ ] AI-powered verification
 - [ ] Quality scoring algorithm
 - [ ] Duplicate detection
 - [ ] Schema validation
-- [ ] HCS log submission
-- [ ] Oracle interaction
+- [ ] HCS provenance logging
+- [ ] Mirror node data analysis
+- [ ] Fraud detection patterns
 - [ ] Plugin testing
 
-**Day 14: Provider Management Plugin**
+**Day 14: Provider Management & Mirror Analytics Plugin**
 - [ ] Provider registration
-- [ ] Uptime monitoring
+- [ ] Uptime monitoring via Hgraph SDK
 - [ ] Reward calculation
 - [ ] Payment distribution
-- [ ] Network metrics
+- [ ] Network metrics from mirror nodes
+- [ ] Real-time analytics queries
 - [ ] Plugin testing
 
 #### Deliverables
 - ✅ 4 custom Hedera Agent Kit plugins
-- ✅ ElizaOS integration complete
+- ✅ Hgraph SDK integration complete
+- ✅ Mirror node analytics working
 - ✅ All plugins tested
 - ✅ Agent registered on Hedera
 
@@ -167,13 +171,15 @@
 - [ ] Call-to-action sections
 - [ ] Responsive design
 
-**Day 18: AI Agent Dashboard**
-- [ ] Chat interface (ElizaOS)
-- [ ] Agent status display
-- [ ] Activity feed
-- [ ] Transaction history
-- [ ] Autonomous operation logs
-- [ ] Real-time updates
+**Day 18: Analytics Dashboard**
+- [ ] Network health metrics display
+- [ ] Real-time transaction analytics
+- [ ] Provider performance charts
+- [ ] Dataset marketplace trends
+- [ ] AI-powered insights panel
+- [ ] Fraud detection alerts
+- [ ] Carbon footprint tracking
+- [ ] Real-time updates via Hgraph SDK
 
 **Day 19: Marketplace & Dataset Studio**
 - [ ] Marketplace page
@@ -232,30 +238,38 @@
 
 #### Tasks
 
-**Day 22-23: Verifiable AI System**
+**Day 22-23: Verifiable & Sustainable AI System**
 - [ ] Provenance tracking implementation
   - Log all AI generations to HCS
-  - Record model details
-  - Track parameters
+  - Record model name, version, provider
+  - Track parameters and prompts
   - Timestamp all operations
+- [ ] Carbon footprint calculator
+  - Track compute resources used
+  - Calculate CO2 emissions
+  - Display carbon cost per dataset
+  - Offset recommendations
 - [ ] Audit trail viewer
-- [ ] Verification dashboard
-- [ ] Carbon tracking integration
+- [ ] Transparency dashboard
 - [ ] Compliance reports
 
-**Day 24-25: Multi-Agent Coordination**
-- [ ] HCS-10 message protocol
-- [ ] Agent discovery service
-- [ ] Agent registry integration
-- [ ] Multi-agent consensus
-  - Verification voting
-  - Quality scoring
-  - Fraud detection
-- [ ] Agent specialization
-  - Generation agents
-  - Verification agents
-  - Trading agents
-- [ ] Load balancing
+**Day 24-25: AI-Powered Analytics & Predictions**
+- [ ] Mirror node data aggregation
+  - Query transaction history
+  - Analyze provider performance
+  - Track dataset sales patterns
+- [ ] Predictive models
+  - Demand forecasting
+  - Price optimization
+  - Network capacity planning
+- [ ] Fraud detection system
+  - Anomaly detection algorithms
+  - Pattern recognition
+  - Automated alerts
+- [ ] Real-time monitoring
+  - Network health scoring
+  - Performance metrics
+  - Alert system
 
 **Day 26: AI-Powered Economics**
 - [ ] Dynamic pricing algorithm
@@ -267,19 +281,21 @@
 - [ ] Recommendation engine
 - [ ] Price prediction
 
-**Day 27-28: Machine-to-Machine Integration**
-- [ ] Neuron SDK integration
-- [ ] M2M payment channels
-- [ ] Automated dataset trading
-- [ ] Inter-agent coordination
-- [ ] Resource allocation
+**Day 27-28: Advanced Analytics Features**
+- [ ] Geographic distribution analysis
+- [ ] Provider reputation scoring
+- [ ] Dataset quality trends
+- [ ] Market insights dashboard
+- [ ] Automated recommendations
+- [ ] Performance optimization suggestions
 - [ ] Testing & optimization
 
 #### Deliverables
 - ✅ Complete provenance system
-- ✅ Multi-agent coordination working
-- ✅ AI-powered pricing live
-- ✅ M2M integration complete
+- ✅ Carbon tracking working
+- ✅ AI-powered analytics live
+- ✅ Predictive models deployed
+- ✅ Fraud detection active
 
 ---
 
@@ -305,7 +321,8 @@
 - [ ] IPFS pinning strategies
 - [ ] Content addressing optimization
 - [ ] Parallel download implementation
-- [ ] Caching layer
+- [ ] Caching layer for mirror node queries
+- [ ] Hgraph SDK query optimization
 - [ ] Database optimization
 - [ ] Query performance tuning
 - [ ] Load testing (1000+ users)
@@ -318,15 +335,18 @@
 - [ ] Fee optimization
 - [ ] Token distribution testing
 
-**Day 34-35: Monitoring & Analytics**
+**Day 34-35: Monitoring & Analytics Dashboard**
 - [ ] Real-time health dashboard
+- [ ] Mirror node analytics integration
 - [ ] Alert system
   - Downtime alerts
   - Performance alerts
   - Security alerts
+  - Fraud detection alerts
 - [ ] Automated recovery
 - [ ] Performance analytics
 - [ ] Network metrics API
+- [ ] Carbon footprint reporting
 - [ ] Admin panel
 
 #### Deliverables
@@ -493,9 +513,10 @@
 - AI integration
 - 60% of time
 
-**Developer 3 (Agent/DePIN)**
+**Developer 3 (Agent/Analytics)**
 - Hedera Agent Kit plugins
-- ElizaOS integration
+- Hgraph SDK integration
+- AI analytics & predictions
 - DePIN infrastructure
 - 60% of time
 
@@ -534,8 +555,8 @@
 ### Milestone 2: Agent Integration Complete (End of Week 2)
 **Criteria:**
 - ✅ All 4 plugins working
-- ✅ ElizaOS integrated
-- ✅ HCS-10 compliant
+- ✅ Hgraph SDK integrated
+- ✅ Mirror node queries working
 - ✅ Agents registered
 
 **Go/No-Go Decision:** Can we proceed to frontend?
@@ -556,9 +577,10 @@
 ### Milestone 4: Advanced Features Complete (End of Week 4)
 **Criteria:**
 - ✅ Verifiable AI working
-- ✅ Multi-agent coordination
-- ✅ AI economics implemented
-- ✅ M2M integration
+- ✅ Carbon tracking implemented
+- ✅ AI analytics deployed
+- ✅ Predictive models working
+- ✅ Fraud detection active
 
 **Go/No-Go Decision:** Can we proceed to optimization?
 

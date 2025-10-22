@@ -25,13 +25,15 @@
 4. ✅ **Autonomous Operations**: AI-driven marketplace and verification
 
 ### Proposed Theme Alignment
-**"Create an AI Agent with ElizaOS + Custom Hedera Agent Kit Plugin"**
+**"AI x Mirror Node Infrastructure + Verifiable & Sustainable AI"**
 
 We will:
 - Build custom Hedera Agent Kit plugins for dataset operations
-- Integrate ElizaOS for conversational AI interactions
-- Implement HCS-10 for multi-agent communication
-- Use Standards SDK for agent registration and discovery
+- Integrate Hgraph SDK for mirror node analytics and real-time data
+- Implement HCS-based provenance tracking for verifiable AI
+- Build carbon-aware dataset generation with sustainability metrics
+- Use AI agents to analyze on-chain data and optimize network performance
+- Implement Standards SDK for multi-agent communication (future phase)
 
 ---
 
@@ -96,9 +98,8 @@ We will:
 | Tool | Purpose | Integration |
 |------|---------|-------------|
 | **Hedera Agent Kit** | Core agent functionality | Custom plugins for FileThetic operations |
-| **ElizaOS** | Conversational AI framework | User-friendly agent interactions |
-| **Standards SDK** | HCS-10 compliance | Agent registration and discovery |
-| **OpenConvAI** | Agent-to-agent communication | Multi-agent coordination |
+| **Hgraph SDK** | Mirror node queries | Real-time analytics and on-chain data analysis |
+| **Standards SDK** | HCS-10 compliance (future) | Agent registration and discovery |
 | **LangChain** | AI orchestration | Hedera Agent Kit integration |
 
 ### Frontend & Infrastructure
@@ -200,17 +201,18 @@ We will:
 - Track network metrics
 ```
 
-#### ElizaOS Integration
-- Conversational interface for all operations
-- Natural language commands
-- Multi-agent coordination
-- Human-in-the-loop approval for critical operations
+#### Hgraph SDK Integration
+- Mirror node data queries for real-time analytics
+- Transaction history analysis
+- Provider performance monitoring
+- Network health metrics
+- Fraud detection pattern analysis
 
 #### Deliverables
 - ✅ 4 custom Hedera Agent Kit plugins
-- ✅ ElizaOS integration
+- ✅ Hgraph SDK integration
+- ✅ Mirror node analytics working
 - ✅ Agent registration in Hedera Agent Registry
-- ✅ HCS-10 compliant communication
 
 ---
 
@@ -225,11 +227,13 @@ We will:
    - Featured datasets
    - Provider map
 
-2. **AI Agent Dashboard**
-   - Chat interface (ElizaOS)
-   - Agent status and activity
-   - Transaction history
-   - Autonomous operation logs
+2. **Analytics Dashboard**
+   - Real-time network metrics
+   - AI-powered insights
+   - Transaction analytics
+   - Provider performance charts
+   - Carbon footprint tracking
+   - Fraud detection alerts
 
 3. **Marketplace**
    - Browse datasets
@@ -278,11 +282,13 @@ We will:
 ### Phase 4: Advanced AI Features (Week 4-5)
 **Goal**: Implement cutting-edge AI capabilities
 
-#### Verifiable AI
+#### Verifiable & Sustainable AI
 - **Provenance Tracking**: Every AI generation logged to HCS
-- **Model Transparency**: Record model name, version, parameters
+- **Model Transparency**: Record model name, version, parameters, prompts
 - **Audit Trails**: Immutable history of all AI decisions
-- **Carbon Tracking**: Monitor and offset AI compute emissions
+- **Carbon Tracking**: Calculate and display CO2 emissions per dataset
+- **Sustainability Metrics**: Track compute resources and energy usage
+- **Offset Recommendations**: Suggest carbon offset options
 
 #### Multi-Agent Systems
 - **Agent Collaboration**: Multiple agents work together on complex tasks
@@ -296,17 +302,19 @@ We will:
 - **Fraud Detection**: Anomaly detection for suspicious activity
 - **Recommendation Engine**: Suggest datasets to users
 
-#### Machine-to-Machine (Neuron SDK)
-- Automated dataset trading between AI systems
-- M2M payment channels
-- Autonomous resource allocation
-- Inter-agent economic coordination
+#### AI x Mirror Node Analytics
+- **Real-time Data Analysis**: Query mirror nodes for transaction patterns
+- **Predictive Models**: Demand forecasting and price optimization
+- **Fraud Detection**: Anomaly detection using on-chain data
+- **Network Optimization**: AI-driven performance improvements
+- **Provider Scoring**: Reputation and reliability metrics
 
 #### Deliverables
 - ✅ HCS-based provenance system
-- ✅ Multi-agent verification
+- ✅ Carbon tracking implemented
 - ✅ AI pricing algorithm
-- ✅ M2M integration
+- ✅ Mirror node analytics live
+- ✅ Predictive models deployed
 
 ---
 
