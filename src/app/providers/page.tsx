@@ -9,6 +9,7 @@ import { ProviderCard } from '@/components/providers/ProviderCard';
 import { ProviderRegistrationForm } from '@/components/providers/ProviderRegistrationForm';
 import { ProviderMap } from '@/components/providers/ProviderMap';
 import { ProviderStats } from '@/components/providers/ProviderStats';
+import { ProviderPerformanceDashboard } from '@/components/providers/ProviderPerformanceDashboard';
 import { useStorageProviders } from '@/hooks/blockchain/useStorageProviders';
 
 export default function ProvidersPage() {
@@ -130,6 +131,7 @@ export default function ProvidersPage() {
           <TabsTrigger value="list">Provider List</TabsTrigger>
           <TabsTrigger value="map">Geographic Map</TabsTrigger>
           <TabsTrigger value="stats">Statistics</TabsTrigger>
+          <TabsTrigger value="performance">Performance Analytics</TabsTrigger>
         </TabsList>
 
         <TabsContent value="list" className="space-y-4">
@@ -173,6 +175,10 @@ export default function ProvidersPage() {
 
         <TabsContent value="stats">
           <ProviderStats providers={providers} networkStats={networkStats} />
+        </TabsContent>
+
+        <TabsContent value="performance">
+          <ProviderPerformanceDashboard />
         </TabsContent>
       </Tabs>
     </div>
