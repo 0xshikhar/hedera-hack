@@ -2,7 +2,6 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { useHederaWallet } from "@/contexts/HederaWalletContext";
-import { formatUnits } from "viem";
 import { defaultBalances, UseBalancesResponse } from "@/types";
 
 /**
@@ -64,6 +63,17 @@ export const useBalances = () => {
     data: query.data || defaultBalances,
   };
 };
+
+/**
+ * Formats a bigint value to a string with specified decimals (Hedera-native implementation)
+ */
+function formatUnits(value: bigint, decimals: number): string {
+  const divisor = BigInt(10 ** decimals);
+  const quotient = value / divisor;
+  const remainder = value % divisor;
+  const remainderStr = remainder.toString().padStart(decimals, '0');
+  return `${quotient}.${remainderStr}`;
+}
 
 /**
  * Formats a balance value with specified decimals
