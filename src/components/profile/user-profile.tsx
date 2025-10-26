@@ -35,7 +35,8 @@ export function UserProfile() {
       
       try {
         setLoading(true);
-        const userDatasets = await getAllDatasets({ ownedOnly: true });
+        const allDatasets = await getAllDatasets();
+        const userDatasets = allDatasets.filter(d => d.owner === address);
         setDatasets(userDatasets);
       } catch (error) {
         console.error("Error loading user datasets:", error);
@@ -195,12 +196,12 @@ export function UserProfile() {
                   id={dataset.id}
                   name={dataset.name}
                   description={dataset.description}
-                  price={dataset.price}
+                  price={String(dataset.price)}
                   owner={dataset.owner}
-                  locked={!dataset.isPublic}
-                  verified={dataset.isVerified}
+                  locked={dataset.locked || false}
+                  verified={dataset.verified || false}
                   isOwner={address?.toLowerCase() === dataset.owner.toLowerCase()}
-                  cid={dataset.cid}
+                  cid={dataset.cid || dataset.ipfsHash || ''}
                 />
               ))}
             </div>
