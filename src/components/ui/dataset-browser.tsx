@@ -21,7 +21,8 @@ type Dataset = {
   owner: string;
   locked: boolean;
   verified: boolean;
-  cid: string;
+  cid?: string;
+  tokenId?: string;
 };
 
 export function DatasetBrowser() {
@@ -44,11 +45,12 @@ export function DatasetBrowser() {
         id: dataset.id,
         name: dataset.name,
         description: dataset.description,
-        price: dataset.price,
+        price: String(dataset.price),
         owner: dataset.owner,
-        locked: dataset.cid !== '',  // If CID exists, consider it locked
-        verified: dataset.isVerified || false,
-        cid: dataset.cid
+        locked: dataset.locked || false,
+        verified: dataset.verified || false,
+        cid: dataset.cid || dataset.ipfsHash,
+        tokenId: dataset.tokenId
       }));
       console.log("Transformed datasets for display:", transformedDatasets);
       setDatasets(transformedDatasets);
@@ -66,13 +68,11 @@ export function DatasetBrowser() {
   // Handle dataset locking
   const handleLockDataset = async (id: number): Promise<void> => {
     try {
-      // Mock values since we're not providing the actual lockDataset parameters in this UI
-      // In a real implementation, these would come from the dataset or user input
-      const cid = "mock-cid-for-now";  // This would be the actual IPFS CID
-      const numRows = 1000;              // Example value
-      const numTokens = 5000;            // Example value
+      // Get the dataset's tokenId
+      const dataset = datasets.find(d => d.id === id);
+      const tokenId = dataset?.tokenId || process.env.NEXT_PUBLIC_DATASET_NFT_TOKEN_ID || '';
       
-      await lockDataset(id, cid, numRows, numTokens);
+      await lockDataset(tokenId, id);
       
       // Update local state
       const updatedDatasets = datasets.map(dataset => 
@@ -227,7 +227,7 @@ export function DatasetBrowser() {
               owner={dataset.owner}
               locked={dataset.locked}
               verified={dataset.verified}
-              cid={dataset.cid}
+              cid={dataset.cid || ''}
               isOwner={!!address && dataset.owner.toLowerCase() === address.toLowerCase()}
               onLock={handleLockDataset}
               onVerificationCheck={async () => Promise.resolve()}

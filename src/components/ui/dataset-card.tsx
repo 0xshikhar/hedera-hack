@@ -1,21 +1,21 @@
 "use client";
 
 import { useState } from 'react';
-import { formatEther, formatUnits } from 'ethers';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Lock, Unlock, ShoppingCart, Shield, CheckCircle, XCircle, Eye, EyeOff, Download } from 'lucide-react';
-import { purchaseDataset, hasAccessToDataset, checkDatasetVerification } from '@/lib/hedera';
+import { Lock, Unlock, ShoppingCart, Shield, CheckCircle, XCircle, Download } from 'lucide-react';
+import { purchaseDataset, hasAccessToDataset } from '@/lib/hedera';
 import { getDatasetContent } from '@/lib/ipfs';
-import { toast } from 'sonner';     
+import { toast } from 'sonner';
 import { useHederaWallet } from '@/contexts/HederaWalletContext';
 
 export interface DatasetCardProps {
   id: number;
+  tokenId?: string; // Hedera token ID
   name: string;
   description?: string;
-  price: string; // Price in wei
+  price: string; // Price in hbar
   owner: string;
   locked: boolean;
   verified?: boolean;
@@ -27,6 +27,7 @@ export interface DatasetCardProps {
 
 export function DatasetCard({
   id,
+  tokenId,
   name,
   description,
   price,
@@ -44,8 +45,8 @@ export function DatasetCard({
   const [isLoading, setIsLoading] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
 
-  // Format price from wei to USDC (with 6 decimals)
-  const parsedPrice = parseFloat(formatUnits(String(price || '0').split('.')[0], 6));
+  // Format price (assuming price is already in HBAR or USDC)
+  const parsedPrice = parseFloat(price || '0');
   const formattedPrice = parsedPrice.toFixed(2);
   const isFree = parsedPrice === 0;
 
@@ -53,7 +54,7 @@ export function DatasetCard({
     if (!isConnected || !address) return;
     setIsLoading(true);
     try {
-      const hasAccess = await hasAccessToDataset(id, address);
+      const hasAccess = await hasAccessToDataset(tokenId || '', id);
       setHasAccess(hasAccess);
     } catch (error) {
       console.error("Error checking dataset access:", error);
@@ -66,7 +67,7 @@ export function DatasetCard({
     if (!isConnected) return;
     setIsPurchasing(true);
     try {
-      await purchaseDataset(id, price);
+      await purchaseDataset(tokenId || '', id, parsedPrice);
       await checkAccess();
     } catch (error) {
       console.error("Error purchasing dataset:", error);
