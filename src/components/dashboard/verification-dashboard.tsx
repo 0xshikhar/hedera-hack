@@ -89,9 +89,9 @@ export function VerificationDashboard() {
 
     // Apply tab filter
     if (activeTab === "verified") {
-      filtered = filtered.filter(dataset => dataset.isVerified);
+      filtered = filtered.filter(dataset => dataset.verified);
     } else if (activeTab === "unverified") {
-      filtered = filtered.filter(dataset => !dataset.isVerified);
+      filtered = filtered.filter(dataset => !dataset.verified);
     }
 
     setFilteredDatasets(filtered);
@@ -193,7 +193,7 @@ export function VerificationDashboard() {
                 >
                   View Details
                 </Button>
-                {verifierStatus && !dataset.isVerified && (
+                {verifierStatus && !dataset.verified && (
                   <Button 
                     variant="default" 
                     size="sm"

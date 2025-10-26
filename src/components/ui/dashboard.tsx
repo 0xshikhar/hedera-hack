@@ -39,7 +39,7 @@ export function Dashboard() {
         // This is a simplified version - in production, you'd want to use batch queries
         const purchased = allDatasets.filter(dataset => 
           dataset.owner.toLowerCase() !== address.toLowerCase() && 
-          dataset.numDownloads > 0 // Simplified check - should check actual access
+          (dataset.purchaseCount || 0) > 0 // Simplified check - should check actual access
         );
         
         setOwnedDatasets(owned);
@@ -97,13 +97,12 @@ export function Dashboard() {
                 <div>
                   <p className="font-medium">{dataset.name}</p>
                   <p className="text-sm text-muted-foreground">
-                    {dataset.isVerified ? '✓ Verified' : 'Not verified'} • {dataset.numDownloads} downloads
+                    {dataset.verified ? '✓ Verified' : 'Not verified'} • {dataset.purchaseCount || 0} purchases
                   </p>
                 </div>
                 <div className="space-x-2">
                   <Link 
                     href={`/dataset/${dataset.id}`}
-                    className="px-3 py-1 text-sm bg-secondary rounded hover:bg-secondary/80"
                   >
                     View
                   </Link>
@@ -136,7 +135,7 @@ export function Dashboard() {
                   <p className="font-medium">{dataset.name}</p>
                   <p className="text-sm text-muted-foreground">
                     By {dataset.owner.slice(0, 6)}...{dataset.owner.slice(-4)} • 
-                    {dataset.isVerified ? ' ✓ Verified' : ' Not verified'}
+                    {dataset.verified ? ' ✓ Verified' : ' Not verified'}
                   </p>
                 </div>
                 <div className="space-x-2">

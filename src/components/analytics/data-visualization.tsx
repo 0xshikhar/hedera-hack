@@ -188,7 +188,7 @@ export function DataVisualization({ stats, className, datasets, onSelect }: Data
                   <p className="text-sm text-muted-foreground">{dataset.description || "No description"}</p>
                 </div>
                 <div className="flex gap-2">
-                  {dataset.isVerified && (
+                  {dataset.verified && (
                     <Badge variant="outline" className="bg-green-50">Verified</Badge>
                   )}
                   <Badge>{dataset.model || "Unknown"}</Badge>

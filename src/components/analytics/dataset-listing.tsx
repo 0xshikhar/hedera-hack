@@ -78,9 +78,9 @@ export function DatasetListing({
                     <h3 className="text-lg font-medium">
                       {dataset.name && dataset.name !== "No description provided" ? dataset.name : "Premium AI Training Dataset"}
                     </h3>
-                    <Badge variant={dataset.isVerified ? "default" : "outline"}
-                           className={dataset.isVerified ? "bg-green-50 text-green-700 border-green-200" : ""}>
-                      {dataset.isVerified ? "Verified" : "Unverified"}
+                    <Badge variant={dataset.verified ? "default" : "outline"}
+                           className={dataset.verified ? "bg-green-50 text-green-700 border-green-200" : ""}>
+                      {dataset.verified ? "Verified" : "Unverified"}
                     </Badge>
                   </div>
                   <div className="text-sm text-muted-foreground mt-2 flex items-center gap-2">

@@ -50,8 +50,8 @@ export function DatasetDetailView({ dataset }: DatasetDetailViewProps) {
               <div>
                 <dt className="text-xs text-muted-foreground">Status</dt>
                 <dd className="text-sm">
-                  <Badge variant={dataset.isVerified ? "default" : "outline"}>
-                    {dataset.isVerified ? "Verified" : "Unverified"}
+                  <Badge variant={dataset.verified ? "default" : "outline"}>
+                    {dataset.verified ? "Verified" : "Unverified"}
                   </Badge>
                 </dd>
               </div>
