@@ -1,11 +1,9 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useHederaWallet } from '@/contexts/HederaWalletContext';
 import { toast } from 'sonner';
-import { ethers } from 'ethers';
 import { createDataset, lockDataset } from '@/lib/hedera';
-import { GenerationResult } from '@/lib/models';
 
 interface UseDatasetPublisherProps {
   name: string;
@@ -13,7 +11,7 @@ interface UseDatasetPublisherProps {
   price: string;
   visibility: 'public' | 'private';
   modelId: string;
-  generatedData: any[] | null;
+  generatedData: unknown[] | null;
   totalTokens?: number;
   commp: string | null;
   onSuccess?: () => void;
@@ -45,34 +43,32 @@ export function useDatasetPublisher() {
         maxComputeUnits: 1000000
       });
 
-      const { datasetId } = await createDataset(
+      const result = await createDataset(
         props.name,
         props.description,
-        props.price, // Pass price as-is, will be parsed in createDataset
-        props.visibility !== 'private',
-        props.modelId,
-        1, // taskId (default)
-        1, // nodeId (default)
-        100, // computeUnitsPrice (default)
-        1000000 // maxComputeUnits (default)
+        props.commp, // IPFS hash/CID
+        parseFloat(props.price),
+        props.modelId, // category
+        [props.visibility] // tags
       );
 
-      if (datasetId) {
-        toast.info(`Dataset created with ID: ${datasetId}. Locking with IPFS CID...`);
-        // Use provided totalTokens or default to 0 if not available
-        const totalTokens = props.totalTokens || 0;
-        await lockDataset(
-          datasetId,
-          props.commp,
-          props.generatedData.length,
-          totalTokens
+      if (result.success && result.tokenId && result.serialNumber) {
+        toast.info(`Dataset created with Token ID: ${result.tokenId}, Serial: ${result.serialNumber}. Locking...`);
+        
+        const lockResult = await lockDataset(
+          result.tokenId,
+          result.serialNumber
         );
+        
+        if (!lockResult.success) {
+          throw new Error(lockResult.error || 'Failed to lock dataset');
+        }
         toast.success('Dataset published and locked successfully!');
         if (props.onSuccess) {
           props.onSuccess();
         }
       } else {
-        throw new Error("Failed to create dataset on-chain.");
+        throw new Error(result.error || "Failed to create dataset on-chain.");
       }
     } catch (error) {
       console.error('Error publishing dataset:', error);

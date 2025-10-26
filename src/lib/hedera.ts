@@ -276,7 +276,7 @@ export async function hasAccessToDataset(
       variables: { tokenId, accountId, serialNumber },
     });
 
-    return data?.nft?.length > 0;
+    return !!(data?.nft && data.nft.length > 0);
   } catch (error) {
     console.error('Error checking dataset access:', error);
     return false;
@@ -305,13 +305,16 @@ export async function getAllDatasets(): Promise<Dataset[]> {
         if (data.type === 'dataset_created') {
           datasetMap.set(key, {
             id: data.serialNumber,
+            tokenId: data.tokenId,
             name: data.metadata.name,
             description: data.metadata.description,
             ipfsHash: data.metadata.ipfsHash,
+            cid: data.metadata.ipfsHash, // Alias
             price: data.metadata.price,
             category: data.metadata.category,
             tags: data.metadata.tags || [],
             creator: data.metadata.creator,
+            owner: data.metadata.creator, // Initially owned by creator
             createdAt: data.metadata.createdAt,
             locked: false,
             verified: false,
