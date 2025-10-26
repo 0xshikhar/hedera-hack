@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Database, MapPin, Zap, HardDrive, Activity, Plus } from 'lucide-react';
+import { Database, Zap, HardDrive, Activity, Plus } from 'lucide-react';
 import { ProviderCard } from '@/components/providers/ProviderCard';
 import { ProviderRegistrationForm } from '@/components/providers/ProviderRegistrationForm';
 import { ProviderMap } from '@/components/providers/ProviderMap';

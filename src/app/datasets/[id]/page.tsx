@@ -179,7 +179,7 @@ export default function DatasetPage() {
                 </div>
                 <div className="text-xl font-semibold">Decrypting Dataset</div>
                 <p className="text-sm text-muted-foreground">
-                  Verified by: {dataset.metadata?.verifier ? dataset.metadata.verifier : "Not verified"}
+                  Verified by: {dataset.metadata?.verifier ? String(dataset.metadata.verifier) : "Not verified"}
                 </p>
               </div>
             </div>
@@ -187,10 +187,10 @@ export default function DatasetPage() {
             <EnhancedDatasetViewer 
               data={datasetContent}
               metadata={{
-                verified: dataset.metadata?.isVerified,
-                verifier: dataset.metadata?.verifier,
-                name: dataset.metadata?.name,
-                description: dataset.metadata?.description
+                verified: Boolean(dataset.metadata?.isVerified),
+                verifier: String(dataset.metadata?.verifier || ''),
+                name: String(dataset.metadata?.name || ''),
+                description: String(dataset.metadata?.description || '')
               }}
               downloadable={true}
             />

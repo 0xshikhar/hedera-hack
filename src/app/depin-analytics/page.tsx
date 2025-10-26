@@ -2,7 +2,7 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Activity, Database, Globe, TrendingUp, Zap, HardDrive, Users, DollarSign } from 'lucide-react';
+import { Activity, Database, Globe, Zap, HardDrive, Users, DollarSign } from 'lucide-react';
 import { NetworkHealthChart } from '@/components/depin/NetworkHealthChart';
 import { ProviderDistributionChart } from '@/components/depin/ProviderDistributionChart';
 import { EconomicActivityChart } from '@/components/depin/EconomicActivityChart';

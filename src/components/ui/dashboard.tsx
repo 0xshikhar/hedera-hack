@@ -112,7 +112,7 @@ export function Dashboard() {
           </div>
         ) : (
           <p className="text-center text-muted-foreground">
-            You haven&apos; t created any datasets yet
+            You haven&apos;t created any datasets yet
           </p>
         )}
         <div className="mt-4 text-center">
