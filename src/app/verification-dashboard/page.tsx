@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -21,7 +21,6 @@ import {
   TrendingUp,
   Users,
   Database,
-  Shield
 } from "lucide-react";
 
 // Type for dashboard dataset display
@@ -67,38 +66,31 @@ export default function VerificationDashboard() {
     let verificationStatus: "verified" | "pending" | "rejected" = "pending";
     if (verificationInfo.isVerified) {
       verificationStatus = "verified";
-    } else if (verificationInfo.verifiedAt > 0) {
-      // If there's a timestamp but not verified, it was rejected
+    } else if (verificationInfo.verificationCount > 0 && verificationInfo.averageScore < 50) {
+      // If there are verifications but low score, it was rejected
       verificationStatus = "rejected";
     }
 
-    // Calculate quality score based on dataset properties
-    let qualityScore = 50; // Base score
-    if (dataset.numRows > 1000) qualityScore += 20;
-    if (dataset.numTokens > 10000) qualityScore += 15;
-    if (dataset.cid && dataset.cid !== '') qualityScore += 15;
+    // Calculate quality score based on verification info
+    let qualityScore = verificationInfo.averageScore || 50; // Use verification score or base score
+    if (dataset.cid && dataset.cid !== '') qualityScore += 10;
+    if (dataset.locked) qualityScore += 10;
     if (verificationStatus === 'verified') qualityScore += 20;
     qualityScore = Math.min(100, qualityScore);
 
-    // Generate tags based on dataset name and description
-    const tags = [];
-    const text = (dataset.name + ' ' + dataset.description).toLowerCase();
-    if (text.includes('medical') || text.includes('health')) tags.push('medical');
-    if (text.includes('financial') || text.includes('finance')) tags.push('finance');
-    if (text.includes('climate') || text.includes('weather')) tags.push('climate');
-    if (text.includes('iot') || text.includes('sensor')) tags.push('iot');
-    if (text.includes('trading') || text.includes('market')) tags.push('trading');
-
-    // Estimate size based on rows and tokens
-    const estimatedSizeKB = (dataset.numRows * dataset.numTokens) / 1000;
-    let sizeString = "Unknown";
-    if (estimatedSizeKB > 1000000) {
-      sizeString = `${(estimatedSizeKB / 1000000).toFixed(1)} GB`;
-    } else if (estimatedSizeKB > 1000) {
-      sizeString = `${(estimatedSizeKB / 1000).toFixed(1)} MB`;
-    } else if (estimatedSizeKB > 0) {
-      sizeString = `${estimatedSizeKB.toFixed(0)} KB`;
+    // Use dataset tags or generate from name/description
+    const tags = dataset.tags || [];
+    if (tags.length === 0) {
+      const text = (dataset.name + ' ' + dataset.description).toLowerCase();
+      if (text.includes('medical') || text.includes('health')) tags.push('medical');
+      if (text.includes('financial') || text.includes('finance')) tags.push('finance');
+      if (text.includes('climate') || text.includes('weather')) tags.push('climate');
+      if (text.includes('iot') || text.includes('sensor')) tags.push('iot');
+      if (text.includes('trading') || text.includes('market')) tags.push('trading');
     }
+
+    // Size estimation (placeholder - would need actual file size from IPFS)
+    const sizeString = "Unknown";
 
     return {
       id: dataset.id.toString(),
@@ -106,11 +98,11 @@ export default function VerificationDashboard() {
       description: dataset.description,
       size: sizeString,
       format: "JSON",
-      uploadDate: new Date().toISOString().split('T')[0],
+      uploadDate: dataset.createdAt ? new Date(dataset.createdAt).toISOString().split('T')[0] : new Date().toISOString().split('T')[0],
       verificationStatus,
       qualityScore,
-      verifier: verificationInfo.verifier !== '0x0000000000000000000000000000000000000000' ? 
-                `${verificationInfo.verifier.slice(0, 6)}...${verificationInfo.verifier.slice(-4)}` : null,
+      verifier: verificationInfo.verifiers.length > 0 ? 
+                `${verificationInfo.verifiers[0].slice(0, 6)}...${verificationInfo.verifiers[0].slice(-4)}` : null,
       tags,
       rating: Math.min(5, Math.max(1, qualityScore / 20))
     };
