@@ -12,9 +12,12 @@ export interface Dataset {
   createdAt?: string | Date;
   updatedAt?: string | Date;
   price?: number;
+  // Hedera-native verification field
+  verified?: boolean;
+  // Legacy EVM field (deprecated, use 'verified' instead)
   isVerified?: boolean;
   categories?: string[];
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   schemaUrl?: string;
   fileUrl?: string;
   contractAddress?: string;
@@ -23,6 +26,12 @@ export interface Dataset {
   ipfsHash?: string;
   verifier?: string;
   category?: string;
+  // Additional Hedera fields
+  cid?: string; // IPFS CID
+  locked?: boolean;
+  purchaseCount?: number;
+  tags?: string[];
+  creator?: string;
 }
 
 export interface DatasetStats {

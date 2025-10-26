@@ -2,33 +2,47 @@
  * Type definitions for the FileThetic application
  */
 
+// Hedera-native Dataset type
 export interface Dataset {
-  id: number;
-  version: number;
-  owner: string;
+  id: number; // Serial number of the NFT
+  tokenId?: string; // Hedera token ID (e.g., "0.0.7158235")
   name: string;
   description: string;
-  price: string;
-  isPublic: boolean;
-  cid: string;
-  numRows: number;
-  numTokens: number;
-  modelName: string;
-  taskId: number;
-  nodeId: number;
-  computeUnitsPrice: number;
-  maxComputeUnits: number;
-  numDownloads: number;
-  isVerified?: boolean;
+  ipfsHash?: string; // IPFS CID for dataset content
+  cid?: string; // Alias for ipfsHash
+  price: string | number; // Price in FTUSD
+  category?: string;
+  tags?: string[];
+  creator?: string; // Hedera account ID of creator
+  owner: string; // Current owner (Hedera account ID)
+  createdAt?: string;
+  locked?: boolean; // Whether dataset is finalized
+  verified?: boolean;
+  purchaseCount?: number;
+  
+  // Legacy EVM fields (deprecated but kept for compatibility)
+  version?: number;
+  isPublic?: boolean;
+  numRows?: number;
+  numTokens?: number;
+  modelName?: string;
+  taskId?: number;
+  nodeId?: number;
+  computeUnitsPrice?: number;
+  maxComputeUnits?: number;
+  numDownloads?: number;
   verificationTimestamp?: number;
   verifier?: string;
 }
 
 export interface VerificationInfo {
   isVerified: boolean;
-  verifiedAt: number;
-  verifier: string;
-  datasetHash: string;
+  verificationCount: number;
+  averageScore: number;
+  verifiers: string[];
+  verifiedAt?: number; // Legacy field
+  verifier?: string; // Legacy field
+  datasetHash?: string; // Legacy field
 }
 
 export type HFDataset = {
