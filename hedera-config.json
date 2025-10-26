@@ -2,20 +2,20 @@
   "network": "testnet",
   "operatorAccountId": "0.0.7158221",
   "tokens": {
-    "datasetNFT": "0.0.7158235",
-    "fileToken": "0.0.7158236",
-    "paymentToken": "0.0.7158237"
+    "datasetNFT": "0.0.7159775",
+    "fileToken": "0.0.7159776",
+    "paymentToken": "0.0.7159777"
   },
   "topics": {
-    "datasetMetadata": "0.0.7158238",
-    "verificationLogs": "0.0.7158239",
-    "agentCommunication": "0.0.7158240",
-    "auditTrail": "0.0.7158241",
-    "marketplaceEvents": "0.0.7158243"
+    "datasetMetadata": "0.0.7159779",
+    "verificationLogs": "0.0.7159780",
+    "agentCommunication": "0.0.7159781",
+    "auditTrail": "0.0.7159782",
+    "marketplaceEvents": "0.0.7159783"
   },
   "contracts": {
-    "marketplace": "0.0.7158321",
-    "providerRegistry": "0.0.7158323",
-    "verificationOracle": "0.0.7158325"
+    "marketplace": "",
+    "providerRegistry": "",
+    "verificationOracle": ""
   }
 }
