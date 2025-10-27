@@ -2,27 +2,11 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from 'recharts';
-import { TrendingUp, Activity, Database, MapPin } from 'lucide-react';
-
-interface Provider {
-  provider: string;
-  location?: string;
-  isActive: boolean;
-  bandwidthMbps?: bigint;
-  storageTB?: bigint;
-  uptime?: bigint;
-  datasetsHosted?: bigint;
-}
-
-interface NetworkStats {
-  totalProviders: number;
-  activeProviders: number;
-  networkBandwidth: number;
-  networkStorage: number;
-}
+import { Activity, Database, MapPin } from 'lucide-react';
+import { UIProvider, NetworkStats } from '@/types/provider';
 
 interface ProviderStatsProps {
-  providers: Provider[];
+  providers: UIProvider[];
   networkStats: NetworkStats | null;
 }
 
@@ -59,7 +43,7 @@ export function ProviderStats({ providers, networkStats }: ProviderStatsProps) {
 
   providers.forEach(provider => {
     if (provider.uptime !== undefined) {
-      const uptime = Number(provider.uptime) / 100;
+      const uptime = provider.uptime;
       if (uptime >= 99) uptimeRanges[0].value++;
       else if (uptime >= 95) uptimeRanges[1].value++;
       else if (uptime >= 90) uptimeRanges[2].value++;

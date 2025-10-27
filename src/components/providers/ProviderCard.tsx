@@ -1,28 +1,15 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { MapPin, Zap, HardDrive, Activity, Database, TrendingUp } from 'lucide-react';
-
-interface Provider {
-  provider: string;
-  stakedAmount?: bigint;
-  bandwidthMbps?: bigint;
-  storageTB?: bigint;
-  uptime?: bigint;
-  ipfsGateway?: string;
-  location?: string;
-  isActive: boolean;
-  registeredAt?: bigint;
-  totalEarnings?: bigint;
-  datasetsHosted?: bigint;
-}
+import { UIProvider } from '@/types/provider';
 
 interface ProviderCardProps {
-  provider: Provider;
+  provider: UIProvider;
 }
 
 export function ProviderCard({ provider }: ProviderCardProps) {
-  const uptimePercent = provider.uptime ? (Number(provider.uptime) / 100).toFixed(1) : '0.0';
-  const isHealthy = provider.uptime ? Number(provider.uptime) >= 9900 : false; // 99%+
+  const uptimePercent = provider.uptime ? provider.uptime.toFixed(1) : '0.0';
+  const isHealthy = provider.uptime ? provider.uptime >= 99 : false; // 99%+
   
   return (
     <Card className="hover:shadow-lg transition-shadow">
@@ -49,14 +36,14 @@ export function ProviderCard({ provider }: ProviderCardProps) {
             <Zap className="h-4 w-4 text-yellow-500" />
             <div>
               <p className="text-xs text-muted-foreground">Bandwidth</p>
-              <p className="text-sm font-semibold">{provider.bandwidthMbps?.toString() || '0'} Mbps</p>
+              <p className="text-sm font-semibold">{provider.bandwidthMbps || 0} Mbps</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
             <HardDrive className="h-4 w-4 text-blue-500" />
             <div>
               <p className="text-xs text-muted-foreground">Storage</p>
-              <p className="text-sm font-semibold">{provider.storageTB?.toString() || '0'} TB</p>
+              <p className="text-sm font-semibold">{provider.storageTB || 0} TB</p>
             </div>
           </div>
         </div>
@@ -74,7 +61,7 @@ export function ProviderCard({ provider }: ProviderCardProps) {
             <Database className="h-4 w-4 text-purple-500" />
             <div>
               <p className="text-xs text-muted-foreground">Datasets</p>
-              <p className="text-sm font-semibold">{provider.datasetsHosted?.toString() || '0'}</p>
+              <p className="text-sm font-semibold">{provider.datasetsHosted || 0}</p>
             </div>
           </div>
         </div>
@@ -86,7 +73,7 @@ export function ProviderCard({ provider }: ProviderCardProps) {
             <div>
               <p className="text-xs text-muted-foreground">Total Earnings</p>
               <p className="text-sm font-semibold">
-                {provider.totalEarnings ? (Number(provider.totalEarnings) / 1e18).toFixed(4) : '0.0000'} U2U
+                {provider.totalEarnings ? (parseFloat(provider.totalEarnings) / 1e18).toFixed(4) : '0.0000'} FILE
               </p>
             </div>
           </div>

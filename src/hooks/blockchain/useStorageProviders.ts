@@ -2,31 +2,11 @@
 
 import { useState, useEffect } from 'react';
 import { useHederaWallet } from '@/contexts/HederaWalletContext';
-
-interface Provider {
-  provider: string;
-  stakedAmount?: bigint;
-  bandwidthMbps?: bigint;
-  storageTB?: bigint;
-  uptime?: bigint;
-  ipfsGateway?: string;
-  location?: string;
-  isActive: boolean;
-  registeredAt?: bigint;
-  totalEarnings?: bigint;
-  datasetsHosted?: bigint;
-}
-
-interface NetworkStats {
-  totalProviders: number;
-  activeProviders: number;
-  networkBandwidth: number;
-  networkStorage: number;
-}
-
+import { getAllProviders, getProviderNetworkStats, Provider as HederaProvider } from '@/lib/hedera';
+import { UIProvider, NetworkStats } from '@/types/provider';
 
 export function useStorageProviders() {
-  const [providers, setProviders] = useState<Provider[]>([]);
+  const [providers, setProviders] = useState<UIProvider[]>([]);
   const [networkStats, setNetworkStats] = useState<NetworkStats | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

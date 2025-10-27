@@ -2,17 +2,10 @@
 
 import { Card, CardContent } from '@/components/ui/card';
 import { MapPin } from 'lucide-react';
-
-interface Provider {
-  provider: string;
-  location?: string;
-  isActive: boolean;
-  bandwidthMbps?: bigint;
-  storageTB?: bigint;
-}
+import { UIProvider } from '@/types/provider';
 
 interface ProviderMapProps {
-  providers: Provider[];
+  providers: UIProvider[];
 }
 
 export function ProviderMap({ providers }: ProviderMapProps) {
