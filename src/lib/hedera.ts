@@ -13,6 +13,8 @@ import {
   TransferTransaction,
   TopicMessageSubmitTransaction,
   Hbar,
+  ContractExecuteTransaction,
+  ContractFunctionParameters,
 } from '@hashgraph/sdk';
 import { Dataset, VerificationInfo } from './types';
 import { hgraphClient } from './hgraph/client';
@@ -24,7 +26,8 @@ import {
   DATASET_METADATA_TOPIC_ID,
   VERIFICATION_LOGS_TOPIC_ID,
   HEDERA_ACCOUNT_ID,
-  FTUSD_TOKEN_ID
+  FTUSD_TOKEN_ID,
+  PROVIDER_REGISTRY_CONTRACT_ID,
 } from './constants';
 
 /**
@@ -463,11 +466,256 @@ export async function submitVerification(
     await topicTx.getReceipt(client);
 
     return { success: true };
-  } catch (error: any) {
+  } catch (error) {
     console.error('Error submitting verification:', error);
     return {
       success: false,
-      error: error.message || 'Failed to submit verification',
+      error: error instanceof Error ? error.message : 'Failed to submit verification',
+    };
+  }
+}
+
+// ============ Provider Registry Functions ============
+
+export interface Provider {
+  providerId: number;
+  owner: string;
+  name: string;
+  endpoint: string;
+  capabilities: string[];
+  stakedAmount: string;
+  uptime: number;
+  totalJobs: number;
+  successfulJobs: number;
+  totalRewards: string;
+  registeredAt: number;
+  isActive: boolean;
+  isSlashed: boolean;
+}
+
+/**
+ * Register as a storage provider - Returns transaction bytes for wallet signing
+ */
+export async function registerProviderTransaction(
+  bandwidthMbps: number,
+  storageTB: number,
+  ipfsGateway: string,
+  location: string,
+  stakeAmount: number,
+  userAccountId: string,
+  signer: any
+): Promise<string> {
+  const name = `Provider-${location}`;
+  const endpoint = ipfsGateway;
+  const capabilities = ['storage', 'ipfs'];
+  
+  // Convert stake to smallest unit (assuming 18 decimals like FILE token)
+  const stakeInSmallestUnit = stakeAmount * Math.pow(10, 18);
+
+  // Create contract execute transaction
+  const contractTx = new ContractExecuteTransaction()
+    .setContractId(PROVIDER_REGISTRY_CONTRACT_ID)
+    .setGas(500000)
+    .setFunction(
+      'registerProvider',
+      new ContractFunctionParameters()
+        .addString(name)
+        .addString(endpoint)
+        .addStringArray(capabilities)
+        .addUint256(stakeInSmallestUnit)
+    )
+    .setTransactionMemo('FileThetic Provider Registration')
+    .setMaxTransactionFee(new Hbar(5))
+    .setNodeAccountIds([AccountId.fromString('0.0.3')]);
+
+  // Freeze with signer from wallet
+  const frozenTx = await contractTx.freezeWithSigner(signer);
+  return Buffer.from(frozenTx.toBytes()).toString('base64');
+}
+
+/**
+ * Get all providers from the ProviderRegistry contract using Mirror Node
+ */
+export async function getAllProviders(): Promise<Provider[]> {
+  try {
+    console.log('📊 Fetching providers from contract:', PROVIDER_REGISTRY_CONTRACT_ID);
+    
+    const mirrorNodeUrl = HEDERA_NETWORK === 'testnet' 
+      ? 'https://testnet.mirrornode.hedera.com'
+      : 'https://mainnet-public.mirrornode.hedera.com';
+    
+    // Step 1: Get provider IDs from ProviderRegistered events
+    const eventsUrl = `${mirrorNodeUrl}/api/v1/contracts/${PROVIDER_REGISTRY_CONTRACT_ID}/results/logs?order=asc&limit=100`;
+    
+    console.log('🔍 Step 1: Fetching ProviderRegistered events...');
+    
+    const response = await fetch(eventsUrl);
+    const data = await response.json();
+    
+    console.log('📡 Events response:', data);
+    
+    const providerIds = new Set<number>();
+    
+    // Parse ProviderRegistered events to get provider IDs
+    if (data.logs && Array.isArray(data.logs)) {
+      for (const log of data.logs) {
+        try {
+          if (log.topics && log.topics.length >= 3) {
+            const providerIdHex = log.topics[1];
+            const providerId = parseInt(providerIdHex, 16);
+            providerIds.add(providerId);
+            console.log(`✅ Found provider ID: ${providerId}`);
+          }
+        } catch (e) {
+          console.error('❌ Error parsing log:', e);
+        }
+      }
+    }
+    
+    console.log(`📋 Total provider IDs found: ${providerIds.size}`);
+    
+    // Step 2: Parse provider details from events (like marketplace does with HCS)
+    // Event data contains: providerId (indexed), owner (indexed), name, stakedAmount
+    const providerMap = new Map<number, Provider>();
+    
+    // Filter out provider ID 0 (doesn't exist in Solidity, counter starts at 1)
+    const validProviderIds = Array.from(providerIds).filter(id => id > 0);
+    console.log(`📋 Valid provider IDs (excluding 0): ${validProviderIds.length}`);
+    
+    if (validProviderIds.length === 0) {
+      console.warn('⚠️ No valid provider IDs found');
+      return [];
+    }
+    
+    // Parse each ProviderRegistered event
+    for (const log of data.logs) {
+      try {
+        if (!log.topics || log.topics.length < 3) continue;
+        
+        const providerIdHex = log.topics[1];
+        const providerId = parseInt(providerIdHex, 16);
+        
+        // Skip provider ID 0
+        if (providerId === 0) continue;
+        
+        console.log(`🔍 Step 2: Parsing event for provider ${providerId}...`);
+        
+        // Parse owner address from topics[2]
+        const ownerHex = log.topics[2];
+        const addressHex = ownerHex.slice(-40);
+        const owner = `0.0.${parseInt(addressHex.slice(-8), 16)}`;
+        
+        // Parse event data (contains name and stakedAmount)
+        // Event data is ABI-encoded: string name + uint256 stakedAmount
+        let name = `Provider-${providerId}`;
+        let endpoint = '';
+        let stakedAmount = '1000000000000000000000'; // Default 1000 FILE
+        
+        if (log.data && log.data !== '0x') {
+          try {
+            // Simple ABI decoding for string + uint256
+            const dataHex = log.data.startsWith('0x') ? log.data.slice(2) : log.data;
+            
+            // First 32 bytes = offset to string
+            // Next 32 bytes = stakedAmount
+            // Then string data
+            
+            if (dataHex.length >= 128) {
+              // Get stakedAmount (bytes 32-64)
+              const stakeHex = dataHex.slice(64, 128);
+              stakedAmount = BigInt('0x' + stakeHex).toString();
+              
+              // Get string offset (bytes 0-32)
+              const stringOffset = parseInt(dataHex.slice(0, 64), 16) * 2;
+              
+              // Get string length (at offset)
+              const stringLength = parseInt(dataHex.slice(stringOffset, stringOffset + 64), 16) * 2;
+              
+              // Get string data
+              const stringData = dataHex.slice(stringOffset + 64, stringOffset + 64 + stringLength);
+              name = Buffer.from(stringData, 'hex').toString('utf-8');
+              
+              // Extract location from name (format: "Provider-{location}")
+              if (name.startsWith('Provider-')) {
+                const location = name.substring(9);
+                // Endpoint was passed as location during registration
+                endpoint = `https://ipfs-${location.toLowerCase().replace(/\s+/g, '-')}.io/{redacted}`;
+              }
+            }
+          } catch (e) {
+            console.warn(`⚠️ Could not decode event data for provider ${providerId}:`, e);
+          }
+        }
+        
+        const provider: Provider = {
+          providerId,
+          owner,
+          name,
+          endpoint: endpoint || `https://ipfs-gateway-${providerId}.io/`,
+          capabilities: ['storage', 'ipfs'],
+          stakedAmount,
+          uptime: 10000, // 100% (default)
+          totalJobs: 0,
+          successfulJobs: 0,
+          totalRewards: '0',
+          registeredAt: log.timestamp ? Math.floor(new Date(log.timestamp).getTime() / 1000) : Math.floor(Date.now() / 1000),
+          isActive: true,
+          isSlashed: false,
+        };
+        
+        providerMap.set(providerId, provider);
+        console.log(`✅ Provider ${providerId} parsed:`, provider);
+      } catch (e) {
+        console.error(`❌ Error parsing provider event:`, e);
+      }
+    }
+    
+    const finalProviders = Array.from(providerMap.values());
+    console.log(`✅ Total providers parsed: ${finalProviders.length}`);
+    return finalProviders;
+  } catch (error) {
+    console.error('❌ Error fetching providers:', error);
+    return [];
+  }
+}
+
+/**
+ * Get provider by ID
+ */
+export async function getProviderById(providerId: number): Promise<Provider | null> {
+  try {
+    const allProviders = await getAllProviders();
+    return allProviders.find(p => p.providerId === providerId) || null;
+  } catch (error) {
+    console.error('Error fetching provider:', error);
+    return null;
+  }
+}
+
+/**
+ * Get network statistics
+ */
+export async function getProviderNetworkStats() {
+  try {
+    const providers = await getAllProviders();
+    
+    const activeProviders = providers.filter(p => p.isActive);
+    
+    return {
+      totalProviders: providers.length,
+      activeProviders: activeProviders.length,
+      totalStaked: providers.reduce((sum, p) => sum + Number(p.stakedAmount), 0),
+      averageUptime: activeProviders.length > 0 
+        ? activeProviders.reduce((sum, p) => sum + Number(p.uptime), 0) / activeProviders.length / 100
+        : 0,
+    };
+  } catch (error) {
+    console.error('Error fetching network stats:', error);
+    return {
+      totalProviders: 0,
+      activeProviders: 0,
+      totalStaked: 0,
+      averageUptime: 0,
     };
   }
 }
