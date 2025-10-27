@@ -23,7 +23,7 @@ interface ProviderRegistrationFormProps {
 }
 
 export function ProviderRegistrationForm({ onSuccess, onCancel }: ProviderRegistrationFormProps) {
-  const { accountId, isConnected } = useHederaWallet();
+  const { accountId, isConnected, dAppConnector } = useHederaWallet();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isConfirming, setIsConfirming] = useState(false);
   
@@ -33,12 +33,12 @@ export function ProviderRegistrationForm({ onSuccess, onCancel }: ProviderRegist
       storageTB: '1',
       ipfsGateway: '',
       location: '',
-      stakeAmount: '100'
+      stakeAmount: '1000'
     }
   });
 
   const onSubmit = async (data: RegistrationFormData) => {
-    if (!isConnected || !accountId) {
+    if (!isConnected || !accountId || !dAppConnector) {
       toast.error('Please connect your Hedera wallet');
       return;
     }
@@ -47,18 +47,68 @@ export function ProviderRegistrationForm({ onSuccess, onCancel }: ProviderRegist
       setIsSubmitting(true);
       setIsConfirming(true);
       
-      // TODO: Implement Hedera smart contract call
-      // This would use the Hedera SDK to call the ProviderRegistry contract
-      // For now, simulate the registration with the form data
-      console.log('Registering provider with data:', data);
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      console.log('🚀 Registering provider with data:', data);
       
-      toast.success('Successfully registered as provider!');
+      // Get signer from dAppConnector (same as /create page)
+      const signer = dAppConnector.signers?.[0];
+      if (!signer) {
+        throw new Error('No signer available from wallet');
+      }
+
+      // Import the registration function
+      const { registerProviderTransaction } = await import('@/lib/hedera');
+
+      // Create the transaction
+      toast.info('Preparing provider registration transaction...');
+      
+      const transactionBytes = await registerProviderTransaction(
+        Number(data.bandwidthMbps),
+        Number(data.storageTB),
+        data.ipfsGateway,
+        data.location,
+        Number(data.stakeAmount),
+        accountId,
+        signer
+      );
+
+      console.log('📝 Transaction created, requesting signature...');
+      toast.info('Please approve the transaction in your wallet');
+
+      // Execute the transaction through dAppConnector
+      const result = await dAppConnector.signAndExecuteTransaction({
+        signerAccountId: accountId,
+        transactionList: transactionBytes,
+      });
+
+      if (!result) {
+        throw new Error('Transaction failed or was rejected');
+      }
+
+      console.log('✅ Transaction result:', result);
+      
+      toast.success('Successfully registered as provider!', {
+        description: 'You can now start hosting datasets on the network',
+      });
       setIsConfirming(false);
       onSuccess();
     } catch (error) {
-      console.error('Registration error:', error);
-      const errorMessage = error instanceof Error ? error.message : 'Failed to register provider';
+      console.error('❌ Registration error:', error);
+      
+      let errorMessage = 'Failed to register provider';
+      
+      // Parse contract errors
+      if (error instanceof Error) {
+        if (error.message.includes('InsufficientStake')) {
+          errorMessage = 'Insufficient stake amount. Minimum required: 1000 FILE tokens';
+        } else if (error.message.includes('ProviderAlreadyRegistered')) {
+          errorMessage = 'You are already registered as a provider';
+        } else if (error.message.includes('CONTRACT_REVERT_EXECUTED')) {
+          errorMessage = 'Contract error: Please ensure you meet all requirements (minimum 1000 FILE stake)';
+        } else {
+          errorMessage = error.message;
+        }
+      }
+      
       toast.error(errorMessage);
       setIsConfirming(false);
     } finally {
@@ -147,17 +197,17 @@ export function ProviderRegistrationForm({ onSuccess, onCancel }: ProviderRegist
           id="stakeAmount"
           type="number"
           step="1"
-          placeholder="100"
+          placeholder="1000"
           {...register('stakeAmount', {
             required: 'Stake amount is required',
-            min: { value: 100, message: 'Minimum stake is 100 FILE' }
+            min: { value: 1000, message: 'Minimum stake is 1000 FILE tokens' }
           })}
         />
         {errors.stakeAmount && (
           <p className="text-sm text-red-500">{errors.stakeAmount.message}</p>
         )}
         <p className="text-xs text-muted-foreground">
-          Minimum stake: 100 FILE tokens. This will be locked while you&apos;re an active provider.
+          Minimum stake: 1000 FILE tokens. This will be locked while you&apos;re an active provider.
         </p>
       </div>
 
