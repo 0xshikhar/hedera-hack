@@ -18,67 +18,66 @@ export function useStorageProviders() {
       setIsLoading(true);
       setError(null);
 
-      // TODO: Implement Hedera smart contract call to ProviderRegistry
-      // For now, use mock data
-      await new Promise(resolve => setTimeout(resolve, 500));
+      console.log('🔍 Fetching providers from Hedera blockchain...');
+      console.log('📍 Contract ID:', 'PROVIDER_REGISTRY_CONTRACT_ID from constants');
 
-      // Mock providers data
-      const mockProviders: Provider[] = [
-        {
-          provider: '0.0.12345',
-          stakedAmount: BigInt(1000),
-          bandwidthMbps: BigInt(100),
-          storageTB: BigInt(5),
-          uptime: BigInt(9900), // 99%
-          ipfsGateway: 'https://ipfs-gateway-1.example.com',
-          location: 'Singapore',
-          isActive: true,
-          registeredAt: BigInt(Date.now() - 30 * 24 * 60 * 60 * 1000),
-          totalEarnings: BigInt(500),
-          datasetsHosted: BigInt(25),
-        },
-        {
-          provider: '0.0.12346',
-          stakedAmount: BigInt(2000),
-          bandwidthMbps: BigInt(200),
-          storageTB: BigInt(10),
-          uptime: BigInt(9950), // 99.5%
-          ipfsGateway: 'https://ipfs-gateway-2.example.com',
-          location: 'USA',
-          isActive: true,
-          registeredAt: BigInt(Date.now() - 60 * 24 * 60 * 60 * 1000),
-          totalEarnings: BigInt(1200),
-          datasetsHosted: BigInt(50),
-        },
-        {
-          provider: '0.0.12347',
-          stakedAmount: BigInt(1500),
-          bandwidthMbps: BigInt(150),
-          storageTB: BigInt(8),
-          uptime: BigInt(9800), // 98%
-          ipfsGateway: 'https://ipfs-gateway-3.example.com',
-          location: 'Germany',
-          isActive: true,
-          registeredAt: BigInt(Date.now() - 45 * 24 * 60 * 60 * 1000),
-          totalEarnings: BigInt(800),
-          datasetsHosted: BigInt(35),
-        },
-      ];
+      // Fetch providers from Hedera blockchain
+      const hederaProviders = await getAllProviders();
+      
+      console.log(`✅ Fetched ${hederaProviders.length} providers:`, hederaProviders);
 
-      setProviders(mockProviders);
+      if (hederaProviders.length === 0) {
+        console.warn('⚠️ No providers found. This could mean:');
+        console.warn('  1. No providers have registered yet');
+        console.warn('  2. The contract has no ProviderRegistered events');
+        console.warn('  3. The Mirror Node API is not returning data');
+      }
 
-      // Mock network stats
-      const mockStats: NetworkStats = {
-        totalProviders: mockProviders.length,
-        activeProviders: mockProviders.filter(p => p.isActive).length,
-        networkBandwidth: mockProviders.reduce((sum, p) => sum + Number(p.bandwidthMbps || 0), 0),
-        networkStorage: mockProviders.reduce((sum, p) => sum + Number(p.storageTB || 0), 0),
+      // Transform Hedera provider format to UI format
+      const transformedProviders: UIProvider[] = hederaProviders.map((p: HederaProvider) => {
+        console.log(`🔄 Transforming provider ${p.providerId}:`, p);
+        
+        // Extract location from name (format: "Provider-{location}")
+        const location = p.name.startsWith('Provider-') 
+          ? p.name.substring(9) // Remove "Provider-" prefix
+          : p.name || 'Unknown';
+        
+        return {
+          id: `${p.owner}-${p.providerId}`, // Unique identifier
+          provider: p.owner,
+          stakedAmount: p.stakedAmount,
+          bandwidthMbps: 100, // Default values - could be stored in contract metadata
+          storageTB: 10,
+          uptime: p.uptime / 100, // Convert from basis points to percentage
+          ipfsGateway: p.endpoint || 'https://ipfs.io',
+          location: location,
+          isActive: p.isActive,
+          registeredAt: p.registeredAt,
+          totalEarnings: p.totalRewards,
+          datasetsHosted: p.totalJobs,
+        };
+      });
+
+      console.log(`✅ Transformed ${transformedProviders.length} providers for UI`);
+      setProviders(transformedProviders);
+
+      // Fetch network stats
+      console.log('📊 Calculating network stats...');
+      const stats = await getProviderNetworkStats();
+      
+      const networkStatsData: NetworkStats = {
+        totalProviders: stats.totalProviders,
+        activeProviders: stats.activeProviders,
+        networkBandwidth: transformedProviders.reduce((sum, p) => sum + (p.bandwidthMbps || 0), 0),
+        networkStorage: transformedProviders.reduce((sum, p) => sum + (p.storageTB || 0), 0),
       };
 
-      setNetworkStats(mockStats);
+      setNetworkStats(networkStatsData);
+
+      console.log('✅ Network stats calculated:', networkStatsData);
 
     } catch (err) {
-      console.error('Error fetching providers:', err);
+      console.error('❌ Error fetching providers:', err);
       const errorMessage = err instanceof Error ? err.message : 'Failed to fetch providers';
       setError(errorMessage);
       setProviders([]);
@@ -90,7 +89,6 @@ export function useStorageProviders() {
 
   useEffect(() => {
     fetchProviders();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isConnected]);
 
   return {
