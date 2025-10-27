@@ -17,20 +17,28 @@ import {
 } from '@hashgraph/sdk';
 import { Dataset, VerificationInfo } from './types';
 import { hgraphClient } from './hgraph/client';
+import {
+  NEXT_PUBLIC_HEDERA_NETWORK,
+  NEXT_PUBLIC_DATASET_NFT_TOKEN_ID,
+  NEXT_PUBLIC_FILE_TOKEN_ID,
+  NEXT_PUBLIC_PAYMENT_TOKEN_ID,
+  NEXT_PUBLIC_DATASET_METADATA_TOPIC_ID,
+  NEXT_PUBLIC_VERIFICATION_LOGS_TOPIC_ID,
+} from './constants';
 
 // Environment variables
-const HEDERA_NETWORK = process.env.HEDERA_NETWORK || 'testnet';
+const HEDERA_NETWORK = NEXT_PUBLIC_HEDERA_NETWORK;
 const HEDERA_ACCOUNT_ID = process.env.HEDERA_ACCOUNT_ID;
 const HEDERA_PRIVATE_KEY = process.env.HEDERA_PRIVATE_KEY;
 
-// Token IDs from environment
-const DATASET_NFT_TOKEN_ID = process.env.NEXT_PUBLIC_DATASET_NFT_TOKEN_ID || '0.0.7158235';
-const FILE_TOKEN_ID = process.env.NEXT_PUBLIC_FILE_TOKEN_ID || '0.0.7158236';
-const FTUSD_TOKEN_ID = process.env.NEXT_PUBLIC_FTUSD_TOKEN_ID || '0.0.7158237';
+// Token IDs from constants
+const DATASET_NFT_TOKEN_ID = NEXT_PUBLIC_DATASET_NFT_TOKEN_ID;
+const FILE_TOKEN_ID = NEXT_PUBLIC_FILE_TOKEN_ID;
+const FTUSD_TOKEN_ID = NEXT_PUBLIC_PAYMENT_TOKEN_ID;
 
-// Topic IDs from environment
-const DATASET_METADATA_TOPIC_ID = process.env.NEXT_PUBLIC_DATASET_METADATA_TOPIC_ID || '0.0.7158238';
-const VERIFICATION_LOGS_TOPIC_ID = process.env.NEXT_PUBLIC_VERIFICATION_LOGS_TOPIC_ID || '0.0.7158239';
+// Topic IDs from constants
+const DATASET_METADATA_TOPIC_ID = NEXT_PUBLIC_DATASET_METADATA_TOPIC_ID;
+const VERIFICATION_LOGS_TOPIC_ID = NEXT_PUBLIC_VERIFICATION_LOGS_TOPIC_ID;
 
 /**
  * Get Hedera client
