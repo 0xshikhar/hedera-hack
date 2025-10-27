@@ -10,6 +10,7 @@ import {
 } from '@hashgraph/hedera-wallet-connect';
 import { LedgerId } from '@hashgraph/sdk';
 import { HederaWalletProvider } from '@/contexts/HederaWalletContext';
+import { ConfettiProvider } from '@/config/ConfettiProvider';
 import { Toaster } from 'sonner';
 
 const projectId = process.env.NEXT_PUBLIC_WALLET_CONNECT_ID ?? '';
@@ -119,8 +120,10 @@ export function ClientProviders({ children }: ClientProvidersProps) {
     <DAppConnectorContext.Provider value={{ dAppConnector, userAccountId, sessionTopic, disconnect, refresh }}>
       <QueryClientProvider client={queryClient}>
         <HederaWalletProvider>
-          <Toaster position="top-right" richColors />
-          {children}
+          <ConfettiProvider>
+            <Toaster position="top-right" richColors />
+            {children}
+          </ConfettiProvider>
         </HederaWalletProvider>
       </QueryClientProvider>
     </DAppConnectorContext.Provider>
