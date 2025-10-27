@@ -18,7 +18,7 @@ export function NodeFAQ() {
           <AccordionItem value="item-2">
             <AccordionTrigger>What&apos;s the minimum stake?</AccordionTrigger> 
             <AccordionContent>
-              0.1 U2U tokens required as stake when registering.
+              0.1 HBAR tokens required as stake when registering.
             </AccordionContent>
           </AccordionItem>
           <AccordionItem value="item-3">

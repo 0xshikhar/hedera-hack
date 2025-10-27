@@ -40,7 +40,7 @@ export default function RunNodePage() {
               <div>
                 <h3 className="font-semibold mb-2">Earn Rewards</h3>
                 <p className="text-sm text-muted-foreground">
-                  Get paid in U2U tokens for providing storage and bandwidth to the network
+                  Get paid in HBAR tokens for providing storage and bandwidth to the network
                 </p>
               </div>
             </div>
