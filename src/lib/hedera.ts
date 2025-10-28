@@ -274,17 +274,38 @@ export async function hasAccessToDataset(
  */
 export async function getAllDatasets(): Promise<Dataset[]> {
   try {
+    console.log('📡 Fetching from HCS topic:', DATASET_METADATA_TOPIC_ID);
+    
     // Get all dataset creation messages from HCS topic
     const messages = await hgraphClient.getTopicMessages(DATASET_METADATA_TOPIC_ID, 1000);
+    
+    console.log('📨 Raw HCS messages received:', messages.length);
+    console.log('📨 First few messages:', messages.slice(0, 3));
 
     const datasets: Dataset[] = [];
     const datasetMap = new Map<string, Dataset>();
 
     // Process messages in order
+    let processedCount = 0;
+    
     for (const msg of messages) {
       try {
-        const decoded = Buffer.from(msg.message, 'base64').toString('utf-8');
+        // HGraph returns hex-encoded messages (with \\x prefix), not base64
+        let decoded: string;
+        if (msg.message.startsWith('\\x')) {
+          // Remove \\x prefix and convert hex to string
+          const hexString = msg.message.slice(2);
+          decoded = Buffer.from(hexString, 'hex').toString('utf-8');
+        } else {
+          // Fallback to base64 if not hex
+          decoded = Buffer.from(msg.message, 'base64').toString('utf-8');
+        }
+        
+        console.log('🔓 Decoded message:', decoded.substring(0, 200));
+        
         const data = JSON.parse(decoded);
+        
+        console.log('🔓 Decoded message:', decoded.substring(0, 200));
 
         // Handle shortened field names (t, tid, sn, etc.)
         const type = data.t || data.type;
@@ -294,6 +315,9 @@ export async function getAllDatasets(): Promise<Dataset[]> {
         const key = `${tokenId}-${serialNumber}`;
 
         if (type === 'ds_created' || type === 'dataset_created') {
+          processedCount++;
+          console.log('✅ Processing dataset:', { type, tokenId, serialNumber });
+          
           datasetMap.set(key, {
             id: serialNumber,
             tokenId: tokenId,
@@ -327,7 +351,12 @@ export async function getAllDatasets(): Promise<Dataset[]> {
       }
     }
 
-    return Array.from(datasetMap.values());
+    const finalDatasets = Array.from(datasetMap.values());
+    console.log(`✅ Successfully processed ${processedCount} dataset messages`);
+    console.log(`📊 Final datasets array:`, finalDatasets);
+    console.log(`🔗 Verify topic manually: https://hashscan.io/testnet/topic/${DATASET_METADATA_TOPIC_ID}`);
+    
+    return finalDatasets;
   } catch (error) {
     console.error('Error fetching datasets:', error);
     return [];
