@@ -185,6 +185,20 @@ export function DatasetBrowser() {
 
   return (
     <div className="w-full space-y-6">
+      {/* Debug info */}
+      <div className="text-xs text-muted-foreground">
+        Querying HCS Topic: <code className="bg-muted px-1 py-0.5 rounded">0.0.7159779</code>
+        {' | '}
+        <a 
+          href="https://hashscan.io/testnet/topic/0.0.7159779" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="underline hover:text-primary"
+        >
+          View on HashScan ↗
+        </a>
+      </div>
+      
       <div className="flex flex-col sm:flex-row gap-4 justify-between">
         <div className="relative flex-1">
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
