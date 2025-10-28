@@ -6,7 +6,6 @@
 import {
   Client,
   AccountId,
-  PrivateKey,
   TokenId,
   TopicId,
   TokenMintTransaction,
@@ -18,42 +17,23 @@ import {
 import { Dataset, VerificationInfo } from './types';
 import { hgraphClient } from './hgraph/client';
 import {
-  NEXT_PUBLIC_HEDERA_NETWORK,
-  NEXT_PUBLIC_DATASET_NFT_TOKEN_ID,
-  NEXT_PUBLIC_FILE_TOKEN_ID,
-  NEXT_PUBLIC_PAYMENT_TOKEN_ID,
-  NEXT_PUBLIC_DATASET_METADATA_TOPIC_ID,
-  NEXT_PUBLIC_VERIFICATION_LOGS_TOPIC_ID,
+  HEDERA_NETWORK,
+  DATASET_NFT_TOKEN_ID,
+  FILE_TOKEN_ID,
+  PAYMENT_TOKEN_ID,
+  DATASET_METADATA_TOPIC_ID,
+  VERIFICATION_LOGS_TOPIC_ID,
+  HEDERA_ACCOUNT_ID,
+  FTUSD_TOKEN_ID
 } from './constants';
 
-// Environment variables
-const HEDERA_NETWORK = NEXT_PUBLIC_HEDERA_NETWORK;
-const HEDERA_ACCOUNT_ID = process.env.HEDERA_ACCOUNT_ID;
-const HEDERA_PRIVATE_KEY = process.env.HEDERA_PRIVATE_KEY;
-
-// Token IDs from constants
-const DATASET_NFT_TOKEN_ID = NEXT_PUBLIC_DATASET_NFT_TOKEN_ID;
-const FILE_TOKEN_ID = NEXT_PUBLIC_FILE_TOKEN_ID;
-const FTUSD_TOKEN_ID = NEXT_PUBLIC_PAYMENT_TOKEN_ID;
-
-// Topic IDs from constants
-const DATASET_METADATA_TOPIC_ID = NEXT_PUBLIC_DATASET_METADATA_TOPIC_ID;
-const VERIFICATION_LOGS_TOPIC_ID = NEXT_PUBLIC_VERIFICATION_LOGS_TOPIC_ID;
-
 /**
- * Get Hedera client
+ * Get Hedera client without operator for wallet-based transactions
  */
 export function getHederaClient(): Client {
-  const client = HEDERA_NETWORK === 'mainnet' 
-    ? Client.forMainnet() 
-    : Client.forTestnet();
-
-  if (HEDERA_ACCOUNT_ID && HEDERA_PRIVATE_KEY) {
-    client.setOperator(
-      AccountId.fromString(HEDERA_ACCOUNT_ID),
-      PrivateKey.fromString(HEDERA_PRIVATE_KEY)
-    );
-  }
+  const client = HEDERA_NETWORK === 'testnet'
+    ? Client.forTestnet()
+    : Client.forMainnet();
 
   return client;
 }
@@ -80,110 +60,105 @@ export function getWalletAddress(): string | null {
 }
 
 /**
- * Create a dataset NFT on Hedera
+ * Create a dataset NFT on Hedera - Returns transaction bytes for wallet signing
  */
-export async function createDataset(
+export async function createDatasetTransaction(
   name: string,
   description: string,
   ipfsHash: string,
   price: number,
   category: string,
-  tags: string[]
-): Promise<{ success: boolean; tokenId?: string; serialNumber?: number; error?: string }> {
-  try {
-    const client = getHederaClient();
-    const accountId = getWalletAddress();
+  tags: string[],
+  userAccountId: string,
+  signer: any
+): Promise<{ transactionBytes: string; metadata: any }> {
+  // Create minimal metadata for the NFT (just IPFS hash to avoid METADATA_TOO_LONG)
+  const nftMetadata = ipfsHash.substring(0, 100);
 
-    if (!accountId) {
-      throw new Error('Wallet not connected');
-    }
+  // Create mint transaction
+  const mintTx = new TokenMintTransaction()
+    .setTokenId(TokenId.fromString(DATASET_NFT_TOKEN_ID))
+    .addMetadata(Buffer.from(nftMetadata))
+    .setTransactionMemo('FileThetic Dataset NFT')
+    .setMaxTransactionFee(new Hbar(2))
+    .setNodeAccountIds([AccountId.fromString('0.0.3')]);
 
-    // Create metadata for the NFT
-    const metadata = {
-      name,
-      description,
-      ipfsHash,
-      price,
-      category,
-      tags,
-      creator: accountId,
-      createdAt: new Date().toISOString(),
-    };
+  // Freeze with signer from wallet
+  const frozenTx = await mintTx.freezeWithSigner(signer);
+  const txBytes = Buffer.from(frozenTx.toBytes()).toString('base64');
 
-    // Mint NFT on Hedera
-    const mintTx = await new TokenMintTransaction()
-      .setTokenId(TokenId.fromString(DATASET_NFT_TOKEN_ID))
-      .setMetadata([Buffer.from(JSON.stringify(metadata))])
-      .execute(client);
+  // Prepare metadata for HCS (will be submitted after mint)
+  const metadata = {
+    name: name.substring(0, 100),
+    description: description.substring(0, 200),
+    ipfsHash,
+    price,
+    category,
+    tags,
+    creator: userAccountId,
+  };
 
-    const receipt = await mintTx.getReceipt(client);
-    const serialNumber = receipt.serials[0].toNumber();
-
-    // Submit metadata to HCS topic
-    const topicTx = await new TopicMessageSubmitTransaction()
-      .setTopicId(TopicId.fromString(DATASET_METADATA_TOPIC_ID))
-      .setMessage(JSON.stringify({
-        type: 'dataset_created',
-        tokenId: DATASET_NFT_TOKEN_ID,
-        serialNumber,
-        metadata,
-        timestamp: new Date().toISOString(),
-      }))
-      .execute(client);
-
-    await topicTx.getReceipt(client);
-
-    return {
-      success: true,
-      tokenId: DATASET_NFT_TOKEN_ID,
-      serialNumber,
-    };
-  } catch (error: any) {
-    console.error('Error creating dataset:', error);
-    return {
-      success: false,
-      error: error.message || 'Failed to create dataset',
-    };
-  }
+  return { transactionBytes: txBytes, metadata };
 }
 
 /**
- * Lock a dataset (mark as finalized)
+ * Submit dataset metadata to HCS topic after minting
  */
-export async function lockDataset(
+export async function submitDatasetMetadata(
+  serialNumber: number,
+  metadata: any,
+  userAccountId: string,
+  signer: any
+): Promise<string> {
+  const topicMessage = {
+    t: 'ds_created',
+    tid: DATASET_NFT_TOKEN_ID,
+    sn: serialNumber,
+    n: metadata.name,
+    d: metadata.description,
+    ipfs: metadata.ipfsHash,
+    p: metadata.price,
+    c: metadata.category,
+    tags: metadata.tags,
+    cr: metadata.creator,
+    ts: Date.now(),
+  };
+
+  const topicTx = new TopicMessageSubmitTransaction()
+    .setTopicId(TopicId.fromString(DATASET_METADATA_TOPIC_ID))
+    .setMessage(JSON.stringify(topicMessage))
+    .setTransactionMemo('FileThetic Metadata')
+    .setMaxTransactionFee(new Hbar(1))
+    .setNodeAccountIds([AccountId.fromString('0.0.3')]);
+
+  const frozenTx = await topicTx.freezeWithSigner(signer);
+  return Buffer.from(frozenTx.toBytes()).toString('base64');
+}
+
+/**
+ * Lock a dataset (mark as finalized) - Returns transaction bytes
+ */
+export async function lockDatasetTransaction(
   tokenId: string,
-  serialNumber: number
-): Promise<{ success: boolean; error?: string }> {
-  try {
-    const client = getHederaClient();
-    const accountId = getWalletAddress();
+  serialNumber: number,
+  userAccountId: string,
+  signer: any
+): Promise<string> {
+  const topicTx = new TopicMessageSubmitTransaction()
+    .setTopicId(TopicId.fromString(DATASET_METADATA_TOPIC_ID))
+    .setMessage(JSON.stringify({
+      t: 'ds_locked',
+      tid: tokenId,
+      sn: serialNumber,
+      by: userAccountId,
+      ts: Date.now(),
+    }))
+    .setTransactionMemo('FileThetic Lock')
+    .setMaxTransactionFee(new Hbar(1))
+    .setNodeAccountIds([AccountId.fromString('0.0.3')]);
 
-    if (!accountId) {
-      throw new Error('Wallet not connected');
-    }
-
-    // Submit lock event to HCS topic
-    const topicTx = await new TopicMessageSubmitTransaction()
-      .setTopicId(TopicId.fromString(DATASET_METADATA_TOPIC_ID))
-      .setMessage(JSON.stringify({
-        type: 'dataset_locked',
-        tokenId,
-        serialNumber,
-        lockedBy: accountId,
-        timestamp: new Date().toISOString(),
-      }))
-      .execute(client);
-
-    await topicTx.getReceipt(client);
-
-    return { success: true };
-  } catch (error: any) {
-    console.error('Error locking dataset:', error);
-    return {
-      success: false,
-      error: error.message || 'Failed to lock dataset',
-    };
-  }
+  const frozenTx = await topicTx.freezeWithSigner(signer);
+  return Buffer.from(frozenTx.toBytes()).toString('base64');
 }
 
 /**
@@ -211,6 +186,7 @@ export async function purchaseDataset(
       await new TokenAssociateTransaction()
         .setAccountId(buyerAccountId)
         .setTokenIds([datasetTokenId, paymentTokenId])
+        .freezeWith(client)
         .execute(client);
     } catch (e) {
       // Token might already be associated
@@ -223,6 +199,7 @@ export async function purchaseDataset(
       .addTokenTransfer(paymentTokenId, buyerAccountId, -price)
       .addTokenTransfer(paymentTokenId, AccountId.fromString(HEDERA_ACCOUNT_ID!), price)
       .addNftTransfer(datasetTokenId, serialNumber, AccountId.fromString(HEDERA_ACCOUNT_ID!), buyerAccountId)
+      .freezeWith(client)
       .execute(client);
 
     await transferTx.getReceipt(client);
@@ -238,6 +215,7 @@ export async function purchaseDataset(
         price,
         timestamp: new Date().toISOString(),
       }))
+      .freezeWith(client)
       .execute(client);
 
     await topicTx.getReceipt(client);
@@ -308,39 +286,44 @@ export async function getAllDatasets(): Promise<Dataset[]> {
         const decoded = Buffer.from(msg.message, 'base64').toString('utf-8');
         const data = JSON.parse(decoded);
 
-        const key = `${data.tokenId}-${data.serialNumber}`;
+        // Handle shortened field names (t, tid, sn, etc.)
+        const type = data.t || data.type;
+        const tokenId = data.tid || data.tokenId;
+        const serialNumber = data.sn || data.serialNumber;
 
-        if (data.type === 'dataset_created') {
+        const key = `${tokenId}-${serialNumber}`;
+
+        if (type === 'ds_created' || type === 'dataset_created') {
           datasetMap.set(key, {
-            id: data.serialNumber,
-            tokenId: data.tokenId,
-            name: data.metadata.name,
-            description: data.metadata.description,
-            ipfsHash: data.metadata.ipfsHash,
-            cid: data.metadata.ipfsHash, // Alias
-            price: data.metadata.price,
-            category: data.metadata.category,
-            tags: data.metadata.tags || [],
-            creator: data.metadata.creator,
-            owner: data.metadata.creator, // Initially owned by creator
-            createdAt: data.metadata.createdAt,
+            id: serialNumber,
+            tokenId: tokenId,
+            name: data.n || data.metadata?.name || 'Unnamed Dataset',
+            description: data.d || data.metadata?.description || '',
+            ipfsHash: data.ipfs || data.metadata?.ipfsHash || '',
+            cid: data.ipfs || data.metadata?.ipfsHash || '',
+            price: data.p || data.metadata?.price || 0,
+            category: data.c || data.metadata?.category || 'general',
+            tags: data.tags || data.metadata?.tags || [],
+            creator: data.cr || data.metadata?.creator || '',
+            owner: data.cr || data.metadata?.creator || '',
+            createdAt: data.ts || data.metadata?.createdAt || Date.now(),
             locked: false,
             verified: false,
             purchaseCount: 0,
           });
-        } else if (data.type === 'dataset_locked') {
+        } else if (type === 'ds_locked' || type === 'dataset_locked') {
           const dataset = datasetMap.get(key);
           if (dataset) {
             dataset.locked = true;
           }
-        } else if (data.type === 'dataset_purchased') {
+        } else if (type === 'dataset_purchased') {
           const dataset = datasetMap.get(key);
           if (dataset) {
             dataset.purchaseCount = (dataset.purchaseCount || 0) + 1;
           }
         }
       } catch (e) {
-        console.error('Error parsing message:', e);
+        console.error('Error parsing message:', e, msg);
       }
     }
 
@@ -445,6 +428,7 @@ export async function submitVerification(
         comments,
         timestamp: new Date().toISOString(),
       }))
+      .freezeWith(client)
       .execute(client);
 
     await topicTx.getReceipt(client);

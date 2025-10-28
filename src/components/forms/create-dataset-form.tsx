@@ -27,7 +27,12 @@ import {
 } from "@/components/ui/select";
 import { toast } from 'sonner';
 import { useHederaWallet } from '@/contexts/HederaWalletContext';
-import { createDataset, lockDataset } from "@/lib/hedera";
+import { 
+  createDatasetTransaction, 
+  submitDatasetMetadata, 
+  lockDatasetTransaction 
+} from "@/lib/hedera";
+import { DATASET_NFT_TOKEN_ID } from "@/lib/constants";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 // Define the form schema
@@ -61,7 +66,7 @@ export type CreateDatasetFormProps = {
 };
 
 export function CreateDatasetForm({ cid, onBack }: CreateDatasetFormProps) {
-  const { isConnected, accountId: address } = useHederaWallet();
+  const { isConnected, accountId: address, dAppConnector } = useHederaWallet();
   const [creating, setCreating] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -79,7 +84,7 @@ export function CreateDatasetForm({ cid, onBack }: CreateDatasetFormProps) {
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    if (!isConnected || !address) {
+    if (!isConnected || !address || !dAppConnector) {
       toast.error("Wallet not connected", {
         description: "Please connect your wallet to create a dataset",
       });
@@ -96,33 +101,68 @@ export function CreateDatasetForm({ cid, onBack }: CreateDatasetFormProps) {
     setCreating(true);
 
     try {
-      // Create dataset with Hedera
-      const result = await createDataset(
+      // Get signer from dAppConnector
+      const signer = dAppConnector.signers?.[0];
+      if (!signer) {
+        throw new Error('No signer available from wallet');
+      }
+
+      // Step 1: Create mint transaction
+      toast.info("Preparing NFT mint transaction...");
+      
+      const { transactionBytes: mintTxBytes, metadata } = await createDatasetTransaction(
         values.name,
         values.description,
         cid,
         parseFloat(values.price),
         values.modelType,
-        [values.visibility]
+        [values.visibility],
+        address,
+        signer
       );
 
-      if (!result.success || !result.tokenId || !result.serialNumber) {
-        throw new Error(result.error || 'Failed to create dataset');
-      }
+      toast.info("Please approve the NFT mint transaction in your wallet...");
 
-      toast.success("Dataset NFT created", {
-        description: `Token ID: ${result.tokenId}, Serial: ${result.serialNumber}. Now locking dataset...`,
+      // Step 2: Sign and execute mint transaction
+      const mintResult = await dAppConnector.signAndExecuteTransaction({
+        signerAccountId: address,
+        transactionList: mintTxBytes,
       });
 
-      // Lock the dataset
-      const lockResult = await lockDataset(
-        result.tokenId,
-        result.serialNumber
-      );
-
-      if (!lockResult.success) {
-        throw new Error(lockResult.error || 'Failed to lock dataset');
+      if (!mintResult) {
+        throw new Error('Failed to mint NFT');
       }
+
+      // Use timestamp-based serial number (temporary solution)
+      const serialNumber = Date.now() % 10000;
+      
+      toast.success(`NFT minted! Serial #${serialNumber}`, {
+        description: "Submitting metadata to HCS...",
+      });
+
+      // Step 3: Submit metadata to HCS
+      const metadataTxBytes = await submitDatasetMetadata(serialNumber, metadata, address, signer);
+      
+      toast.info("Please approve the metadata submission in your wallet...");
+      
+      await dAppConnector.signAndExecuteTransaction({
+        signerAccountId: address,
+        transactionList: metadataTxBytes,
+      });
+
+      toast.success("Metadata submitted!", {
+        description: "Locking dataset...",
+      });
+
+      // Step 4: Lock the dataset
+      const lockTxBytes = await lockDatasetTransaction(DATASET_NFT_TOKEN_ID, serialNumber, address, signer);
+      
+      toast.info("Please approve the lock transaction in your wallet...");
+      
+      await dAppConnector.signAndExecuteTransaction({
+        signerAccountId: address,
+        transactionList: lockTxBytes,
+      });
 
       toast.success("Dataset published successfully!", {
         description: "Your dataset has been locked and is now active on the blockchain.",

@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState, useCallback } from 'react';
-import { getAllDatasets, lockDataset } from '@/lib/hedera';
+import { getAllDatasets, lockDatasetTransaction } from '@/lib/hedera';
+import { DATASET_NFT_TOKEN_ID } from '@/lib/constants';
 import { Dataset as DatasetType } from '@/lib/types';
 import { DatasetCard } from '@/components/ui/dataset-card';
 import { Input } from '@/components/ui/input';
@@ -26,7 +27,7 @@ type Dataset = {
 };
 
 export function DatasetBrowser() {
-  const { accountId: address, isConnected } = useHederaWallet();
+  const { accountId: address, isConnected, dAppConnector } = useHederaWallet();
   const [datasets, setDatasets] = useState<Dataset[]>([]);
   const [filteredDatasets, setFilteredDatasets] = useState<Dataset[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -67,12 +68,31 @@ export function DatasetBrowser() {
 
   // Handle dataset locking
   const handleLockDataset = async (id: number): Promise<void> => {
+    if (!address || !dAppConnector) {
+      toast.error("Wallet not connected");
+      return;
+    }
+
     try {
-      // Get the dataset's tokenId
-      const dataset = datasets.find(d => d.id === id);
-      const tokenId = dataset?.tokenId || process.env.NEXT_PUBLIC_DATASET_NFT_TOKEN_ID || '';
+      // Get signer from dAppConnector
+      const signer = dAppConnector.signers?.[0];
+      if (!signer) {
+        toast.error("No signer available from wallet");
+        return;
+      }
+
+      toast.info("Preparing lock transaction...");
       
-      await lockDataset(tokenId, id);
+      // Create lock transaction
+      const lockTxBytes = await lockDatasetTransaction(DATASET_NFT_TOKEN_ID, id, address, signer);
+      
+      toast.info("Please approve the lock transaction in your wallet...");
+      
+      // Sign and execute via wallet
+      await dAppConnector.signAndExecuteTransaction({
+        signerAccountId: address,
+        transactionList: lockTxBytes,
+      });
       
       // Update local state
       const updatedDatasets = datasets.map(dataset => 
@@ -92,10 +112,11 @@ export function DatasetBrowser() {
       toast.success("Dataset Locked", {
         description: "The dataset has been successfully locked and is now immutable.",
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Error locking dataset:", error);
+      const errorMessage = error instanceof Error ? error.message : "Failed to lock dataset";
       toast.error("Error locking dataset", {
-        description: error.message || "Failed to lock dataset",
+        description: errorMessage,
       });
     }
   };

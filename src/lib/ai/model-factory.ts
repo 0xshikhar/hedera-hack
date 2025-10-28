@@ -153,7 +153,7 @@ export class AIModelFactory {
       modelName: model,
       temperature,
       maxTokens,
-      openAIApiKey: apiKey || process.env.OPENAI_API_KEY,
+      openAIApiKey: apiKey || process.env.NEXT_PUBLIC_OPENAI_API_KEY,
     });
   }
 
@@ -253,7 +253,7 @@ export class AIModelFactory {
   static isProviderConfigured(provider: AIProvider): boolean {
     switch (provider) {
       case 'openai':
-        return !!process.env.OPENAI_API_KEY;
+        return !!process.env.NEXT_PUBLIC_OPENAI_API_KEY;
       case 'anthropic':
         return !!process.env.ANTHROPIC_API_KEY;
       case 'google':

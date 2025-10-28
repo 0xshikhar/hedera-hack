@@ -4,7 +4,7 @@ import { z } from 'zod';
 import { GenerationConfig, GenerationResult } from './models';
 
 // Initialize model providers based on environment variables
-const openaiApiKey = process.env.OPENAI_API_KEY;
+const openaiApiKey = process.env.NEXT_PUBLIC_OPENAI_API_KEY;
 const anthropicApiKey = process.env.ANTHROPIC_API_KEY;
 
 /**
@@ -146,7 +146,7 @@ async function generateWithOpenAI(
   }
 
   let providerApiUrl = 'https://api.openai.com/v1/chat/completions';
-  let providerApiKey = process.env.OPENAI_API_KEY;
+  let providerApiKey = process.env.NEXT_PUBLIC_OPENAI_API_KEY;
 
   if (modelId.startsWith('claude-')) {
     // Anthropic models - this part of the code is simplified and might need adjustment based on actual Anthropic API structure

@@ -69,6 +69,8 @@ export function HederaWalletProvider({ children }: HederaWalletProviderProps) {
             const accountIdStr = hederaAccountId.split(':')[2];
             setAccountId(accountIdStr);
             setIsConnected(true);
+            // Store in localStorage for hedera.ts functions
+            localStorage.setItem('hedera_account_id', accountIdStr);
             console.log('✅ Restored Hedera wallet session:', accountIdStr);
           }
         }
@@ -104,6 +106,8 @@ export function HederaWalletProvider({ children }: HederaWalletProviderProps) {
             setAccountId(accountIdStr);
             setIsConnected(true);
             setIsConnecting(false);
+            // Store in localStorage for hedera.ts functions
+            localStorage.setItem('hedera_account_id', accountIdStr);
             console.log('✅ Connected to Hedera wallet:', accountIdStr);
           }
         }
@@ -136,6 +140,8 @@ export function HederaWalletProvider({ children }: HederaWalletProviderProps) {
       
       setAccountId(null);
       setIsConnected(false);
+      // Remove from localStorage
+      localStorage.removeItem('hedera_account_id');
       console.log('✅ Disconnected from Hedera wallet');
     } catch (error) {
       console.error('Failed to disconnect wallet:', error);

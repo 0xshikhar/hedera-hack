@@ -29,9 +29,9 @@ export class HgraphClient {
   private client: HgraphSDK;
   
   constructor() {
-    const network = process.env.HEDERA_NETWORK === 'testnet' 
-      ? 'testnet.hedera' 
-      : 'mainnet.hedera';
+    const network = process.env.NEXT_PUBLIC_HEDERA_NETWORK === 'mainnet' 
+      ? 'mainnet.hedera' 
+      : 'testnet.hedera';
     
     // Initialize HGraph SDK with optional API key
     const headers: Record<string, string> = {};

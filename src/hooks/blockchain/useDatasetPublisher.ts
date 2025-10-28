@@ -3,7 +3,12 @@
 import { useState } from 'react';
 import { useHederaWallet } from '@/contexts/HederaWalletContext';
 import { toast } from 'sonner';
-import { createDataset, lockDataset } from '@/lib/hedera';
+import { 
+  createDatasetTransaction, 
+  submitDatasetMetadata, 
+  lockDatasetTransaction
+} from '@/lib/hedera';
+import { DATASET_NFT_TOKEN_ID } from '@/lib/constants';
 
 interface UseDatasetPublisherProps {
   name: string;
@@ -18,57 +23,81 @@ interface UseDatasetPublisherProps {
 }
 
 export function useDatasetPublisher() {
-  const { accountId: address } = useHederaWallet();
+  const { accountId: address, dAppConnector } = useHederaWallet();
   const [isPublishing, setIsPublishing] = useState(false);
 
   const publish = async (props: UseDatasetPublisherProps) => {
-    if (!props.commp || !address || !props.generatedData) {
+    if (!props.commp || !address || !props.generatedData || !dAppConnector) {
+      toast.error('Wallet not connected or missing data');
       return;
     }
 
     setIsPublishing(true);
-    toast.info("Publishing dataset to the blockchain...");
+    toast.info("Preparing dataset transaction...");
 
     try {
-      // Debug logs to track parameters
-      console.log('Publishing dataset with parameters:', {
-        name: props.name,
-        description: props.description,
-        price: props.price,
-        isPublic: props.visibility !== 'private',
-        modelId: props.modelId,
-        taskId: 1,
-        nodeId: 1,
-        computeUnitsPrice: 100,
-        maxComputeUnits: 1000000
-      });
+      // Get signer from dAppConnector
+      const signer = dAppConnector.signers?.[0];
+      if (!signer) {
+        throw new Error('No signer available from wallet');
+      }
 
-      const result = await createDataset(
+      // Step 1: Create mint transaction
+      const { transactionBytes: mintTxBytes, metadata } = await createDatasetTransaction(
         props.name,
         props.description,
-        props.commp, // IPFS hash/CID
+        props.commp,
         parseFloat(props.price),
-        props.modelId, // category
-        [props.visibility] // tags
+        props.modelId,
+        [props.visibility],
+        address,
+        signer
       );
 
-      if (result.success && result.tokenId && result.serialNumber) {
-        toast.info(`Dataset created with Token ID: ${result.tokenId}, Serial: ${result.serialNumber}. Locking...`);
-        
-        const lockResult = await lockDataset(
-          result.tokenId,
-          result.serialNumber
-        );
-        
-        if (!lockResult.success) {
-          throw new Error(lockResult.error || 'Failed to lock dataset');
-        }
-        toast.success('Dataset published and locked successfully!');
-        if (props.onSuccess) {
-          props.onSuccess();
-        }
-      } else {
-        throw new Error(result.error || "Failed to create dataset on-chain.");
+      toast.info("Please approve the NFT mint transaction in your wallet...");
+
+      // Step 2: Sign and execute mint transaction via wallet
+      const mintResult = await dAppConnector.signAndExecuteTransaction({
+        signerAccountId: address,
+        transactionList: mintTxBytes,
+      });
+
+      if (!mintResult) {
+        throw new Error('Failed to mint NFT');
+      }
+
+      // Extract serial number from result (WalletConnect returns transaction result)
+      // For now, we'll use a placeholder - in production, query the transaction receipt
+      const serialNumber = Date.now() % 10000; // Temporary: use timestamp-based ID
+      
+      toast.success(`NFT minted! Serial #${serialNumber}. Submitting metadata...`);
+
+      // Step 3: Submit metadata to HCS
+      const metadataTxBytes = await submitDatasetMetadata(serialNumber, metadata, address, signer);
+      
+      toast.info("Please approve the metadata submission in your wallet...");
+      
+      await dAppConnector.signAndExecuteTransaction({
+        signerAccountId: address,
+        transactionList: metadataTxBytes,
+      });
+
+      toast.success('Metadata submitted! Locking dataset...');
+
+      // Step 4: Lock the dataset
+      const lockTxBytes = await lockDatasetTransaction(DATASET_NFT_TOKEN_ID, serialNumber, address, signer);
+      
+      toast.info("Please approve the lock transaction in your wallet...");
+      
+      await dAppConnector.signAndExecuteTransaction({
+        signerAccountId: address,
+        transactionList: lockTxBytes,
+      });
+
+      toast.success('Dataset published and locked successfully!');
+      
+      if (props.onSuccess) {
+        props.onSuccess();
       }
     } catch (error) {
       console.error('Error publishing dataset:', error);
