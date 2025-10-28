@@ -134,7 +134,7 @@ export class HgraphClient {
   ): Promise<TopicMessageData[]> {
     try {
       const query = `
-        query GetTopicMessages($topicId: String!, $limit: Int!) {
+        query GetTopicMessages($topicId: bigint!, $limit: Int!) {
           topic_message(
             where: { topic_id: { _eq: $topicId } }
             limit: $limit
@@ -149,10 +149,18 @@ export class HgraphClient {
         }
       `;
 
+      // Convert topic ID to bigint format (remove dots and convert to number)
+      const topicIdBigint = topicId.split('.').pop() || topicId;
+
+      console.log('🔍 HGraph query variables:', { topicId, topicIdBigint, limit });
+      
       const { data } = await this.client.query<{ topic_message: TopicMessageData[] }>({
         query,
-        variables: { topicId, limit },
+        variables: { topicId: parseInt(topicIdBigint), limit },
       });
+
+      console.log('📊 HGraph response:', data);
+      console.log('📊 Messages found:', data?.topic_message?.length || 0);
 
       return data?.topic_message || [];
     } catch (error) {
