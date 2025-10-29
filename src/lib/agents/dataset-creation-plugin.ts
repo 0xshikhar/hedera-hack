@@ -83,25 +83,28 @@ export class DatasetCreationPlugin extends Tool {
 
       // 5. Log provenance to HCS
       const datasetId = `dataset_${Date.now()}`;
-      const provenanceResult = await this.provenanceService.logProvenance({
-        datasetId,
-        model: params.model,
-        provider: params.provider,
-        version: '1.0',
-        prompt: params.prompt,
-        parameters: {
+      const provenanceResult = await this.provenanceService.logAIOperation(
+        'dataset_generation',
+        params.model,
+        params.provider,
+        params.prompt,
+        JSON.stringify(dataset),
+        {
           temperature: 0.7,
           maxTokens: 2000,
         },
-        timestamp: new Date().toISOString(),
-        carbonFootprint: {
+        {
           computeTimeMs,
           energyKwh: carbonResult.energyKwh,
           co2Grams: carbonResult.co2Grams,
         },
-        creator: this.hederaClient.operatorAccountId?.toString() || 'unknown',
-        ipfsCID,
-      });
+        this.hederaClient.operatorAccountId?.toString() || 'unknown',
+        {
+          datasetId,
+          ipfsCID,
+          version: '1.0',
+        }
+      );
 
       return {
         success: true,
