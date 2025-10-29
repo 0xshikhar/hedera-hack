@@ -17,7 +17,6 @@ import {
   ContractFunctionParameters,
 } from '@hashgraph/sdk';
 import { Dataset, VerificationInfo } from './types';
-import { hgraphClient } from './hgraph/client';
 import {
   HEDERA_NETWORK,
   DATASET_NFT_TOKEN_ID,
@@ -260,6 +259,7 @@ export async function hasAccessToDataset(
       }
     `;
 
+    const { hgraphClient } = await import('./hgraph/client');
     const { data } = await hgraphClient['client'].query<{ nft: any[] }>({
       query,
       variables: { tokenId, accountId, serialNumber },
@@ -279,7 +279,8 @@ export async function getAllDatasets(): Promise<Dataset[]> {
   try {
     console.log('📡 Fetching from HCS topic:', DATASET_METADATA_TOPIC_ID);
     
-    // Get all dataset creation messages from HCS topic
+    // Use dynamic import to avoid server-side issues
+    const { hgraphClient } = await import('./hgraph/client');
     const messages = await hgraphClient.getTopicMessages(DATASET_METADATA_TOPIC_ID, 1000);
     
     console.log('📨 Raw HCS messages received:', messages.length);
@@ -375,6 +376,7 @@ export async function getDatasetVerificationInfo(
 ): Promise<VerificationInfo> {
   try {
     // Get verification logs from HCS topic
+    const { hgraphClient } = await import('./hgraph/client');
     const messages = await hgraphClient.getTopicMessages(VERIFICATION_LOGS_TOPIC_ID, 1000);
 
     let verificationCount = 0;
