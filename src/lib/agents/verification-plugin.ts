@@ -1,6 +1,6 @@
 import { Tool } from 'langchain/tools';
 import { Client } from '@hashgraph/sdk';
-import { analyticsService } from '@/services/analytics';
+import { serverAnalyticsService } from '@/services/analytics-server';
 import { ProvenanceService } from '@/services/provenance';
 
 export interface VerificationInput {
@@ -74,7 +74,7 @@ export class VerificationPlugin extends Tool {
 
       const creatorAnalysis =
         creatorAccountId !== 'unknown'
-          ? await analyticsService.detectAnomalies(creatorAccountId)
+          ? await serverAnalyticsService.detectAnomalies(creatorAccountId)
           : {
               accountId: 'unknown',
               totalTransactions: 0,

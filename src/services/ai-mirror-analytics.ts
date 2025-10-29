@@ -1,5 +1,5 @@
 import { serverHgraphClient } from '@/lib/hgraph/server-client';
-import { analyticsService } from './analytics';
+import { serverAnalyticsService } from './analytics-server';
 
 export interface PredictiveInsight {
   type: 'trend' | 'anomaly' | 'opportunity' | 'risk';
@@ -172,7 +172,7 @@ export class AIMirrorAnalytics {
 
     for (const category of categories) {
       try {
-        const forecast = await analyticsService.predictDemand(category, 7);
+        const forecast = await serverAnalyticsService.predictDemand(category, 7);
 
         let trend: 'bullish' | 'bearish' | 'neutral' = 'neutral';
         if (forecast.demandMultiplier > 1.1) trend = 'bullish';
@@ -201,7 +201,7 @@ export class AIMirrorAnalytics {
     const insights: PredictiveInsight[] = [];
 
     try {
-      const marketplaceStats = await analyticsService.getMarketplaceStats();
+      const marketplaceStats = await serverAnalyticsService.getMarketplaceStats();
 
       // Detect unusual pricing
       if (marketplaceStats.averagePrice > 100) {
@@ -321,20 +321,20 @@ export class AIMirrorAnalytics {
     reasoning: string;
   }> {
     try {
-      const marketplaceStats = await analyticsService.getMarketplaceStats();
-      const categoryTrend = await analyticsService.predictDemand(category);
+      const marketStats = await serverAnalyticsService.getMarketplaceStats();
+      const trend = await serverAnalyticsService.predictDemand(category, 7);
 
       // Base price on market average
-      let basePrice = marketplaceStats.averagePrice || 10;
+      let basePrice = marketStats.averagePrice || 10;
 
       // Adjust for quality (0-100 scale)
-      const qualityMultiplier = 0.5 + (quality / 100) * 1.5;
+      const qualityMultiplier = 1 + (quality - 50) / 100;
 
       // Adjust for size
       const sizeMultiplier = Math.log10(size + 1) / 3;
 
       // Adjust for demand
-      const demandMultiplier = categoryTrend.demandMultiplier;
+      const demandMultiplier = trend.demandMultiplier;
 
       const recommendedPrice = basePrice * qualityMultiplier * sizeMultiplier * demandMultiplier;
 
@@ -343,7 +343,7 @@ export class AIMirrorAnalytics {
         `Quality adjustment: ${(qualityMultiplier * 100).toFixed(0)}%`,
         `Size adjustment: ${(sizeMultiplier * 100).toFixed(0)}%`,
         `Demand adjustment: ${(demandMultiplier * 100).toFixed(0)}%`,
-        `Category trend: ${categoryTrend.trend}`,
+        `Category trend: ${trend.trend}`,
       ].join('. ');
 
       return {

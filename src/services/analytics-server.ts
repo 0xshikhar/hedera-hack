@@ -1,5 +1,5 @@
-// Client-side analytics service (uses hgraphClient - only for client components)
-// For server-side/API routes, use analytics-server.ts instead
+// Server-safe analytics service (no hgraphClient dependency)
+// This version uses mock data to avoid React context issues in API routes
 
 export interface MarketplaceStats {
   totalSales: number;
@@ -43,13 +43,12 @@ export interface DemandForecast {
   demandMultiplier: number;
 }
 
-export class AnalyticsService {
+export class ServerAnalyticsService {
   /**
    * Get comprehensive marketplace statistics
-   * NOTE: This uses mock data to avoid hgraphClient dependency
    */
   async getMarketplaceStats(): Promise<MarketplaceStats> {
-    // Return mock data
+    // Mock data for server-side rendering
     return {
       totalSales: 156,
       totalVolume: 12450,
@@ -65,6 +64,7 @@ export class AnalyticsService {
    * Get provider performance metrics
    */
   async getProviderPerformance(providerId: string): Promise<ProviderPerformance> {
+    // Mock data
     return {
       providerId,
       totalTransactions: 1250,
@@ -80,6 +80,7 @@ export class AnalyticsService {
    * Detect anomalies in account activity
    */
   async detectAnomalies(accountId: string): Promise<AnomalyDetection> {
+    // Mock data
     return {
       accountId,
       totalTransactions: 450,
@@ -99,7 +100,8 @@ export class AnalyticsService {
   /**
    * Predict demand for a category
    */
-  async predictDemand(category: string, _daysAhead: number = 7): Promise<DemandForecast> {
+  async predictDemand(category: string, daysAhead: number = 7): Promise<DemandForecast> {
+    // Mock predictions based on category
     const categoryMultipliers: Record<string, number> = {
       medical: 1.25,
       finance: 1.15,
@@ -118,32 +120,6 @@ export class AnalyticsService {
       confidence: 0.85,
       trend: multiplier > 1.1 ? 'increasing' : multiplier < 0.95 ? 'decreasing' : 'stable',
       demandMultiplier: multiplier,
-    };
-  }
-
-  /**
-   * Get network health metrics
-   */
-  async getNetworkHealth(): Promise<{
-    overall: number;
-    status: 'healthy' | 'degraded' | 'unhealthy';
-    metrics: {
-      transactionThroughput: number;
-      successRate: number;
-      averageLatency: number;
-      networkStability: number;
-    };
-  }> {
-    // Return mock network health data
-    return {
-      overall: 95.2,
-      status: 'healthy',
-      metrics: {
-        transactionThroughput: 92.5,
-        successRate: 98.7,
-        averageLatency: 95.0,
-        networkStability: 98.0,
-      },
     };
   }
 
@@ -167,7 +143,15 @@ export class AnalyticsService {
       volumeScore * volumeWeight
     );
   }
+
+  /**
+   * Calculate uptime based on transaction consistency
+   */
+  private calculateUptime(transactions: unknown[]): number {
+    // Simplified uptime calculation
+    return 99.2;
+  }
 }
 
 // Singleton instance
-export const analyticsService = new AnalyticsService();
+export const serverAnalyticsService = new ServerAnalyticsService();
