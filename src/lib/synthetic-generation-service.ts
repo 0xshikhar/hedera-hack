@@ -1,5 +1,3 @@
-'use client';
-
 import { GeneratorFactory, GenerationResult as AIGenerationResult } from './ai-generators';
 import { DatasetSchema, DatasetGenerationRequest, getSchemaById } from './schemas';
 import { GenerationConfig, GenerationResult } from './models';

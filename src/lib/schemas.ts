@@ -1,5 +1,3 @@
-'use client';
-
 import { z } from 'zod';
 
 /**
@@ -17,7 +15,7 @@ export interface DatasetField {
     enum?: string[];
     format?: string;
   };
-  examples?: any[];
+  examples?: unknown[];
 }
 
 export interface DatasetSchema {

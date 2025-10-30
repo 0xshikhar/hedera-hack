@@ -1,10 +1,8 @@
-'use client';
-
 import { Web3Storage } from 'web3.storage';
 import { toast } from 'sonner';
 import * as LighthouseSDK from '@lighthouse-web3/sdk';
 
-// Initialize Web3Storage client
+// Initialize Web3Storage client ( optional - not needed for use now)
 let web3StorageClient: Web3Storage | null = null;
 
 function getWeb3StorageClient() {
