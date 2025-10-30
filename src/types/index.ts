@@ -174,8 +174,11 @@ export interface UseBalancesResponse {
 
 // @ts-ignore
 export const defaultBalances: UseBalancesResponse = {
-  filBalance: 0n,
+  // @ts-ignore
+  filBalance: 0n, 
+  // @ts-ignore
   usdfcBalance: 0n,
+  // @ts-ignore
   pandoraBalance: 0n,
   filBalanceFormatted: 0,
   usdfcBalanceFormatted: 0,
