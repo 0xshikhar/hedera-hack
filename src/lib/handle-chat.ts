@@ -8,6 +8,12 @@ const chatResponseSchema = z.object({
 });
 
 export async function handleChatRequest(body: ChatRequest) {
+  console.log('📤 Sending chat request:', {
+    userAccountId: body.userAccountId,
+    input: body.input,
+    historyLength: body.history.length,
+  });
+  
   const response = await fetch('/api/chat', {
     method: 'POST',
     headers: {
@@ -15,7 +21,24 @@ export async function handleChatRequest(body: ChatRequest) {
     },
     body: JSON.stringify(body),
   });
+  
+  console.log('📥 Received response:', {
+    status: response.status,
+    statusText: response.statusText,
+  });
+  
+  if (!response.ok) {
+    const errorData = await response.json();
+    console.error('❌ API error:', errorData);
+    throw new Error(errorData.error || errorData.message || 'Failed to process chat request');
+  }
+  
   const rawData = await response.json();
+  console.log('✅ Chat response received:', {
+    hasMessage: !!rawData.message,
+    hasTransactionBytes: !!rawData.transactionBytes,
+  });
+  
   return chatResponseSchema.parse(rawData);
 }
 
