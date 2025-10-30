@@ -45,7 +45,6 @@ module.exports = {
       url: `https://polygon-mainnet.g.alchemy.com/v2/${ALCHEMY_API_KEY}`,
       accounts: [PRIVATE_KEY]
     },
-    // U2U Blokchain  networks (legacy)
     filecoinCalibration: {
       url: "https://api.calibration.node.glif.io/rpc/v1",
       accounts: [PRIVATE_KEY]
