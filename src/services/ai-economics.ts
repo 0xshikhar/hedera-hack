@@ -33,6 +33,8 @@ export interface DemandPrediction {
   confidence: number;
   timeframe: string;
   factors: string[];
+  demandMultiplier: number;
+  
 }
 
 export interface MarketInsights {
@@ -160,6 +162,7 @@ export class AIEconomicsService {
         confidence: forecast.confidence,
         timeframe: `${timeframeDays} days`,
         factors,
+        demandMultiplier: forecast.demandMultiplier,
       };
     } catch (error) {
       console.error('Error predicting demand:', error);
@@ -171,6 +174,7 @@ export class AIEconomicsService {
         confidence: 0,
         timeframe: `${timeframeDays} days`,
         factors: ['Insufficient data'],
+        demandMultiplier: 1,
       };
     }
   }
@@ -279,7 +283,7 @@ export class AIEconomicsService {
     // Estimate sales based on price and demand
     const priceElasticity = 1.5; // Assume elastic demand
     const salesMultiplier =
-      demand.demandMultiplier * Math.pow(currentPrice / recommendedPrice, priceElasticity);
+      demand.demandMultiplier * Math.pow(currentPrice / recommendedPrice, priceElasticity); 
     const expectedSales = Math.max(1, demand.currentDemand * salesMultiplier);
     const expectedRevenue = expectedSales * recommendedPrice;
 
