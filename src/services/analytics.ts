@@ -39,6 +39,7 @@ export interface DemandForecast {
   predictedDemand: number;
   confidence: number;
   trend: 'increasing' | 'decreasing' | 'stable';
+  demandMultiplier: number;
 }
 
 export class AnalyticsService {
@@ -235,6 +236,7 @@ export class AnalyticsService {
           predictedDemand: 0,
           confidence: 0,
           trend: 'stable',
+          demandMultiplier: 1.0,
         };
       }
 
@@ -263,8 +265,14 @@ export class AnalyticsService {
 
       // Simple prediction: apply trend to average
       let predictedDemand = average;
-      if (trend === 'increasing') predictedDemand = average * 1.15;
-      else if (trend === 'decreasing') predictedDemand = average * 0.85;
+      let demandMultiplier = 1.0;
+      if (trend === 'increasing') {
+        predictedDemand = average * 1.15;
+        demandMultiplier = 1.15;
+      } else if (trend === 'decreasing') {
+        predictedDemand = average * 0.85;
+        demandMultiplier = 0.85;
+      }
 
       return {
         category,
@@ -272,6 +280,7 @@ export class AnalyticsService {
         predictedDemand,
         confidence: Math.min(0.95, values.length / 30), // Higher confidence with more data
         trend,
+        demandMultiplier,
       };
     } catch (error) {
       console.error('Error predicting demand:', error);
