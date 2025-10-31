@@ -18,11 +18,11 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { Database, Plus, Shield, User, Server, TrendingUp, ChevronDown, Menu } from "lucide-react";
+import { Database, Plus, Shield, User, Server, TrendingUp, ChevronDown, Menu, MessageSquare, BarChart3, FolderOpen } from "lucide-react";
 import { HederaConnectButton } from "@/components/wallet/HederaConnectButton";
+import Image from "next/image";
 
 const navItems = [
- 
   {
     name: "Marketplace",
     href: "/marketplace",
@@ -38,6 +38,11 @@ const navItems = [
     href: "/create",
     icon: Plus,
   },
+  {
+    name: "AI Chat",
+    href: "/chat",
+    icon: MessageSquare,
+  },
 ];
 
 const profileMenuItems = [
@@ -47,12 +52,27 @@ const profileMenuItems = [
     icon: User,
   },
   {
+    name: "My Datasets",
+    href: "/mydatasets",
+    icon: FolderOpen,
+  },
+  {
+    name: "Analytics",
+    href: "/analytics",
+    icon: BarChart3,
+  },
+  {
+    name: "Verifiable AI",
+    href: "/verifiable-ai",
+    icon: BarChart3,
+  },
+  {
     name: "Verify",
-    href: "/verify",
+    href: "/verify/dashboard",
     icon: Shield,
   },
   {
-    name:"Run Node",
+    name: "Run Node",
     href: "/run-node",
     icon: Server,
   },
@@ -70,16 +90,14 @@ export function Navbar() {
 
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background backdrop-blur-sm bg-background/95">
-      <div className="container flex h-16 items-center justify-between space-x-4 sm:space-x-0">
+      <div className="container mx-auto px-4 md:px-6 flex h-16 items-center justify-between space-x-4 sm:space-x-0">
         <div className="flex items-center gap-2">
           <Link href="/" className="flex items-center space-x-2">
-            <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
-              <Database className="h-5 w-5 text-white" />
-            </div>
+              <Image src="/logo.png" alt="Logo" width={35} height={35} />
             <span className="font-bold text-2xl">FileThetic</span>
           </Link>
         </div>
-        
+
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-6">
           {navItems.map((item) => (
@@ -97,7 +115,7 @@ export function Navbar() {
               {item.name}
             </Link>
           ))}
-          
+
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
@@ -132,12 +150,12 @@ export function Navbar() {
             </DropdownMenuContent>
           </DropdownMenu>
         </nav>
-        
+
         <div className="flex items-center gap-2">
           <div className="hidden md:flex items-center gap-2">
             <HederaConnectButton />
           </div>
-          
+
           {/* Mobile Menu */}
           <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
             <SheetTrigger asChild className="md:hidden">
@@ -166,7 +184,7 @@ export function Navbar() {
                     {item.name}
                   </Link>
                 ))}
-                
+
                 <div className="border-t pt-4 mt-2">
                   <p className="text-sm font-semibold mb-3 text-muted-foreground">Profile</p>
                   {profileMenuItems.map((item) => (
@@ -186,7 +204,7 @@ export function Navbar() {
                     </Link>
                   ))}
                 </div>
-                
+
                 <div className="border-t pt-4 mt-4 flex items-center gap-2">
                   <HederaConnectButton />
                 </div>

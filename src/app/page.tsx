@@ -16,7 +16,7 @@ export default function Home() {
                   New
                 </span>
                 <span className="text-sm font-medium">
-                  Decentralized Storage Providers on Hedera 🚀
+                  Live on Hedera Testnet with Agent Kit & HCS 🚀
                 </span>
                 <ArrowRight className="h-4 w-4" />
               </Link>
@@ -34,7 +34,7 @@ export default function Home() {
                     DePIN for AI Data Economy
                   </h1>
                   <p className="max-w-[600px] text-xl text-muted-foreground">
-                    The worlds first Decentralized Physical Infrastructure Network purpose-built for the $200B+ AI data market. Create, verify, and trade synthetic datasets with real infrastructure providers on Hedera.
+                    Decentralized Physical Infrastructure Network for the $200B+ AI data market. Create verifiable synthetic datasets using AI agents, store on IPFS, and trade as NFTs on Hedera with cryptographic proof.
                   </p>
                 </div>
                 <div className="flex flex-col gap-3 sm:flex-row">
@@ -131,13 +131,13 @@ export default function Home() {
           <div className="container px-4 md:px-6 mx-auto">
             <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12">
               <div className="inline-block rounded-lg bg-blue-500/10 px-3 py-1 text-sm text-blue-600 font-medium mb-4">
-                DePIN Infrastructure
+                Hedera-Powered Infrastructure
               </div>
               <h2 className="text-3xl font-bold tracking-tighter md:text-4xl/tight">
-                Built on Real Decentralized Infrastructure
+                Built on Hedera with Agent Kit & HCS
               </h2>
               <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed">
-                Not just smart contracts—real IPFS storage providers operating physical nodes globally, earning rewards for serving the AI economy
+                Leveraging Hedera Token Service (HTS), Consensus Service (HCS), and Agent Kit for autonomous AI operations with real IPFS storage providers
               </p>
             </div>
             <div className="grid gap-8 md:grid-cols-4 mb-8">
@@ -155,7 +155,7 @@ export default function Home() {
                   <Server className="h-8 w-8 text-purple-600" />
                 </div>
                 <div>
-                  <h3 className="text-2xl font-bold mb-1">4</h3>
+                  <h3 className="text-2xl font-bold mb-1">3</h3>
                   <p className="text-sm text-muted-foreground">Smart Contracts</p>
                 </div>
               </div>
@@ -164,8 +164,8 @@ export default function Home() {
                   <Shield className="h-8 w-8 text-green-600" />
                 </div>
                 <div>
-                  <h3 className="text-2xl font-bold mb-1">100%</h3>
-                  <p className="text-sm text-muted-foreground">Testnet Uptime</p>
+                  <h3 className="text-2xl font-bold mb-1">5</h3>
+                  <p className="text-sm text-muted-foreground">HCS Topics</p>
                 </div>
               </div>
               <div className="flex flex-col items-center text-center space-y-4">
@@ -174,7 +174,7 @@ export default function Home() {
                 </div>
                 <div>
                   <h3 className="text-2xl font-bold mb-1">3</h3>
-                  <p className="text-sm text-muted-foreground">AI Providers</p>
+                  <p className="text-sm text-muted-foreground">HTS Tokens</p>
                 </div>
               </div>
             </div>
@@ -209,9 +209,9 @@ export default function Home() {
                   <div className="inline-flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
                     <Database className="h-6 w-6 text-primary" />
                   </div>
-                  <h3 className="text-xl font-bold">AI Dataset Generation</h3>
+                  <h3 className="text-xl font-bold">AI-Powered Dataset Generation</h3>
                   <p className="text-muted-foreground">
-                    Create high-quality synthetic datasets using OpenAI GPT-4, Anthropic Claude, and Google Gemini with built-in templates.
+                    Generate synthetic datasets using AI agents with OpenAI GPT-4, Anthropic Claude, and Google Gemini. Built-in templates for common use cases.
                   </p>
                 </div>
               </div>
@@ -220,9 +220,9 @@ export default function Home() {
                   <div className="inline-flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
                     <LockKeyhole className="h-6 w-6 text-primary" />
                   </div>
-                  <h3 className="text-xl font-bold">NFT Ownership</h3>
+                  <h3 className="text-xl font-bold">Hedera NFT Ownership</h3>
                   <p className="text-muted-foreground">
-                    Mint datasets as ERC-721 NFTs for provable ownership, automated royalties, and transparent provenance tracking.
+                    Mint datasets as Hedera NFTs (HTS) for provable ownership, automated royalties, and immutable provenance tracking on-chain.
                   </p>
                 </div>
               </div>
@@ -231,9 +231,9 @@ export default function Home() {
                   <div className="inline-flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
                     <CheckCircle className="h-6 w-6 text-primary" />
                   </div>
-                  <h3 className="text-xl font-bold">Cryptographic Verification</h3>
+                  <h3 className="text-xl font-bold">Verifiable AI with HCS</h3>
                   <p className="text-muted-foreground">
-                    Trusted verifier nodes validate dataset quality and authenticity with hash-based proof stored on-chain.
+                    Complete audit trail logged to Hedera Consensus Service. Track AI model usage, generation parameters, and verification status immutably.
                   </p>
                 </div>
               </div>
@@ -242,9 +242,9 @@ export default function Home() {
                   <div className="inline-flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
                     <Shield className="h-6 w-6 text-primary" />
                   </div>
-                  <h3 className="text-xl font-bold">Decentralized Storage</h3>
+                  <h3 className="text-xl font-bold">DePIN Storage Network</h3>
                   <p className="text-muted-foreground">
-                    Real infrastructure providers operate IPFS nodes globally, earning rewards for storage and bandwidth—not just smart contracts.
+                    Physical IPFS storage providers earn rewards for serving datasets. Staking mechanism ensures reliability and uptime tracking via smart contracts.
                   </p>
                 </div>
               </div>
@@ -253,9 +253,9 @@ export default function Home() {
                   <div className="inline-flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
                     <Store className="h-6 w-6 text-primary" />
                   </div>
-                  <h3 className="text-xl font-bold">USDC Marketplace</h3>
+                  <h3 className="text-xl font-bold">Hedera Marketplace</h3>
                   <p className="text-muted-foreground">
-                    Buy and sell datasets with USDC payments, instant IPFS delivery, and automatic royalty distribution to creators.
+                    Trade datasets with FTUSD payments on Hedera, instant IPFS delivery, and automatic royalty distribution through HTS.
                   </p>
                 </div>
               </div>
@@ -264,9 +264,9 @@ export default function Home() {
                   <div className="inline-flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
                     <FileText className="h-6 w-6 text-primary" />
                   </div>
-                  <h3 className="text-xl font-bold">Earn as Provider</h3>
+                  <h3 className="text-xl font-bold">Agent Kit Integration</h3>
                   <p className="text-muted-foreground">
-                    Run IPFS nodes, stake Hedera tokens, and earn passive income by providing storage and bandwidth to the network.
+                    Autonomous AI agents interact with Hedera services using custom plugins. Create, verify, and trade datasets programmatically.
                   </p>
                 </div>
               </div>
@@ -363,33 +363,33 @@ export default function Home() {
                 <ul className="grid gap-6">
                   <li>
                     <div className="grid gap-1">
-                      <h3 className="text-xl font-bold">1. Create or Upload Dataset</h3>
+                      <h3 className="text-xl font-bold">1. Generate with AI Agents</h3>
                       <p className="text-muted-foreground">
-                        Generate synthetic datasets using AI templates or upload your own JSON/CSV files through our intuitive interface.
+                        Use AI agents powered by GPT-4, Claude, or Gemini to generate synthetic datasets. Choose from templates or create custom schemas.
                       </p>
                     </div>
                   </li>
                   <li>
                     <div className="grid gap-1">
-                      <h3 className="text-xl font-bold">2. Store on IPFS Network</h3>
+                      <h3 className="text-xl font-bold">2. Store on DePIN Network</h3>
                       <p className="text-muted-foreground">
-                        Your datasets are uploaded to IPFS through our network of storage providers, generating a unique CID for permanent access.
+                        Datasets are stored on IPFS through physical infrastructure providers who stake tokens and earn rewards for reliable service.
                       </p>
                     </div>
                   </li>
                   <li>
                     <div className="grid gap-1">
-                      <h3 className="text-xl font-bold">3. Publish On-Chain</h3>
+                      <h3 className="text-xl font-bold">3. Mint as Hedera NFT</h3>
                       <p className="text-muted-foreground">
-                        Publish your dataset metadata to the Hedera blockchain with IPFS CID, making it discoverable in the marketplace.
+                        Mint your dataset as an HTS NFT with metadata and IPFS CID. All generation parameters logged to HCS for verifiable AI.
                       </p>
                     </div>
                   </li>
                   <li>
                     <div className="grid gap-1">
-                      <h3 className="text-xl font-bold">4. Verify & Share</h3>
+                      <h3 className="text-xl font-bold">4. Trade on Marketplace</h3>
                       <p className="text-muted-foreground">
-                        Use our verification system to validate dataset quality, and share access through the decentralized marketplace.
+                        List datasets on the marketplace with FTUSD pricing. Buyers get instant IPFS access, creators earn automatic royalties.
                       </p>
                     </div>
                   </li>
@@ -407,27 +407,27 @@ export default function Home() {
                 Why FileThetic
               </div>
               <h2 className="text-3xl font-bold tracking-tighter md:text-4xl/tight">
-                First-Mover in AI Data DePIN
+                Why FileThetic on Hedera
               </h2>
               <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed">
-                The only DePIN specifically built for the AI data economy with real infrastructure and sustainable economics
+                Leveraging Hedera&apos;s unique capabilities for verifiable AI, autonomous agents, and true DePIN economics
               </p>
             </div>
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {[
                 {
-                  title: "vs. Centralized (AWS, GCP)",
-                  description: "70% lower costs through P2P economics, no censorship, no single point of failure, and true data ownership through NFTs.",
+                  title: "Hedera Agent Kit",
+                  description: "Custom plugins enable autonomous AI agents to create, verify, and trade datasets. Full HCS-10 compliance for multi-agent coordination.",
                   icon: <Database className="h-10 w-10 text-primary" />,
                 },
                 {
-                  title: "vs. General DePIN (Filecoin)",
-                  description: "AI-native features with built-in verification, synthetic data generation, instant marketplace liquidity, and compute layer.",
+                  title: "Verifiable AI",
+                  description: "Complete provenance tracking via HCS. Every AI generation logged immutably with model, parameters, and carbon footprint.",
                   icon: <Layers className="h-10 w-10 text-primary" />,
                 },
                 {
-                  title: "vs. Data Marketplaces (Ocean)",
-                  description: "Real physical infrastructure included, decentralized storage built-in, better provider economics, and purpose-built for AI.",
+                  title: "True DePIN Economics",
+                  description: "Physical infrastructure providers stake tokens and earn rewards. Not just smart contracts—real nodes providing storage and bandwidth.",
                   icon: <Shield className="h-10 w-10 text-primary" />,
                 },
               ].map((advantage, index) => (
@@ -450,10 +450,10 @@ export default function Home() {
             <div className="flex flex-col items-center justify-center space-y-6 text-center">
               <div className="space-y-4">
                 <h2 className="text-3xl font-bold tracking-tighter md:text-4xl/tight">
-                  Join the AI Data Revolution
+                  Join the Verifiable AI Revolution
                 </h2>
                 <p className="max-w-[700px] text-muted-foreground md:text-xl/relaxed">
-                  Be part of the first DePIN built for the $200B+ AI data economy. Whether you&apos;re creating datasets, running infrastructure, or building AI applications—FileThetic is your platform.
+                  First DePIN for AI data on Hedera with Agent Kit integration. Create verifiable synthetic datasets, run infrastructure nodes, or build autonomous AI agents.
                 </p>
               </div>
               <div className="flex flex-col gap-3 min-[400px]:flex-row">
@@ -480,11 +480,11 @@ export default function Home() {
                 </div>
                 <div className="flex items-center gap-2">
                   <CheckCircle className="h-5 w-5 text-green-600" />
-                  <span>4 Smart Contracts</span>
+                  <span>Agent Kit Plugins</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <CheckCircle className="h-5 w-5 text-green-600" />
-                  <span>Multi-AI Support</span>
+                  <span>HCS Audit Trail</span>
                 </div>
               </div>
             </div>

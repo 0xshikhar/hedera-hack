@@ -1,95 +1,173 @@
-# FileThetic: AI Data Economy DePIN on Hedera
+<div align="center">
 
-**Hedera Africa Hackathon 2025 - Track 4: AI and DePIN**
+# 🚀 FileThetic
+### **DePIN for AI Data Economy on Hedera**
 
-> Decentralized AI data economy platform with verifiable provenance, multi-agent coordination, and carbon-aware operations on Hedera.
+*The world's first Decentralized Physical Infrastructure Network purpose-built for the $200B+ AI data market*
 
 [![Hedera](https://img.shields.io/badge/Hedera-Testnet-purple)](https://testnet.hashscan.io)
 [![Agent Kit](https://img.shields.io/badge/Hedera-Agent%20Kit-blue)](https://github.com/hashgraph/hedera-agent-kit)
 [![HCS-10](https://img.shields.io/badge/HCS--10-Compliant-green)](https://github.com/hashgraph/hedera-improvement-proposal)
-[![Status](https://img.shields.io/badge/Status-90%25%20Complete-yellow)](#status)
+[![Next.js](https://img.shields.io/badge/Next.js-15-black)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-blue)](https://www.typescriptlang.org/)
+
+[🎯 Live Demo](#) • [📖 Documentation](./documents/README.md) • [🎥 Video Demo](#) • [🏆 Hackathon Track 4](https://hedera-hackathon.hashgraph.swiss/tools#track4)
+
+</div>
+
+## 🎯 The Problem
+
+### **AI Data Market is Broken**
+
+The global AI data market is projected to reach **$200B+ by 2030**, yet:
+
+- **🔒 Centralized Control**: Big tech monopolizes high-quality datasets
+- **💰 Prohibitive Costs**: Enterprise datasets cost $10K-$100K+ with restrictive licensing
+- **🚫 Privacy Concerns**: Real data contains sensitive information that can't be shared
+- **❌ No Verification**: No way to verify data quality or AI model authenticity before purchase
+- **🌍 Infrastructure Gap**: No decentralized physical infrastructure for AI data operations
+- **⚡ Unsustainable**: AI compute is energy-intensive with no carbon tracking
 
 ---
 
-## 🚀 Key Features
+## 💡 Our Solution
 
-### 🤖 AI Chat Assistant (NEW!)
-- **Natural language dataset generation** - Just describe what you need
-- **Conversational interface** - Generate datasets by chatting
-- **Instant previews** - See results before downloading
-- **Cost estimation** - Know the price before generating
-- **Quick actions** - One-click common tasks
-- **Smart recommendations** - AI suggests dataset types
+### **FileThetic: The First DePIN for AI Data Economy**
 
-👉 **Try it**: Navigate to `/chat` and say "Generate a medical dataset with 100 samples"
+We're building a **Decentralized Physical Infrastructure Network** that democratizes access to AI-generated synthetic datasets while ensuring creators are fairly compensated and operations are verifiable.
 
-### AI-Powered Dataset Generation
-- Multi-provider support (OpenAI, Anthropic, Google)
-- Natural language to structured data
-- Automated IPFS storage
-- HTS NFT minting with metadata
+<div align="center">
 
-### Decentralized Marketplace
-- Trade AI datasets as HTS NFTs
-- Native royalties (5%)
-- Secure payments with FILE/FTUSD tokens
-- Smart contract escrow
+### **🏗️ Real Infrastructure + 🤖 AI Agents + ⛓️ Hedera = FileThetic**
 
-### Verifiable AI Operations
-- Every AI generation logged to HCS
-- Immutable provenance trails
-- Model version tracking
-- Parameter transparency
-
-### DePIN Provider Network
-- Real infrastructure providers
-- Stake-based registration (1000 FILE)
-- Uptime monitoring & rewards
-- Geographic distribution
-
-### AI-Powered Verification
-- Multi-signature quality scoring
-- Reputation-based weighting
-- Automated fraud detection
-- Slashing for bad actors
-
-### Carbon-Aware Computing
-- Real-time carbon footprint tracking
-- Energy consumption per model
-- Carbon offset recommendations
-- Sustainable AI choices
+</div>
 
 ---
+
+## ✨ Key Features
+
+### 🤖 **AI Chat Assistant**
+> Natural language to production-ready datasets in seconds
+
+- **Conversational Generation**: "Generate 1000 customer records with purchase history"
+- **Multi-Provider AI**: OpenAI GPT-4o, Anthropic Claude 3.5, Google Gemini 1.5
+- **Instant Previews**: See results before committing
+- **Cost Transparency**: Know exact pricing upfront
+- **Smart Recommendations**: AI suggests optimal dataset configurations
+
+**Try it**: `/chat` → "Create a medical dataset with 100 patient records"
+
+### 🏢 **DePIN Provider Network**
+> Real infrastructure providers, not just smart contracts
+
+- **Stake-Based Registration**: 1000 FILE tokens to become a provider
+- **Geographic Distribution**: Providers across multiple regions
+- **Uptime Monitoring**: Real-time health checks and SLA tracking
+- **Reward Distribution**: Earn FILE tokens for reliable service
+- **Slashing Mechanism**: Bad actors lose stake automatically
+
+**Live**: `/providers` → View 5+ active infrastructure providers
+
+### 🔐 **Verifiable AI Operations**
+> Every AI operation is cryptographically proven on Hedera
+
+- **HCS Audit Trails**: All AI generations logged immutably
+- **Model Provenance**: Track which AI model generated what data
+- **Parameter Transparency**: Full visibility into generation parameters
+- **Multi-Signature Verification**: Community-driven quality scoring
+- **Fraud Detection**: Automated detection of synthetic or manipulated data
+
+**Powered by**: Hedera Consensus Service (HCS) + Agent Kit
+
+### 🛒 **Decentralized Marketplace**
+> Trade AI datasets as native Hedera NFTs
+
+- **HTS NFT Collections**: Datasets as first-class Hedera tokens
+- **Native Royalties**: 5% creator royalties built into HTS
+- **Dual Token Economy**: FILE (utility) + FTUSD (payments)
+- **Smart Contract Escrow**: Trustless transactions via HSCS
+- **Instant Settlements**: 3-5 second finality
+
+**Economics**: 2.5% platform fee, 5% creator royalties, 92.5% to creator
+
+### 🌱 **Carbon-Aware Computing**
+> First AI platform with carbon tracking and offset recommendations
+
+- **Real-Time Tracking**: Monitor carbon footprint per AI generation
+- **Model Comparison**: See energy consumption across providers
+- **Offset Integration**: Automatic carbon offset recommendations
+- **Sustainability Score**: Rate datasets by environmental impact
+
+**Why it matters**: Hedera is carbon-negative certified ♻️
+
+### 📊 **Advanced Analytics**
+> HGraph SDK-powered real-time insights
+
+- **Marketplace Trends**: Live transaction volume and pricing data
+- **Provider Performance**: Uptime, latency, and reliability metrics
+- **Dataset Analytics**: Downloads, ratings, and revenue tracking
+- **Network Health**: Real-time DePIN infrastructure monitoring
+
+**Powered by**: HGraph SDK + Mirror Node API
+
 ---
 
-## 🏗️ Architecture
+## 🏗️ System Architecture
+
+### **Three-Layer DePIN Architecture**
 
 ```
-┌─────────────────────────────────────────────────┐
-│         FileThetic Application (Next.js)        │
-│          + Hedera Wallet Connect                │
-└───────────────┬─────────────────────────────────┘
-                │
-    ┌───────────┼───────────┐
-    ▼           ▼           ▼
-┌─────────┐ ┌─────────┐ ┌──────────────┐
-│ AI Kit  │ │ Hedera  │ │   HGraph     │
-│ Plugins │ │ Native  │ │   SDK        │
-│ • Create│ │ • HTS   │ │ • Analytics  │
-│ • Trade │ │ • HCS   │ │ • Real-time  │
-│ • Verify│ │ • HSCS  │ │ • Queries    │
-└─────────┘ └─────────┘ └──────────────┘
-    │           │           │
-    └───────────┼───────────┘
-                ▼
-    ┌───────────────────────┐
-    │   Hedera Network      │
-    │  • Tokens (HTS)       │
-    │  • Topics (HCS)       │
-    │  • Contracts (HSCS)   │
-    │  • Mirror Nodes       │
-    └───────────────────────┘
+┌──────────────────────────────────────────────────────────────────┐
+│                    APPLICATION LAYER                              │
+│  ┌────────────┐  ┌────────────┐  ┌────────────┐  ┌────────────┐ │
+│  │  Next.js   │  │  AI Chat   │  │ Marketplace│  │  Provider  │ │
+│  │  Frontend  │  │  Interface │  │    UI      │  │  Dashboard │ │
+│  └────────────┘  └────────────┘  └────────────┘  └────────────┘ │
+└──────────────────────────────────────────────────────────────────┘
+                              ↕
+┌──────────────────────────────────────────────────────────────────┐
+│                    ORCHESTRATION LAYER                            │
+│  ┌────────────┐  ┌────────────┐  ┌────────────┐  ┌────────────┐ │
+│  │  Hedera    │  │  LangChain │  │   HGraph   │  │   IPFS     │ │
+│  │ Agent Kit  │  │   Agents   │  │    SDK     │  │ Lighthouse │ │
+│  │  Plugins   │  │ Multi-AI   │  │  GraphQL   │  │   Pinata   │ │
+│  └────────────┘  └────────────┘  └────────────┘  └────────────┘ │
+└──────────────────────────────────────────────────────────────────┘
+                              ↕
+┌──────────────────────────────────────────────────────────────────┐
+│                    INFRASTRUCTURE LAYER (DePIN)                   │
+│  ┌────────────────────────────────────────────────────────────┐  │
+│  │                    Hedera Network                           │  │
+│  │  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐  │  │
+│  │  │   HTS    │  │   HCS    │  │   HSCS   │  │  Mirror  │  │  │
+│  │  │  Tokens  │  │  Topics  │  │Contracts │  │   Nodes  │  │  │
+│  │  │ • NFTs   │  │ • Audit  │  │• Registry│  │ • Query  │  │  │
+│  │  │ • FILE   │  │ • Verify │  │• Market  │  │ • Events │  │  │
+│  │  │ • FTUSD  │  │ • Agents │  │• Oracle  │  │ • Stats  │  │  │
+│  │  └──────────┘  └──────────┘  └──────────┘  └──────────┘  │  │
+│  └────────────────────────────────────────────────────────────┘  │
+│                              ↕                                    │
+│  ┌────────────────────────────────────────────────────────────┐  │
+│  │         Physical Infrastructure Providers (DePIN)          │  │
+│  │  🖥️ Storage  🌐 Compute  📡 Network  🔐 Verification      │  │
+│  └────────────────────────────────────────────────────────────┘  │
+└──────────────────────────────────────────────────────────────────┘
 ```
+
+### **Key Architectural Decisions**
+
+**Why Hedera?**
+- ⚡ **3-5 second finality** vs 12-60s on EVM chains
+- 💰 **99.9% cost savings** ($0.001 vs $5-50 per NFT mint)
+- 🌱 **Carbon negative** certified network
+- 🔒 **aBFT consensus** - mathematically proven security
+- 📊 **Native HCS** - built-in audit trails without gas fees
+
+**Why DePIN?**
+- 🏢 **Real infrastructure** providers, not just validators
+- 💪 **Stake-based incentives** align provider interests
+- 🌍 **Geographic distribution** ensures resilience
+- 📈 **Scalable** to thousands of providers
 
 ---
 
@@ -105,7 +183,7 @@
 - **HGraph SDK** - Mirror node queries
 
 ### AI & Agents
-- **LangChain** - Agent orchestration
+- **LangChain (utilizing Hedera Agent Kit)** - Agent orchestration
 - **OpenAI** - GPT-4o, GPT-4o Mini
 - **Anthropic** - Claude 3.5 Sonnet
 - **Google** - Gemini 1.5 Pro/Flash
@@ -120,6 +198,162 @@
 ### Storage & APIs
 - **IPFS** (Lighthouse) - Decentralized storage
 - **GraphQL** - HGraph queries
+
+
+## 🎯 Hedera Resources
+
+### Created on Testnet
+**Tokens (HTS)**:
+- Dataset NFT: `0.0.7159775`
+- FILE Token: `0.0.7159776`
+- FTUSD Token: `0.0.7159777`
+
+**Topics (HCS)**:
+- Dataset Metadata: `0.0.7159779`
+- Verification Logs: `0.0.7159780`
+- Agent Communication: `0.0.7159781`
+- Audit Trail: `0.0.7159782`
+- Marketplace Events: `0.0.7159783`
+
+**Smart Contracts (HSCS)**:
+- FiletheticMarketplace: `0.0.7158321`
+- ProviderRegistry: `0.0.7158323`
+- VerificationOracle: `0.0.7158325`
+
+---
+
+## 💡 Usage Examples
+
+### Create Dataset with AI Agent
+```typescript
+import { initializeAgent } from '@/server/initialize-agent';
+
+const agent = await initializeAgent('0.0.123456', 'openai');
+
+const result = await agent.invoke({
+  input: "Create a customer dataset with 100 rows including name, email, age, and purchase history"
+});
+// Returns: Dataset created, minted as NFT, logged to HCS
+```
+
+### Query with HGraph SDK
+```typescript
+import { hgraphClient } from '@/lib/hgraph/client';
+
+// Get dataset transactions
+const txs = await hgraphClient.getTransactionHistory(
+  '0.0.7159779',
+  10
+);
+
+// Real-time subscription
+hgraphClient.subscribeToTopicMessages('0.0.7159779', (msg) => {
+  console.log('New dataset:', msg);
+});
+```
+
+### Verify Dataset Quality
+```typescript
+import { VerificationPlugin } from '@/lib/agents';
+
+const verifier = new VerificationPlugin(hederaClient);
+const score = await verifier.verifyDataset(datasetId);
+// Returns: Quality score 0-100, logs to HCS
+```
+
+---
+
+## 💼 Market Opportunity
+
+### **$200B+ AI Data Market by 2030**
+
+| Market Segment | Size (2030) | FileThetic TAM |
+|----------------|-------------|----------------|
+| **Synthetic Data** | $11.5B | $11.5B (100%) |
+| **AI Training Data** | $85B | $25B (30%) |
+| **Data Marketplaces** | $15B | $10B (67%) |
+| **DePIN Infrastructure** | $3.5T | $50B (1.4%) |
+| **Total Addressable Market** | - | **$96.5B** |
+
+### **Target Customers**
+
+- **🏛️ Enterprises**: Fortune 500 companies ($50K-$500K/year)
+- **🏛️ Research Institutions**: 40,000+ universities ($10K-$100K/year)
+- **👥 Data Scientists**: 12M+ professionals globally ($100-$5K/year)
+- **🚀 AI Startups**: 15,000+ startups ($5K-$50K/year)
+
+---
+
+
+## 🏆 Competitive Advantages
+
+### **1. First-Mover in DePIN + AI Data**
+
+No direct competitors combining:
+- ✅ Decentralized physical infrastructure
+- ✅ AI-generated synthetic datasets
+- ✅ Verifiable AI operations
+- ✅ Carbon-aware computing
+
+### **2. 99.9% Cost Advantage**
+
+| Operation | Ethereum | Polygon | Hedera | **Savings** |
+|-----------|----------|---------|--------|-------------|
+| Mint NFT | $50 | $0.10 | $0.001 | **99.998%** |
+| Transfer Token | $20 | $0.05 | $0.001 | **99.995%** |
+| Log to Chain | $10 | $0.02 | $0.0001 | **99.999%** |
+| **1000 Operations** | **$80,000** | **$170** | **$1.10** | **99.999%** |
+
+### **3. Technical Moat**
+
+- **🔐 Proprietary Verification System**: Multi-agent quality scoring with reputation weighting
+- **🌱 Carbon Tracking Integration**: First platform to track AI compute carbon footprint
+- **📊 HGraph SDK Integration**: Real-time analytics without centralized databases
+
+### **4. Network Effects**
+
+```
+More Creators → Better Dataset Variety → More Buyers
+     ↑                                          ↓
+     ←────── Higher Revenue for Creators ───────┘
+
+More Providers → Better Infrastructure → Lower Costs
+     ↑                                          ↓
+     ←────── More Users & Transactions ─────────┘
+```
+
+---
+
+## 💰 Business Model & Economics
+
+### **Revenue Streams**
+
+1. **Transaction Fees**: 2.5% on all dataset purchases → $125K/month (Month 12)
+2. **Provider Staking**: 10% annual fee on 1000 FILE stakes → $10K/month (Month 12)
+3. **Premium Features**: Analytics, priority AI, custom SLAs → $15K/month (Month 12)
+4. **Enterprise Licensing**: White-label solutions (Future)
+
+### **Unit Economics**
+
+**Per Dataset Transaction**:
+- Average Sale Price: $500
+- Platform Fee (2.5%): $12.50
+- Creator Royalty (5%): $25.00
+- Creator Net: $462.50
+- **Platform Margin**: 100% (pure fee revenue)
+
+### **Financial Projections (12 Months)**
+
+| Metric | Month 3 | Month 6 | Month 12 |
+|--------|---------|---------|----------|
+| Active Users | 1,000 | 5,000 | 20,000 |
+| Datasets Created | 500 | 3,000 | 15,000 |
+| Monthly Transactions | 100 | 1,000 | 10,000 |
+| Providers | 10 | 30 | 100 |
+| **Monthly Revenue** | **$1.3K** | **$13K** | **$150K** |
+| **Annual Run Rate** | **$15K** | **$156K** | **$1.8M** |
+
+---
 
 ---
 
@@ -191,126 +425,63 @@ Open [http://localhost:3000](http://localhost:3000)
 
 ---
 
-## 📖 Documentation
-
-### Essential Docs
-1. **[CURRENT_STATUS.md](./documents/CURRENT_STATUS.md)** - Implementation status
-2. **[TRACK4_WINNING_STRATEGY.md](./documents/TRACK4_WINNING_STRATEGY.md)** - Gap analysis & roadmap
-3. **[DEVELOPMENT_ROADMAP.md](./documents/DEVELOPMENT_ROADMAP.md)** - 7-week plan
-4. **[documents/README.md](./documents/README.md)** - Documentation index
-
-### Quick Links
-- [Architecture Details](./documents/HEDERA_IMPLEMENTATION_STATUS.md)
-- [Track 4 Requirements](./documents/Hedera.md)
-- [Progress Log](./documents/PROGRESS.md)
-
----
-
-## 🎯 Hedera Resources
-
-### Created on Testnet
-**Tokens (HTS)**:
-- Dataset NFT: `0.0.7159775`
-- FILE Token: `0.0.7159776`
-- FTUSD Token: `0.0.7159777`
-
-**Topics (HCS)**:
-- Dataset Metadata: `0.0.7159779`
-- Verification Logs: `0.0.7159780`
-- Agent Communication: `0.0.7159781`
-- Audit Trail: `0.0.7159782`
-- Marketplace Events: `0.0.7159783`
-
-**Smart Contracts (HSCS)**:
-- FiletheticMarketplace: TBD
-- ProviderRegistry: TBD
-- VerificationOracle: TBD
-
----
-
-## 💡 Usage Examples
-
-### Create Dataset with AI Agent
-```typescript
-import { initializeAgent } from '@/server/initialize-agent';
-
-const agent = await initializeAgent('0.0.123456', 'openai');
-
-const result = await agent.invoke({
-  input: "Create a customer dataset with 100 rows including name, email, age, and purchase history"
-});
-// Returns: Dataset created, minted as NFT, logged to HCS
-```
-
-### Query with HGraph SDK
-```typescript
-import { hgraphClient } from '@/lib/hgraph/client';
-
-// Get dataset transactions
-const txs = await hgraphClient.getTransactionHistory(
-  '0.0.7159779',
-  10
-);
-
-// Real-time subscription
-hgraphClient.subscribeToTopicMessages('0.0.7159779', (msg) => {
-  console.log('New dataset:', msg);
-});
-```
-
-### Verify Dataset Quality
-```typescript
-import { VerificationPlugin } from '@/lib/agents';
-
-const verifier = new VerificationPlugin(hederaClient);
-const score = await verifier.verifyDataset(datasetId);
-// Returns: Quality score 0-100, logs to HCS
-```
-
----
-
-## 🌟 Why FileThetic?
-
-### 99%+ Cost Savings vs EVM
-| Operation | EVM | Hedera | Savings |
-|-----------|-----|--------|----------|
-| Mint NFT | $5-50 | $0.001 | 99.98% |
-| Transfer | $2-20 | $0.001 | 99.95% |
-| Log Event | $1-10 | $0.0001 | 99.99% |
-
-### Carbon Negative
-- Hedera is carbon-negative certified
-- Track and offset AI compute emissions
-- Sustainable AI-first approach
-
-### Fast & Secure
-- 3-5 second finality
-- aBFT consensus
-- Fair transaction ordering
-
-### Verifiable AI
-- Every operation immutably logged
-- Complete provenance tracking
-- Community verification
-
----
 
 ## 🗺️ Roadmap
 
-### This Week (Track 4 Critical)
-- [x] Foundation infrastructure
-- [ ] Custom Agent Kit plugins
-- [ ] HCS-10 multi-agent system
-- [ ] Deploy smart contracts
-- [ ] Complete verifiable AI
-- [ ] Demo video
+### **🏆 Hackathon Phase (Current)**
+- [x] Core Hedera infrastructure (HTS, HCS, HSCS)
+- [x] AI chat assistant with multi-provider support
+- [x] DePIN provider network with staking
+- [x] Verifiable AI operations with HCS logging
+- [x] Marketplace with NFT minting
+- [x] Carbon tracking and analytics
+- [ ] Custom Agent Kit plugins (90% complete)
+- [ ] HCS-10 multi-agent communication (80% complete)
+- [ ] Demo video and documentation
 
-### Post-Hackathon
-- [ ] Mainnet deployment
-- [ ] Enterprise features
-- [ ] Mobile apps
-- [ ] Additional AI providers
-- [ ] Cross-chain bridges
+### **Phase 1: Mainnet Launch (Months 1-3)**
+- [ ] Deploy to Hedera mainnet
+- [ ] Security audit of smart contracts
+- [ ] Onboard 10 infrastructure providers
+- [ ] Launch with 1,000 beta users
+- [ ] Integrate 3 additional AI providers
+
+### **Phase 2: Enterprise Features (Months 4-6)**
+- [ ] Advanced analytics dashboard
+- [ ] Custom SLA support
+- [ ] White-label solutions
+- [ ] API for third-party integrations
+- [ ] Enterprise billing and invoicing
+
+### **Phase 3: Scale & Expansion (Months 7-12)**
+- [ ] Cross-chain bridges (Ethereum, Polygon)
+- [ ] Mobile apps (iOS, Android)
+- [ ] AI model marketplace (trade trained models)
+- [ ] Global provider network (100+ providers)
+- [ ] Academic partnerships program
+
+### **Phase 4: Ecosystem (Year 2)**
+- [ ] DAO governance for protocol decisions
+- [ ] Token launch (FILE mainnet)
+- [ ] Staking rewards program
+- [ ] Developer grants program
+- [ ] Integration with major ML frameworks
+
+---
+
+## 🔗 Links
+
+- **Demo**: [https://filethetic.shikhar.xyz](https://filethetic.shikhar.xyz)
+- **Video**: Coming soon
+
+---
+
+
+### **Hedera Resources**
+- 🏆 **Track 4**: [Hedera Africa Hackathon](https://hedera-hackathon.hashgraph.swiss/tools#track4)
+- 📖 **Hedera Docs**: [docs.hedera.com](https://docs.hedera.com)
+- 🤖 **Agent Kit**: [github.com/hashgraph/hedera-agent-kit](https://github.com/hashgraph/hedera-agent-kit)
+- 🔍 **Testnet Explorer**: [testnet.hashscan.io](https://testnet.hashscan.io)
 
 ---
 
@@ -329,25 +500,14 @@ See [CONTRIBUTING.md](./CONTRIBUTING.md) for details.
 
 MIT License - see [LICENSE](./LICENSE) for details.
 
----
 
-## 🔗 Links
+<div align="center">
 
-- **Demo**: Coming soon
-- **Video**: Coming soon
-- **Track 4**: [Hedera Africa Hackathon](https://hedera-hackathon.hashgraph.swiss/tools#track4)
-- **Hedera Docs**: [docs.hedera.com](https://docs.hedera.com)
-- **Agent Kit**: [github.com/hashgraph/hedera-agent-kit](https://github.com/hashgraph/hedera-agent-kit)
+### **🚀 FileThetic: Building the Future of AI Data Economy on Hedera**
 
----
+*Where Real Infrastructure Meets Verifiable AI*
 
-## 📧 Contact
+**Built with ❤️ for the Hedera community**
 
-- **Team**: FileThetic
-- **Hackathon**: Hedera Africa 2025
-- **Track**: 4 - AI and DePIN
-
----
-
-**Built with ❤️ for the future of AI data economy on Hedera**
+</div>
     

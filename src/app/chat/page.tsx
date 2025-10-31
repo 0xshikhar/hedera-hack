@@ -98,9 +98,7 @@ Let's create some amazing datasets! 🚀`,
   };
 
   return (
-    <div className="min-h-screen w-full bg-white">
-      <Header />
-      
+    <div className="min-h-screen w-full bg-white">      
       <main className="container mx-auto max-w-6xl h-[calc(100vh-80px)] flex flex-col px-4 py-6">
         {/* Chat Area */}
         <div className="flex-1 mb-6 bg-gray-50 rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
